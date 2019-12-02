@@ -1,4 +1,5 @@
 """Everything to do with the DC player's cards: the class, the info namedtuple, and all the lists of specific cards"""
+import collections
 
 import pygame
 pygame.init() # I don't know why I have to do this but StackOverflow told me to
@@ -38,12 +39,33 @@ class Card:
         text = pygame.Surface((SCREEN_WIDTH, Card.font.get_linesize() * 7)) # as wide as the screen for 7 lines: name, type, cost, power, draw, VPs, text
         text.fill(GAME_BKG_COLOR) # get rid of text background
         linenum = 0
-        for field in self.info._fields:
+        for field in self.info.fields:
             # make a surface containing the text of this line ("Name: Aquaman's Trident" or "Type: Supervillain" or whatever)
             line = Card.font.render(" " + field + ": " + getattr(self.info, field), False, (255, 255, 255))
             text.blit(line, (0, Card.font.get_linesize() * linenum)) # draw the line onto the text at the appropriate line height
             linenum += 1
         return text
+
+    def get_name(self):
+        return self.info[0]
+
+    def get_type(self):
+        return self.info[1]
+
+    def get_cost(self):
+        return self.info[2]
+
+    def get_power(self):
+        return self.info[3]
+
+    def get_draw(self):
+        return self.info[4]
+
+    def get_vp(self):
+        return self.info[5]
+
+    def get_text(self):
+        return self.info[6]
 
 # list containing all the images to be used
 cards = []
@@ -56,7 +78,7 @@ TO COPY:  = Card("cardimgs/imagename", card_info("N", "T", "C", "P", "D", "V", "
 """
 
 # the namedtuple that holds all the information about the card
-card_info = namedtuple("card_info", ["Name", "Type", "Cost", "Power", "Draw", "VP", "Text"])
+card_info = collections.namedtuple("card_info", ["Name", "Type", "Cost", "Power", "Draw", "VP", "Text"])
 
 # STARTERS, WEAKNESSES, KICKS (oh my)
 #Punch = Card("cardimgs/imagename", card_info("Punch", "Starter", "0", "1", "0", "0", ""))
