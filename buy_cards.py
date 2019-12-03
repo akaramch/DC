@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 import cards
+import deck
 
 
 """
@@ -10,7 +11,7 @@ Parameter list:
     power: buying power
     lineup: lineup (any sorting)
 Return:
-    list of cards to buy, power_left
+    list of cards to buy
 """
 def max_vp_lineup(power, lineup):
     cards_to_buy = []
@@ -138,6 +139,7 @@ Parameter list:
     lineup: list of cards available to buy
 """
 def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup):
+    #first, we'll play to try to end the game when possible
     cards_to_buy = []
     #(bool can_end_game, cards_to_buy, remaining_power)
     end_game = check_end_game(power, super_villain_deck.peek(), super_villain_deck.num_size, main_deck.size, lineup)
@@ -150,7 +152,23 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup)
             #TODO add kicks to cards to buy (not certain how this will look based on how other stuff is implemented)
         return cards_to_buy
 
+    #can buy super_villain
+    if super_villain_deck.peek().get_cost() <= power:
+        power -= super_villain_deck.peek().get_cost()
+        cards_to_buy.append(super_villain_deck.peek()) #add the super villain to the cards to buy
+        if power <= 1: #buying super spent all power so no need to check other stuff
+            return cards_to_buy
 
-
+    #end game coming soon, but cannot end it on our turn
+    if super_villain_deck.num_cards <= 3 or main_deck.num_cards <= 15:
+        #cards to add to cards to buy from lineup
+        max_vp = max_vp_lineup(power, lineup)
+        spent = 0
+        #figure out the cost of the cards
+        for card in max_vp:
+            spent += card.get_vp()
+        power -= spent #get leftover power
+        cards_to_buy.extend(max_vp[0])
+        #TODO add as many kicks as possible
 
     return None
