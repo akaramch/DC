@@ -39,3 +39,19 @@ class Deck:
             self.num_villains += 1
         elif card.get_type() == "Weakness":
             self.num_weaknesses += 1
+
+    #Shuffles the deck
+    def shuffle(self):
+        #TODO
+        return 0
+
+    #draws card from deck and returns it
+    def draw(self):
+        #TODO
+        return 0
+
+    #look at the top card of the deck without drawing
+    def peek(self):
+        #TODO
+        return 0
+    #TODO implement other useful deck functions (couldn't think of everything, it's 2:15 in the morning)
