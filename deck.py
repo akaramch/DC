@@ -66,4 +66,7 @@ class Deck:
     #look at the top card of the deck without drawing
     def peek(self):
         return self.contents[0]
+
+    def isEmpty(self):
+        return self.num_cards == 0
     #TODO implement other useful deck functions (couldn't think of everything, it's 2:15 in the morning)
