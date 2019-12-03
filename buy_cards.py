@@ -131,23 +131,23 @@ Takes the amount of buying power along with the super villain, and the lineup in
 and returns a list of cards to buy based on our algorithm for buying cards.
 Parameter list:
     power: buying power from playing cards
-    super_villain: the current card on top of the super villain deck
-    super_deck_size: how many cards left in super villain deck
-    main_deck_size: how many cards left in main deck
-    kick_deck_size: how many kicks left
+    super_villain_deck: current super villain deck
+    main_deck: current main deck
+    kick_deck: current kick deck
+    own_deck: current own deck
     lineup: list of cards available to buy
 """
-def buy_cards(power, super_villain, super_deck_size, main_deck_size, kick_deck_size, lineup):
+def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup):
     cards_to_buy = []
     #(bool can_end_game, cards_to_buy, remaining_power)
-    end_game = check_end_game(power, super_villain, super_deck_size, main_deck_size, lineup)
+    end_game = check_end_game(power, super_villain_deck.peek(), super_villain_deck.num_size, main_deck.size, lineup)
     if end_game[0]:
         cards_to_buy += end_game[1]
         kicks = end_game[2]//3 #of kicks able to buy with remaining power
         for i in range(1, kicks):
-            if kick_deck_size == 0:
+            if kick_deck.size == 0:
                 break
-            #TODO add kicks to cards to buy (not certain how this will look based on how other stuff is implemented
+            #TODO add kicks to cards to buy (not certain how this will look based on how other stuff is implemented)
         return cards_to_buy
 
 
