@@ -2,7 +2,7 @@ import cards
 
 """
 Finds cards in the lineup to buy with given power that maximizes VP gain via backtracking
-Paremeter list:
+Parameter list:
     power: buying power
     lineup: lineup (any sorting)
 Return:
@@ -101,7 +101,7 @@ def buy_cards(power, super_villain, super_deck_size, main_deck_size, kick_deck_s
             #TODO add kicks to cards to buy (not certain how this will look based on how other stuff is implemented
         return cards_to_buy
 
-    
+
 
 
     return None
