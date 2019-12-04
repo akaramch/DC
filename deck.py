@@ -90,7 +90,6 @@ class Deck:
         elif card.get_type() == "Weakness":
             self.num_weaknesses += 1
 
-    #TODO implement other useful deck functions (couldn't think of everything, it's 2:15 in the morning)
 
 class PlayerDeck(Deck):
     def __init__(self, card_list):
@@ -98,6 +97,19 @@ class PlayerDeck(Deck):
         self.undrawn = [] #cards in face down deck
         self.hand = [] #player hand
         self.discard = [] #discard pile
+
+    #draw a card from undrawn to hand
+    def draw(self):
+        card = self.undrawn.pop(0)
+        self.add_to_hand(card)
+
+    #add a card to hand
+    def add_to_hand(self, card):
+        self.hand.append(card)
+
+    #look at top of undrawn
+    def peek(self):
+        return self.undrawn[0]
 
     #add card to discard
     def add_to_discard(self, card):
