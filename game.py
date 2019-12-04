@@ -8,8 +8,8 @@ pygame.init()
 from collections import namedtuple
 
 # window dimensions
-SCREEN_WIDTH = 1500
-SCREEN_HEIGHT = 1020
+SCREEN_WIDTH = 1525
+SCREEN_HEIGHT = 950
 SCREEN_NAME = "DC Game"
 # background color for the whole screen
 GAME_BKG_COLOR = (127, 127, 127)
@@ -137,6 +137,7 @@ cards.append(Aquamans_Trident)
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
+bkg = pygame.image.load("bkg.png")
 
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
@@ -160,7 +161,7 @@ while not done:
                 done = True
 
     # do this before you draw anything on the screen so you don't cover anything up
-    screen.fill(GAME_BKG_COLOR)
+    screen.blit(bkg, (0, 0))
     for card in cards:
         # if the mouse is on this card
         if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
