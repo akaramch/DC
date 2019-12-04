@@ -8,11 +8,11 @@ pygame.init()
 from collections import namedtuple
 
 # window dimensions
-SCREEN_WIDTH = 1500
-SCREEN_HEIGHT = 1020
+SCREEN_WIDTH = 1525
+SCREEN_HEIGHT = 950
 SCREEN_NAME = "DC Game"
 # background color for the whole screen
-GAME_BKG_COLOR = (127, 127, 127)
+GAME_BKG_COLOR = (112, 208, 127)
 
 """
 card class
@@ -24,12 +24,13 @@ inform(): returns a text pygame.surface that shows the info namedtuple in text f
 class Card:
     font = pygame.font.SysFont("ubuntucondensed", 24) # the font to be used to write all things card-related
 
-    def __init__(self, image_name, type, cost, vp, text, custom=0, power=(0,0), draw=(0,0), destroy_top=(False,0), destroy_hand=0, destroy_discard=0, destroy_hand_or_discard=0, puts_on_top=False, discard=0, op_discard=0, weakness=(False,0), defense=(False, 0), first_appearance=0):
+    def __init__(self, image_name, type, cost, vp=0, text="", name="", custom=0, power=(0,0), draw=(0,0), destroy_top=(False,0), destroy_hand=0, destroy_discard=0, destroy_hand_or_discard=0, puts_on_top=False, discard=0, op_discard=0, weakness=(False,0), defense=(False, 0), first_appearance=0):
         """
         takes a file path for an image that will be the face of the card
         and a pre-populated card_info namedtuple
         """
         self.img = pygame.image.load(image_name) # the image corresponding to the face of the card
+        self.name = name # will be read from DCCardsList below
         self.type = type # will be read from DCCardsList below
         self.cost = cost # will be read from DCCardsList below
         self.vp = vp # will be read from DCCardsList below
@@ -211,6 +212,28 @@ cards.append(Aquamans_Trident)
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
+bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+bkg.fill(GAME_BKG_COLOR)
+card_outline = pygame.Surface((185, 260))
+card_outline.fill((127, 127, 127))
+card_interior = pygame.Surface((165, 240))
+card_interior.fill(GAME_BKG_COLOR)
+card_outline.blit(card_interior, (10, 10))
+# outline the weakness, kick, supervillain, and main decks
+bkg.blit(card_outline, (45, 45))
+bkg.blit(card_outline, (270, 45))
+bkg.blit(card_outline, (45, 345))
+bkg.blit(card_outline, (270, 345))
+# outline the lineup
+bkg.blit(card_outline, (495, 305))
+bkg.blit(card_outline, (695, 305))
+bkg.blit(card_outline, (895, 305))
+bkg.blit(card_outline, (1095, 305))
+bkg.blit(card_outline, (1295, 305))
+# outline the player's hand
+hand_outline = pygame.Surface((SCREEN_WIDTH, 10))
+hand_outline.fill((127, 127, 127))
+bkg.blit(hand_outline, (0, 745))
 
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
@@ -234,7 +257,7 @@ while not done:
                 done = True
 
     # do this before you draw anything on the screen so you don't cover anything up
-    screen.fill(GAME_BKG_COLOR)
+    screen.blit(bkg, (0, 0))
     for card in cards:
         # if the mouse is on this card
         if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():

@@ -91,3 +91,31 @@ class Deck:
             self.num_weaknesses += 1
 
     #TODO implement other useful deck functions (couldn't think of everything, it's 2:15 in the morning)
+
+class PlayerDeck(Deck):
+    def __init__(self, card_list):
+        super().__init__(card_list)
+        self.undrawn = [] #cards in face down deck
+        self.hand = [] #player hand
+        self.discard = [] #discard pile
+
+    #add card to discard
+    def add_to_discard(self, card):
+        self.discard.append(card)
+
+    #add card to undrawn top
+    def add_to_undrawn_top(self, card):
+        self.undrawn.insert(0, card)
+
+    #add card to undrawn bottom
+    def add_to_undrawn_bottom(self, card):
+        self.undrawn.append(card)
+
+    #moves cards from discard pile to undrawn and shuffles
+    def refill_deck(self):
+        for card in self.discard:
+            self.add_to_undrawn_bottom(card)
+            random.shuffle(self.undrawn)
+            self.discard = []
+
+#TODO implement subclass for player decks that includes a discard pile and functions for discarding and hand functions and different draw function
