@@ -101,7 +101,7 @@ card_info = namedtuple("card_info", ["Name", "Type", "Cost", "Power", "Draw", "V
 #Kick = Card("cardimgs/imagename", card_info("Kick", "Super", "3", "2", "0", "1", ""))
 
 """  DEFAULT CARD
- = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="Power", text="") #
+ = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="Villain", text="") #
 """
 
 # EQUIPMENT
@@ -148,35 +148,59 @@ PowerList.append(X_Ray_Vision)
 
 
 # HEROES
-#Raven = Card("cardimgs/imagename", card_info("Raven", "Hero", "3", "1", "1", "1", "")) #3
-#Catwoman = Card("cardimgs/imagename", card_info("Catwoman", "Hero", "2", "2", "0", "1", "")) #2
-#Katana = Card("cardimgs/imagename", card_info("Katana", "Hero", "2", "1", "D", "1", "")) #2    How to indicate defenses?
-#Winged_Warrior = Card("cardimgs/imagename", card_info("Winged Warrior", "Hero", "6", "2", "0", "2", "If you play or have played another Hero this turn, additional +3 Power.")) #1
-#Princess_Diana = Card("cardimgs/imagename", card_info("Princess Diana of Themyscira", "Hero", "7", "0", "0", "2", "Gain all Villains with cost 7 or less in the Line-Up.")) #1
-#Power_Girl = Card("cardimgs/imagename", card_info("Power Girl", "Hero", "5", "3", "0", "2", "")) #3
-#Hawkgirl = Card("cardimgs/imagename", card_info("Hawkgirl", "Hero", "2", "1", "0", "1", "+1 additional Power for each Hero in your discard pile.")) #2
-#Kid_Flash = Card("cardimgs/imagename", card_info("Kid Flash", "Hero", "2", "0", "1", "1", "")) #2
-#Supergirl = Card("cardimgs/imagename", card_info("Supergirl", "Hero", "4", "0", "0", "1", "You may put a Kick card from the Kick stack into your hand.")) #2
-#Jonn_Jonnz = Card("cardimgs/imagename", card_info("J'onn J'onnz", "Hero", "6", "0", "0", "2", "Play the top card of the Super-Villain stack, then return it to the top of the stack.")) #1
-#The_Fastest_Man_Alive = Card("cardimgs/imagename", card_info("The Fastest Man Alive", "Hero", "5", "0", "2", "1", "")) #1
-#King_Of_Atlantis = Card("cardimgs/imagename", card_info("King of Atlantis", "Hero", "5", "1", "0", "1", "You may destroy a card in your discard pile. If you do, gain +2 additional Power")) #1
+HeroList = []
 
-#HeroList = [Raven, Catwoman, Katana, Winged_Warrior, Princess_Diana, Power_Girl, Hawkgirl, Kid_Flash, Supergirl, Jonn_Jonnz, The_Fastest_Man_Alive, King_Of_Atlantis]
+Raven = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Raven", draw=(1,0), vp=1, type="Hero", text="") #3
+Catwoman = Card("cardimgs/imagename.jpg", cost=2, power=(2,0), name="Catwoman", vp=1, type="Hero", text="") #2
+Katana = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Katana", vp=1, type="Hero", defense=(True,1), text="") #2
+Winged_Warrior = Card("cardimgs/imagename.jpg", cost=6, power=(2,3), name="Winged Warrior", vp=2, type="Hero", text="If you play or have played another Hero this turn, additional +3 Power.") #1
+Power_Girl = Card("cardimgs/imagename.jpg", cost=5, power=(3,0), name="Power Girl", vp=2, type="Hero", text="") #3
+Hawkgirl = Card("cardimgs/imagename.jpg", cost=2, power=(1,4), name="Hawkgirl", vp=1, type="Hero", text="+1 additional Power for each Hero in your discard pile.") #2
+Kid_Flash = Card("cardimgs/imagename.jpg", cost=2, name="Kid Flash", vp=1, draw=(1,0), type="Hero", text="") #2
+Supergirl = Card("cardimgs/imagename.jpg", cost=4, name="Supergirl", vp=1, type="Hero", custom=5, text="") #2
+Jonn_Jonnz = Card("cardimgs/imagename.jpg", cost=6, name="J'onn J'onnz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") #1
+The_Fastest_Man_Alive = Card("cardimgs/imagename.jpg", cost=5, name="The Fastest Man Alive", vp=1, draw=(2,0), type="Hero", text="") #1
+King_of_Atlantis = Card("cardimgs/imagename.jpg", cost=5, power=(1,5), name="King of Atlantis", vp=1, destroy_discard=1, type="Hero", text="You may destroy a card in your discard pile. If you do, gain +2 additional Power.") #1
+
+HeroList.append(Catwoman)
+HeroList.append(Hawkgirl)
+HeroList.append(Jonn_Jonnz)
+HeroList.append(Katana)
+HeroList.append(Kid_Flash)
+HeroList.append(King_of_Atlantis)
+HeroList.append(Power_Girl)
+HeroList.append(Raven)
+HeroList.append(Supergirl)
+HeroList.append(The_Fastest_Man_Alive)
+HeroList.append(Winged_Warrior)
+
 
 # VILLAINS
-#Johnny_Quick = Card("cardimgs/imagename", card_info("Johnny Quick", "Villain", "2", "0", "1", "1", "")) #2
-#Bane = Card("cardimgs/imagename", card_info("Bane", "Villain", "4", "2", "0", "1", "Attack: Each foe chooses and discards a card."))
-#Mr_Zsasz = Card("cardimgs/imagename", card_info("Mr. Zsasz", "Villain", "3", "2", "0", "1", "Attack: Each foe reveals the top card of his deck. If its cost is odd, that player gains a Weakness."))
-#Scarecrow = Card("cardimgs/imagename", card_info("Bane", "Villain", "5", "2", "0", "1", "Attack: Each foe gains a Weakness"))
-#Doomsday = Card("cardimgs/imagename", card_info("Doomsday", "Villain", "6", "4", "0", "2", "")) #2
-#Red_Lantern_Corps = Card("cardimgs/imagename", card_info("Red Lantern Corps", "Villain", "5", "1", "0", "1", "You may destroy a card in your hand. If you do, additional +2 Power.")) #2
-#Lobo = Card("cardimgs/imagename", card_info("Lobo", "Villain", "7", "3", "0", "2", "You may destroy up to two cards in your hand and/or discard pile.")) #1
-#Gorilla_Grod = Card("cardimgs/imagename", card_info("Gorilla Grod", "Villain", "5", "3", "0", "2", "")) #2
-#Jervis_Tech = Card("cardimgs/imagename", card_info("Jervis Tech", "Villain", "3", "1", "0", "1", "Look at the top card of your deck. Destroy it or discard it.")) #2
-#Killer_Croc = Card("cardimgs/imagename", card_info("Killer Croc", "Villain", "4", "2", "0", "1", "If you play or have played another Villain this turn, additional +1 Power.")) #2
-#Two_Face = Card("cardimgs/imagename", card_info("Two-Face", "Villain", "2", "1", "0", "1", "Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.")) #2
+VillainList = []
 
-#VillainList = [Johnny_Quick, Harley_Quinn, Cheetah, Doomsday, Red_Lantern_Corps, Lobo, Gorilla_Grod, Jervis_Tech, Killer_Croc, Two_Face]
+Johnny_Quick = Card("cardimgs/imagename.jpg", cost=2, draw=(1,0), name="Johnny Quick", vp=1, type="Villain", text="") #2
+#ATTACKS UNWRITTEN Bane = Card("cardimgs/imagename.jpg", cost=4, power=(2,0), name="Bane", vp=1, type="Villain", text="Attack: Each foe chooses and discards a card.") #UNDECIDED NUMBER
+#ATTACKS UNWRITTEN Mr_Zsasz = Card("cardimgs/imagename.jpg", cost=3, power=(2,0), name="Mr. Zsasz", vp=1, type="Villain", text="Attack: Each foe reveals the top card of his deck. If its cost is odd, that player gains a Weakness.") #UNDECIDED NUMBER
+#ATTACKS UNWRITTEN Scarecrow = Card("cardimgs/imagename.jpg", cost=5, power=(2,0), name="Scarecrow", vp=1, type="Villain", text="Attack: Each foe gains a Weakness.") #UNDECIDED NUMBER
+Doomsday = Card("cardimgs/imagename.jpg", cost=6, power=(4,0), name="Doomsday", vp=2, type="Villain", text="") #2
+Red_Lantern_Corps = Card("cardimgs/imagename.jpg", cost=5, power=(1,6), name="Red Lantern Corps", vp=1, type="Villain", destroy_hand=1, text="You may destroy a card in your hand. If you do, additional +2 Power.") #2
+Lobo = Card("cardimgs/imagename.jpg", cost=7, power=(3,0), name="Lobo", vp=2, type="Villain", destroy_hand_or_discard=2, text="You may destroy up to two cards in your hand and/or discard pile.") #1
+Gorilla_Grod = Card("cardimgs/imagename.jpg", cost=5, power=(3,0), name="Gorilla Grod", vp=2, type="Villain", text="") #2
+Jervis_Tetch = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True2,), text="") #2
+Killer_Croc = Card("cardimgs/imagename.jpg", cost=4, power=(2,7), name="Killer Croc", vp=1, type="Villain", text="If you play or have played another Villain this turn, additional +1 Power.") #2
+Two_Face = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Two-Face", vp=1, type="Villain", draw=(0,1), text="Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.") #2
+
+#VillainList.append(Bane)
+VillainList.append(Doomsday)
+VillainList.append(Gorilla_Grod)
+VillainList.append(Jervis_Tetch)
+VillainList.append(Johnny_Quick)
+VillainList.append(Killer_Croc)
+VillainList.append(Lobo)
+#VillainList.append(Mr_Zsasz)
+VillainList.append(Red_Lantern_Corps)
+#VillainList.append(Scarecrow)
+VillainList.append(Two_Face)
 
 # SUPER VILLAINS
 #N = Card("cardimgs/imagename", card_info("N", "SVillain", "C", "P", "D", "V", "T"))

@@ -1,0 +1,57 @@
+def __init__(self, image_name, type, cost, vp, text, custom=0,
+power=(0,0), draw=(0,0), destroy_top=(False,0), destroy_hand=0,
+destroy_discard=0, destroy_hand_or_discard=0, puts_on_top=False,
+discard=0, op_discard=0, weakness=(False,0), defense=(False, 0), first_appearance=0):
+
+
+Power = (n,1)  Power Ring (+1 additional if top card costs more than 1)
+Power = (n,2)  Starbolt (+1/Super Power in discard pile)
+Power = (n,3)  Winged Warrior (+3 if play/have played another Hero this turn)
+Power = (n,4)  Hawkgirl (+1/Hero in discard pile)
+Power = (n,5)  King of Atlantis (+2 Power if you destroy a card in discard pile)
+Power = (n,6)  Red Lantern Corps (+2 additional power if you destroy a card in hand)
+Power = (n,7)  Killer Croc (+1 if play/have played another Villain this turn)
+
+
+draw(0,1)  Two-Face  <--If incorrect choice, put in discard pile!
+
+
+op_discard = 1  Bane (Choose and discard 1 from hand)
+
+
+weakness = (True,1)  Mr. Zsasz (If top card of deck is odd cost, gain a Weakness)
+weakness = (True,2)  Scarecrow (Gain a Weakness)
+
+
+destroy_top(True,1) for Nth Metal
+destroy_top(True,2) for Jervis Tetch  <--If don't destroy, put in discard pile!
+
+
+destroy_hand = 1  Red Lantern Corps (+2 additional power if you destroy a card in hand)
+
+
+destroy_discard = 1  King of Atlantis (+2 Power if you destroy a card in discard pile)
+
+
+destroy_hand_or_discard = 2  Lobo (May destroy up to 2 cards in hand/discard)
+
+
+Defenses:
+  1: Lasso of Truth, Katana
+  2: Bulletproof
+
+
+customs:
+  1: J'onn J'onnz
+  2: Shazam!
+  3: White Lantern Power Battery
+  4: X-Ray Vision
+  5: Hawkgirl
+
+non-custom Supes:
+  Lex Luthor
+  Black Manta
+  The Flash
+  Mongol
+  
+  
