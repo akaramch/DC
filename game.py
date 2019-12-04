@@ -24,13 +24,16 @@ inform(): returns a text pygame.surface that shows the info namedtuple in text f
 class Card:
     font = pygame.font.SysFont("jamrul", 24) # the font to be used to write all things card-related
 
-    def __init__(self, image_name, info):
+    def __init__(self, image_name, custom=0, power=(0,0), draw=(0,0), destroy_top=(False,0), destroy_hand=0, destroy_discard=0, destroy_hand_or_discard=0, puts_on_top=False, discard=0, op_discard=0, weakness=(False,0), defense=(False, 0), first_appearance=0, type, cost, vp, text):
         """
         takes a file path for an image that will be the face of the card
         and a pre-populated card_info namedtuple
         """
         self.img = pygame.image.load(image_name) # the image corresponding to the face of the card
-        self.info = info # will be read from DCCardsList below
+        self.type = type # will be read from DCCardsList below
+        self.cost = cost # will be read from DCCardsList below
+        self.vp = vp # will be read from DCCardsList below
+        self.text = text # will be read from DCCardsList below
         self.pos = (0, 0) # the coordinates of the top left corner of the card
 
     def get_width(self):
@@ -77,7 +80,7 @@ card_info = namedtuple("card_info", ["Name", "Type", "Cost", "Power", "Draw", "V
 
 # EQUIPMENT
 EquipmentList = []
-Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", card_info("Aquaman's Trident", "Equipment", "3", "2", "0", "1", "You may put any one card you buy or gain this turn on top of your deck.")) #3
+Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", text="You may put any one card you buy or gain this turn on top of your deck.") #3
 EquipmentList.append(Aquamans_Trident)
 #Batarang = Card("cardimgs/imagename", card_info("Batarang", "Equipment", "2", "2", "0", "1", "")) #2
 #Soultaker_Sword = Card("cardimgs/imagename", card_info("Soultaker Sword", "Equipment", "4", "2", "0", "1", "You may destroy a card in your hand.")) #3
