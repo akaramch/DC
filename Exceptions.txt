@@ -46,7 +46,7 @@ customs:
   2: Shazam!
   3: White Lantern Power Battery
   4: X-Ray Vision
-  5: Hawkgirl
+  5: Supergirl
 
 non-custom Supes:
   Lex Luthor
