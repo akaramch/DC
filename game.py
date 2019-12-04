@@ -22,7 +22,7 @@ move(dx, dy): move the card by that distance
 inform(): returns a text pygame.surface that shows the info namedtuple in text form
 """
 class Card:
-    font = pygame.font.SysFont("jamrul", 24) # the font to be used to write all things card-related
+    font = pygame.font.SysFont("ubuntucondensed", 24) # the font to be used to write all things card-related
 
     def __init__(self, image_name, info):
         """
