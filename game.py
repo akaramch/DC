@@ -49,7 +49,7 @@ class Card:
         text = pygame.Surface((SCREEN_WIDTH, Card.font.get_linesize() * 7)) # as wide as the screen for 7 lines: name, type, cost, power, draw, VPs, text
         text.fill(GAME_BKG_COLOR) # get rid of text background
         linenum = 0
-        for field in self.info._fields:
+        for field in self.info.fields:
             # make a surface containing the text of this line ("Name: Aquaman's Trident" or "Type: Supervillain" or whatever)
             line = Card.font.render(" " + field + ": " + getattr(self.info, field), False, (255, 255, 255))
             text.blit(line, (0, Card.font.get_linesize() * linenum)) # draw the line onto the text at the appropriate line height
