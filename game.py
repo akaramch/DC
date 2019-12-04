@@ -55,6 +55,28 @@ class Card:
             text.blit(line, (0, Card.font.get_linesize() * linenum)) # draw the line onto the text at the appropriate line height
             linenum += 1
         return text
+    
+    def get_name(self):
+        return self.info[0]
+
+    def get_type(self):
+        return self.info[1]
+
+    def get_cost(self):
+        return self.info[2]
+
+    def get_power(self):
+        return self.info[3]
+
+    def get_draw(self):
+        return self.info[4]
+
+    def get_vp(self):
+        return self.info[5]
+
+    def get_text(self):
+        return self.info[6]
+
 
 # list containing all the images to be used
 cards = []
@@ -91,7 +113,7 @@ EquipmentList.append(Aquamans_Trident)
 #Shazam = Card("cardimgs/imagename", card_info("Shazam!", "Power", "7", "2", "0", "2", "Reveal and play the top card of the main deck, then return it to the top of the main deck.")) #1
 #Super_Strength = Card("cardimgs/imagename", card_info("Super Strength", "Power", "7", "5", "0", "2", "")) #2
 #Starbolt = Card("cardimgs/imagename", card_info("Starbolt", "Power", "5", "2", "0", "1", "+1 additional Power for each Super Power in your discard pile.")) #3
-#Force_Field = Card("cardimgs/imagename", card_info("Force Field", "Power", "3", "0", "1", "1", "Ongoing: Do not discard this card at the end of your turn. Defense: While this card is in play, you may put it into your discard pile to avoid an Attack.")) #2     Defense  Ongoing
+#Bulletproof = Card("cardimgs/imagename", card_info("Bulletproof", "Power", "4", "2", "0", "1", "Defense: You may discard this card to avoid an Attack. If you do, draw a card and you may destroy a card in your discard pile.")) #2     Defense
 #Giant_Growth = Card("cardimgs/imagename", card_info("Giant Growth", "Power", "2", "2", "0", "1", "")) #2
 #X_Ray_Vision = Card("cardimgs/imagename", card_info("X-Ray Vision", "Power", "3", "0", "0", "1", "Each foe reveals the top card of their deck. Choose a non-Location card revealed this way, play it, then return it to the top of its owner's deck.")) #1
 #Ultra_Strength = Card("cardimgs/imagename", card_info("Ultra Strength", "Power", "9", "3", "2", "3", "")) #1
@@ -117,8 +139,9 @@ EquipmentList.append(Aquamans_Trident)
 
 # VILLAINS
 #Johnny_Quick = Card("cardimgs/imagename", card_info("Johnny Quick", "Villain", "2", "0", "1", "1", "")) #2
-#Harley_Quinn = Card("cardimgs/imagename", card_info("Harley Quinn", "Villain", "2", "1", "0", "1", "Attack: Each foe puts a Punch or Vulnerability from their discard pile on top of their deck.")) #2
-#Cheetah = Card("cardimgs/imagename", card_info("Cheetah", "Villain", "2", "0", "0", "1", "Gain any card with cost 4 or less from the Line-Up.")) #2
+#Bane = Card("cardimgs/imagename", card_info("Bane", "Villain", "4", "2", "0", "1", "Attack: Each foe chooses and discards a card."))
+#Mr_Zsasz = Card("cardimgs/imagename", card_info("Mr. Zsasz", "Villain", "3", "2", "0", "1", "Attack: Each foe reveals the top card of his deck. If its cost is odd, that player gains a Weakness."))
+#Scarecrow = Card("cardimgs/imagename", card_info("Bane", "Villain", "5", "2", "0", "1", "Attack: Each foe gains a Weakness"))
 #Doomsday = Card("cardimgs/imagename", card_info("Doomsday", "Villain", "6", "4", "0", "2", "")) #2
 #Red_Lantern_Corps = Card("cardimgs/imagename", card_info("Red Lantern Corps", "Villain", "5", "1", "0", "1", "You may destroy a card in your hand. If you do, additional +2 Power.")) #2
 #Lobo = Card("cardimgs/imagename", card_info("Lobo", "Villain", "7", "3", "0", "2", "You may destroy up to two cards in your hand and/or discard pile.")) #1
@@ -131,6 +154,20 @@ EquipmentList.append(Aquamans_Trident)
 
 # SUPER VILLAINS
 #N = Card("cardimgs/imagename", card_info("N", "SVillain", "C", "P", "D", "V", "T"))
+
+
+
+
+
+""" Defined Cards """
+
+
+
+
+
+
+
+
 
 cards.append(Aquamans_Trident)
 
