@@ -8,11 +8,11 @@ pygame.init()
 from collections import namedtuple
 
 # window dimensions
-SCREEN_WIDTH = 1500
-SCREEN_HEIGHT = 1020
+SCREEN_WIDTH = 1525
+SCREEN_HEIGHT = 950
 SCREEN_NAME = "DC Game"
 # background color for the whole screen
-GAME_BKG_COLOR = (127, 127, 127)
+GAME_BKG_COLOR = (112, 208, 127)
 
 """
 card class
@@ -24,12 +24,13 @@ inform(): returns a text pygame.surface that shows the info namedtuple in text f
 class Card:
     font = pygame.font.SysFont("ubuntucondensed", 24) # the font to be used to write all things card-related
 
-    def __init__(self, image_name, custom=0, power=(0,0), draw=(0,0), destroy_top=(False,0), destroy_hand=0, destroy_discard=0, destroy_hand_or_discard=0, puts_on_top=False, discard=0, op_discard=0, weakness=(False,0), defense=(False, 0), first_appearance=0, type, cost, vp, text):
+    def __init__(self, image_name, type, cost, vp=0, text="", name="", custom=0, power=(0,0), draw=(0,0), destroy_top=(False,0), destroy_hand=0, destroy_discard=0, destroy_hand_or_discard=0, puts_on_top=False, discard=0, op_discard=0, weakness=(False,0), defense=(False, 0), first_appearance=0):
         """
         takes a file path for an image that will be the face of the card
         and a pre-populated card_info namedtuple
         """
         self.img = pygame.image.load(image_name) # the image corresponding to the face of the card
+        self.name = name # will be read from DCCardsList below
         self.type = type # will be read from DCCardsList below
         self.cost = cost # will be read from DCCardsList below
         self.vp = vp # will be read from DCCardsList below
@@ -100,29 +101,52 @@ card_info = namedtuple("card_info", ["Name", "Type", "Cost", "Power", "Draw", "V
 #Weakness  = Card("cardimgs/imagename", card_info("Weakness", "Weakness", "0", "0", "0", "-1", ""))
 #Kick = Card("cardimgs/imagename", card_info("Kick", "Super", "3", "2", "0", "1", ""))
 
+"""  DEFAULT CARD
+ = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="Power", text="") #
+"""
+
 # EQUIPMENT
 EquipmentList = []
-Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", text="You may put any one card you buy or gain this turn on top of your deck.") #3
+
+Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", vp=1, text="You may put any one card you buy or gain this turn on top of your deck.") #3
+Batarang = Card("cardimgs/aquamanstrident.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="") #2
+Soultaker_Sword = Card("cardimgs/imagename.jpg", cost=4, power=(2,0), name="Soultaker Sword", vp=1, type="Equipment", text="You may destroy a card in your hand.", destroy_hand=1) #3
+Legion_Flight_Ring = Card("cardimgs/imagename.jpg", cost=2, name="Legion Flight Ring", vp=1, type="Equipment", text="", draw=(1,0)) #2
+Lasso_of_Truth = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="Defense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
+Power_Ring = Card("cardimgs/imagename.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") #3
+Nth_Metal = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) #3
+White_Lantern_Power_Battery = Card("cardimgs/imagename.jpg", cost=7, name="White Lantern Power Battery", vp=2, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") #1
+
 EquipmentList.append(Aquamans_Trident)
-#Batarang = Card("cardimgs/imagename", card_info("Batarang", "Equipment", "2", "2", "0", "1", "")) #2
-#Soultaker_Sword = Card("cardimgs/imagename", card_info("Soultaker Sword", "Equipment", "4", "2", "0", "1", "You may destroy a card in your hand.")) #3
-#Legion_Flight_Ring = Card("cardimgs/imagename", card_info("Legion Flight Ring", "Equipment", "2", "0", "1", "1", "")) #2
-#Lasso_of_Truth = Card("cardimgs/imagename", card_info("Lasso of Truth", "Equipment", "2", "1", "0", "1", "Defense: You may discard this card to avoid an Attack. If you do, draw a card.")) #2    Defense
-#Power_Ring = Card("cardimgs/imagename", card_info("Power Ring", "Equipment", "3", "2", "0", "1", "Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.")) #3
-#Nth_Metal = Card("cardimgs/imagename", card_info("Nth Metal", "Equipment", "3", "1", "0", "1", "Look at the top card of your deck. You may destroy it.")) #3
-#White_Lantern_Power_Battery = Card("cardimgs/imagename", card_info("White Lantern Power Battery", "Equipment", "7", "0", "0", "2", "Gain all Power Rings from the Line-Up and put them into your hand. Then gain any card from the Line-Up and put it on top of your deck.")) #1
+EquipmentList.append(Batarang)
+EquipmentList.append(Lasso_of_Truth)
+EquipmentList.append(Legion_Flight_Ring)
+EquipmentList.append(Nth_Metal)
+EquipmentList.append(Power_Ring)
+EquipmentList.append(Soultaker_Sword)
+EquipmentList.append(White_Lantern_Power_Battery)
 
 # SUPER POWERS
-#Shazam = Card("cardimgs/imagename", card_info("Shazam!", "Power", "7", "2", "0", "2", "Reveal and play the top card of the main deck, then return it to the top of the main deck.")) #1
-#Super_Strength = Card("cardimgs/imagename", card_info("Super Strength", "Power", "7", "5", "0", "2", "")) #2
-#Starbolt = Card("cardimgs/imagename", card_info("Starbolt", "Power", "5", "2", "0", "1", "+1 additional Power for each Super Power in your discard pile.")) #3
-#Bulletproof = Card("cardimgs/imagename", card_info("Bulletproof", "Power", "4", "2", "0", "1", "Defense: You may discard this card to avoid an Attack. If you do, draw a card and you may destroy a card in your discard pile.")) #2     Defense
-#Giant_Growth = Card("cardimgs/imagename", card_info("Giant Growth", "Power", "2", "2", "0", "1", "")) #2
-#X_Ray_Vision = Card("cardimgs/imagename", card_info("X-Ray Vision", "Power", "3", "0", "0", "1", "Each foe reveals the top card of their deck. Choose a non-Location card revealed this way, play it, then return it to the top of its owner's deck.")) #1
-#Ultra_Strength = Card("cardimgs/imagename", card_info("Ultra Strength", "Power", "9", "3", "2", "3", "")) #1
-#Heat_Vision = Card("cardimgs/imagename", card_info("Heat Vision", "Power", "6", "3", "0", "2", "You may destroy a card in your hand or discard pile.")) #3
+PowerList = []
 
-#PowerList = [Shazam, Super_Strength, Starbolt, Force_Field, Giant_Growth, X_Ray_Vision, Ultra_Strength, Heat_Vision]
+Shazam = Card("cardimgs/imagename.jpg", cost=7, name="Shazam!", type="Power", text="Reveal and play the top card of the main deck, then return it to the top of the main deck.", custom=2) #1
+Super_Strength = Card("cardimgs/imagename.jpg", cost=7, power=(5,0), name="Super Strength", vp=2, type="Power", text="") #2
+Starbolt  = Card("cardimgs/imagename.jpg", cost=5, power=(2,2), name="Starbolt", vp=1, type="Power", text="+1 additional Power for each Super Power in your discard pile.") #3
+Bulletproof = Card("cardimgs/imagename.jpg", cost=4, power=(2,0), name="Bulletproof", vp=1, type="Power", defense=(True,2), text="Defense: You may discard this card to avoid an Attack. If you do, draw a card and you may destroy a card in your discard pile.") #2
+Giant_Growth = Card("cardimgs/imagename.jpg", cost=2, power=(2,0), name="Giant Growth", vp=1, type="Power", text="") #2
+X_Ray_Vision = Card("cardimgs/imagename.jpg", cost=4, name="X-Ray Vision", vp=1, type="Power", custom=4, text="Each foe reveals the top card of their deck. Choose a non-Location card revealed this way, play it, then return it to the top of its owner's deck.") #1
+Ultra_Strength = Card("cardimgs/imagename.jpg", cost=9, power=(3,0), name="Ultra Strength", vp=3, draw=(2,0), type="Power", text="") #1
+Heat_Vision = Card("cardimgs/imagename.jpg", cost=6, power=(3,0), name="Heat Vision", vp=2, type="Power", destroy_hand_or_discard=1, text="") #3
+
+PowerList.append(Bulletproof)
+PowerList.append(Giant_Growth)
+PowerList.append(Heat_Vision)
+PowerList.append(Shazam)
+PowerList.append(Starbolt)
+PowerList.append(Super_Strength)
+PowerList.append(Ultra_Strength)
+PowerList.append(X_Ray_Vision)
+
 
 # HEROES
 #Raven = Card("cardimgs/imagename", card_info("Raven", "Hero", "3", "1", "1", "1", "")) #3
@@ -159,24 +183,33 @@ EquipmentList.append(Aquamans_Trident)
 #N = Card("cardimgs/imagename", card_info("N", "SVillain", "C", "P", "D", "V", "T"))
 
 
-
-
-
-""" Defined Cards """
-
-
-
-
-
-
-
-
-
 cards.append(Aquamans_Trident)
 
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
+bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+bkg.fill(GAME_BKG_COLOR)
+card_outline = pygame.Surface((185, 260))
+card_outline.fill((127, 127, 127))
+card_interior = pygame.Surface((165, 240))
+card_interior.fill(GAME_BKG_COLOR)
+card_outline.blit(card_interior, (10, 10))
+# outline the weakness, kick, supervillain, and main decks
+bkg.blit(card_outline, (45, 45))
+bkg.blit(card_outline, (270, 45))
+bkg.blit(card_outline, (45, 345))
+bkg.blit(card_outline, (270, 345))
+# outline the lineup
+bkg.blit(card_outline, (495, 305))
+bkg.blit(card_outline, (695, 305))
+bkg.blit(card_outline, (895, 305))
+bkg.blit(card_outline, (1095, 305))
+bkg.blit(card_outline, (1295, 305))
+# outline the player's hand
+hand_outline = pygame.Surface((SCREEN_WIDTH, 10))
+hand_outline.fill((127, 127, 127))
+bkg.blit(hand_outline, (0, 745))
 
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
@@ -200,7 +233,7 @@ while not done:
                 done = True
 
     # do this before you draw anything on the screen so you don't cover anything up
-    screen.fill(GAME_BKG_COLOR)
+    screen.blit(bkg, (0, 0))
     for card in cards:
         # if the mouse is on this card
         if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
