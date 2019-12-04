@@ -42,11 +42,19 @@ Defenses:
 
 
 customs:
-  1: J'onn J'onnz
-  2: Shazam!
-  3: White Lantern Power Battery
-  4: X-Ray Vision
-  5: Supergirl
+  1: J'onn J'onnz = 6 power for buying purposes
+  2: Shazam!= 5 power for buying purposes
+  3: White Lantern Power Battery= 6 power for buying purposes
+  4: X-Ray Vision= avg power of opponent's deck (a little more complicated for multiple opponents, but can be done)
+  5: Supergirl= +4 power if there are 12+ kicks in the kick deck, +3 if there are 9-11, +2 if there are 5-8, +0 if there are 4 or less kicks.
+  6: Parallax= 4 times average power in your deck
+  7: Trigon= +8 power
+  8: Graves= +6 power
+  9: Nekron= +9 power
+  10: Bart Allen= +15 power
+  11: Black Adam= +7 power
+  12: H'el= +6 power
+  13: Arkillo= 2 power + 1 power for each equipment in your deck
 
 non-custom Supes:
   Lex Luthor
