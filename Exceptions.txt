@@ -46,20 +46,35 @@ customs:
   2: Shazam!= 5 power for buying purposes
   3: White Lantern Power Battery= 6 power for buying purposes
   4: X-Ray Vision= avg power of opponent's deck (a little more complicated for multiple opponents, but can be done)
-  5: Supergirl= +4 power if there are 12+ kicks in the kick deck, +3 if there are 9-11, +2 if there are 5-8, +0 if there are 4 or less kicks.
-  6: Parallax= 4 times average power in your deck
+  5: Supergirl= +4 power if there are 12+ kicks in the kick deck, +3 if there are 9-11, +2 if there are 5-8, +0 if there are 4 or fewer kicks
+  6: Parallax= 4*average power in your deck (Current deck or total deck?)
   7: Trigon= +8 power
   8: Graves= +6 power
   9: Nekron= +9 power
   10: Bart Allen= +15 power
   11: Black Adam= +7 power
   12: H'el= +6 power
-  13: Arkillo= 2 power + 1 power for each equipment in your deck
+  13: Arkillo= 2 power + 1 power for each equipment in your deck  (Current deck or total deck?)
 
 non-custom Supes:
   Lex Luthor
   Black Manta
-  The Flash
+  The Flash  draw(3,0) discard=1 (Must discard 1 card)
   Mongol
   
+  
+SuperVillain First Appearance Values and Description
+  1: Lex Luthor--Each player gains a Weakness for each villain in the Line-Up.
+  2: Black Manta--Each player discards the top card of their deck. If you discarded a card with cost 1 or more, choose one: Destroy it; or discard your hand.
+  3: Mongol--Each player discards two random cards from their hand.
+ NO 4
+ NO 5 
+  6: Parallax--Each player reveals their hand and discards all cards with cost 2 or less.
+  7: Trigon--Each player destroys a card with cost 1 or greater in their hand.
+  8: Graves--Each player puts a card from their hand face down. Destroy those cards. If one player destroyed a card with cost higher than each other player, they draw two cards.
+  9: Nekron--Each player totals the cost of the cards in their hand. The player(s) with the highest total destroys a random card in their hand. Each other player chooses and destroys a card in their hand.
+  10: Bart Allen--Each player reveals their hand and gains a Weakness for each different card with VP value 1 or greater revealed this way.
+  11: Black Adam--Each player destroys a Hero in their hand or discard pile.
+  12: H'el--Each player reveals the top three cards of their deck. Choose one of them with cost 1 or greater, then destroy it. Discard the rest.
+  13: Arkillo--Each player totals the cost of cards in their hand. The player(s) with the highest total gains three Weakness cards.
   
