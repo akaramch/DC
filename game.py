@@ -12,6 +12,8 @@ import deck
 CARD_WIDTH = 123
 CARD_HEIGHT = 175
 CARD_SPACE = 35
+LARGE_CARD_WIDTH = 316
+LARGE_CARD_HEIGHT = 450
 # window dimensions
 SCREEN_WIDTH = CARD_WIDTH * 7 + CARD_SPACE * 3 + 100
 SCREEN_HEIGHT = CARD_HEIGHT * 3 + CARD_SPACE * 5
@@ -386,6 +388,8 @@ while not done:
     screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
     screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
     screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
+    screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - 23))
+    screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3 + LARGE_CARD_WIDTH, CARD_SPACE - 20))
     for i in range(hand_scroll, len(human_player.own_deck.hand)):
         #TODO draw the hand and let the hand display scroll
         screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
@@ -406,6 +410,11 @@ while not done:
             # TODO the player buys the top card off the main deck (is this a thing? I don't know)
             pass
         pass
+    # is the mouse on a card in the hand
+    elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
+        screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE - 5))
+        if click:
+            human_player.own_deck.hand_to_played(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH])
     # is the mouse on any of the top 4 lineup cards
     for i in range(4):
         if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * (i + 1):
