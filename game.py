@@ -5,7 +5,6 @@ Created mostly for purposes of learning pygame
 
 import pygame
 pygame.init()
-from collections import namedtuple
 
 # card dimensions
 CARD_WIDTH = 123
@@ -31,9 +30,11 @@ class Card:
     def __init__(self, image_name, type, cost, vp=0, text="", name="", custom=0, power=(0,0), draw=(0,0), destroy_top=(False,0), destroy_hand=0, destroy_discard=0, destroy_hand_or_discard=0, puts_on_top=False, discard=0, op_discard=0, weakness=(False,0), defense=(False, 0), first_appearance=0):
         """
         takes a file path for an image that will be the face of the card
-        and a pre-populated card_info namedtuple
+        and all of the fields that the card needs to know about
+        Required fields are image_name, type, cost
         """
-        self.img = pygame.image.load(image_name) # the image corresponding to the face of the card
+        self.img_name = image_name
+        self.img = pygame.image.load(image_name[:-4] + "small.jpg") # the image corresponding to the small card
         self.name = name # will be read from DCCardsList below
         self.type = type # will be read from DCCardsList below
         self.cost = cost # will be read from DCCardsList below
@@ -51,7 +52,11 @@ class Card:
         """move the card to new coordinates on the screen"""
         self.pos = (self.pos[0] + dx, self.pos[1] + dy)
 
-    #TODO figure out of this is actually needed anymore (probably outdated because of resizing the cards)
+    def zoom(self):
+        # load the big image and return it to blit to the screen where big images go
+        return pygame.image.load(self.img_name)
+    
+    #TODO figure out if this is actually needed anymore (probably outdated because of resizing the cards)
 
     # def inform(self):
     #     """return a text surface containing the information about the card (name, type, cost, power, draw, VPs, text)"""
@@ -95,21 +100,22 @@ cards = []
 DC Card List
 A namedtuple to hold the card's information
 ORDER: Name, Type, Cost, Power, Draw, VP, Text
-TO COPY:  = Card("cardimgs/imagename", card_info("N", "T", "C", "P", "D", "V", ""))
+TO COPY:  = Card("cardimgs/imagename.jpg", card_info("N", "T", "C", "P", "D", "V", ""))
 """
 
-# the namedtuple that holds all the information about the card
-card_info = namedtuple("card_info", ["Name", "Type", "Cost", "Power", "Draw", "VP", "Text"])
-
 # STARTERS, WEAKNESSES, KICKS (oh my)
-#Punch = Card("cardimgs/imagename", card_info("Punch", "Starter", "0", "1", "0", "0", ""))
-#Vulnerability = Card("cardimgs/imagename", card_info("Vulnerability", "Starter", "0", "0", "0", "0", ""))
-#Weakness  = Card("cardimgs/imagename", card_info("Weakness", "Weakness", "0", "0", "0", "-1", ""))
-#Kick = Card("cardimgs/imagename", card_info("Kick", "Super", "3", "2", "0", "1", ""))
+Punch = Card("cardimgs/imagename.jpg", type="Starter", cost=0, name="Punch")
+Vulnerability = Card("cardimgs/imagename.jpg", type="Starter", cost=0, name="Vulnerability")
+Weakness  = Card("cardimgs/imagename.jpg", type="Weakness", cost=0, vp=-1, name="Weakness")
+Kick = Card("cardimgs/imagename.jpg", type="Super", cost=3, vp=1, name="Kick", power=(1,0))
+
+StartingPlayerDeck = [Punch] * 7 + [Vulnerability] * 3
 
 """  DEFAULT CARD
  = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="SuperVillain", text="") #
 """
+
+
 
 # EQUIPMENT
 EquipmentList = []
@@ -231,6 +237,9 @@ Arkillo = Card("cardimgs/imagename.jpg", cost=10, first_appearance=13, name="Ark
 
 cards.append(Aquamans_Trident)
 
+
+
+    
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
@@ -247,11 +256,11 @@ bkg.blit(card_outline, (CARD_WIDTH + CARD_SPACE * 2 - 5, CARD_SPACE - 5))
 bkg.blit(card_outline, (CARD_SPACE - 5, CARD_HEIGHT + CARD_SPACE * 2 - 5))
 bkg.blit(card_outline, (CARD_WIDTH + CARD_SPACE * 2 - 5, CARD_HEIGHT + CARD_SPACE * 2 - 5))
 # outline the lineup
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT + CARD_SPACE + 5))
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 3 + 15, CARD_HEIGHT + CARD_SPACE + 5))
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 4 + 35, CARD_HEIGHT + CARD_SPACE + 5))
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 5 + 55, CARD_HEIGHT + CARD_SPACE + 5))
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 6 + 75, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 3 + CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 3 * 2 + CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 3 * 3 + CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 3 * 4 + CARD_SPACE - 5))
 # outline the player's hand
 hand_outline = pygame.Surface((SCREEN_WIDTH, 10))
 hand_outline.fill((127, 127, 127))
@@ -283,7 +292,7 @@ while not done:
     for card in cards:
         # if the mouse is on this card
         if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
-            pass
+            screen.blit(card.zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
             #TODO get the card to increase in size when moused over (or something like that)
             #info = card.inform()
             #screen.blit(info, (0, SCREEN_HEIGHT - info.get_height()))
