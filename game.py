@@ -378,6 +378,9 @@ while not done:
     screen.blit(bkg, (0, 0))
     screen.blit(super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
     screen.blit(main_deck.peek().img, (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented the same way)
+    for card in human_player.own_deck.hand:
+        #TODO draw the hand and let the hand display scroll
+        pass
     for i in range(5): # draw the lineup
         if lineup[i] == None:
             lineup[i] = main_deck.draw()
