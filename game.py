@@ -6,6 +6,7 @@ Created mostly for purposes of learning pygame
 import pygame
 pygame.init()
 import dc_player
+import deck
 
 # card dimensions
 CARD_WIDTH = 123
@@ -41,7 +42,21 @@ class Card:
         self.cost = cost # will be read from DCCardsList below
         self.vp = vp # will be read from DCCardsList below
         self.text = text # will be read from DCCardsList below
+        self.custom = custom
+        self.power = power
+        self.draw = draw
+        self.destroy_top = destroy_top
+        self.destroy_hand = destroy_hand
+        self.destroy_discard = destroy_discard
+        self.destroy_hand_or_discard = destroy_hand_or_discard
+        self.puts_on_top = puts_on_top
+        self.discard = discard
+        self.op_discard = op_discard
+        self.weakness = weakness
+        self.defense = defense
+        self.first_appearance = first_appearance
         self.pos = (0, 0) # the coordinates of the top left corner of the card
+
 
     def get_width(self):
         return self.img.get_width()
@@ -73,25 +88,25 @@ class Card:
     #     return text
     
     def get_name(self):
-        return self.info[0]
+        return self.name
 
     def get_type(self):
-        return self.info[1]
+        return self.type
 
     def get_cost(self):
-        return self.info[2]
+        return self.cost
 
     def get_power(self):
-        return self.info[3]
+        return self.power
 
     def get_draw(self):
-        return self.info[4]
+        return self.draw
 
     def get_vp(self):
-        return self.info[5]
+        return self.vp
 
     def get_text(self):
-        return self.info[6]
+        return self.text
 
 
 # list containing all the images to be used
@@ -107,8 +122,7 @@ TO COPY:  = Card("cardimgs/imagename.jpg", card_info("N", "T", "C", "P", "D", "V
 # STARTERS, WEAKNESSES, KICKS (oh my)
 Punch = Card("cardimgs/imagename.jpg", type="Starter", cost=0, name="Punch")
 Vulnerability = Card("cardimgs/imagename.jpg", type="Starter", cost=0, name="Vulnerability")
-Weakness  = Card("cardimgs/imagename.jpg", type="Weakness", cost=0, vp=-1, name="Weakness")
-Kick = Card("cardimgs/imagename.jpg", type="Super", cost=3, vp=1, name="Kick", power=(1,0))
+Weakness = Card("cardimgs/imagename.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") #HOWEVER MANY
 
 StartingPlayerDeck = [Punch] * 7 + [Vulnerability] * 3
 
@@ -141,6 +155,16 @@ EquipmentList.append(Power_Ring)
 EquipmentList.append(Soultaker_Sword)
 EquipmentList.append(White_Lantern_Power_Battery)
 
+#add equipment to main deck
+StartingMainDeck += [Aquamans_Trident] *3
+StartingMainDeck += [Batarang] *2
+StartingMainDeck += [Lasso_of_Truth] *2
+StartingMainDeck += [Legion_Flight_Ring] *2
+StartingMainDeck += [Nth_Metal] *3
+StartingMainDeck += [Power_Ring] *3
+StartingMainDeck += [Soultaker_Sword] *3
+StartingMainDeck += [White_Lantern_Power_Battery] *1
+
 # SUPER POWERS
 PowerList = []
 
@@ -164,6 +188,15 @@ PowerList.append(Super_Strength)
 PowerList.append(Ultra_Strength)
 PowerList.append(X_Ray_Vision)
 
+#add non-kick powers to main deck list
+StartingMainDeck += [Bulletproof] *2
+StartingMainDeck += [Giant_Growth] *2
+StartingMainDeck += [Heat_Vision] *3
+StartingMainDeck += [Shazam] *1
+StartingMainDeck += [Starbolt] *3
+StartingMainDeck += [Super_Strength] *2
+StartingMainDeck += [Ultra_Strength] *1
+StartingMainDeck += [X_Ray_Vision] *3
 
 # HEROES
 HeroList = []
@@ -192,6 +225,18 @@ HeroList.append(Supergirl)
 HeroList.append(The_Fastest_Man_Alive)
 HeroList.append(Winged_Warrior)
 
+#add heroes to main deck list
+StartingMainDeck += [Catwoman] *2
+StartingMainDeck += [Hawkgirl] *2
+StartingMainDeck += [Jonn_Jonnz] *1
+StartingMainDeck += [Katana] *2
+StartingMainDeck += [Kid_Flash] *2
+StartingMainDeck += [King_of_Atlantis] *1
+StartingMainDeck += [Power_Girl] *3
+StartingMainDeck += [Raven] *3
+StartingMainDeck += [Supergirl] *2
+StartingMainDeck += [The_Fastest_Man_Alive] *1
+StartingMainDeck += [Winged_Warrior] *1
 
 # VILLAINS
 VillainList = []
@@ -220,6 +265,20 @@ VillainList.append(Red_Lantern_Corps)
 VillainList.append(Scarecrow)  #NUMBER UNDECIDED
 VillainList.append(Two_Face)
 
+#add villains to main deck list
+# TODO StartingMainDeck += [Bane] *
+StartingMainDeck += [Doomsday] *2
+StartingMainDeck += [Gorilla_Grod] *2
+StartingMainDeck += [Jervis_Tetch] *2
+StartingMainDeck += [Johnny_Quick] *2
+StartingMainDeck += [Killer_Croc] *2
+StartingMainDeck += [Lobo] *1
+# TODO StartingMainDeck += [Mr_Zsasz] *
+StartingMainDeck += [Red_Lantern_Corps] *2
+# TODO StartingMainDeck += [Scarecrow] *
+StartingMainDeck += [Two_Face] *2
+
+
 # SUPER VILLAINS
 SuperVillainList = []
 
@@ -236,12 +295,19 @@ Black_Adam = Card("cardimgs/imagename.jpg", cost=11, first_appearance=11, name="
 Hel = Card("cardimgs/imagename.jpg", cost=9, first_appearance=12, name="H'el", vp=5, custom=12, type="SuperVillain", text="Reveal and draw cards from the top of your deck until you have drawn 7 or greater cost worth of cards.\nFirst Appearance--Attack: Each player reveals the top three cards of their deck. Choose one of them with cost 1 or greater, then destroy it. Discard the rest.")
 Arkillo = Card("cardimgs/imagename.jpg", cost=10, first_appearance=13, name="Arkillo", vp=5, custom=13, type="SuperVillain", text="+2 Power and put all Equipment from your discard pile into your hand.\nFirst Appearance--Attack: Each player totals the cost of cards in their hand. The player(s) with the highest total gains three Weakness cards.")
 
-Weakness = Card("cardimgs/imagename.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") #HOWEVER MANY
-
-
-
-cards.append(Aquamans_Trident)
-
+#list of villains not including the Flash who goes on top
+SuperVillainDeckList = []
+SuperVillainDeckList.append(Lex_Luthor)
+SuperVillainDeckList.append(Black_Manta)
+SuperVillainDeckList.append(Mongol)
+SuperVillainDeckList.append(Parallax)
+SuperVillainDeckList.append(Trigon)
+SuperVillainDeckList.append(Graves)
+SuperVillainDeckList.append(Nekron)
+SuperVillainDeckList.append(Bart_Allen)
+SuperVillainDeckList.append(Black_Adam)
+SuperVillainDeckList.append(Hel)
+SuperVillainDeckList.append(Arkillo)
 
 
     
@@ -282,8 +348,18 @@ done = False
 human_player = dc_player.Player(StartingPlayerDeck, False) #makes the human player
 computer_player = dc_player.Player(StartingPlayerDeck, True) #makes computer player
 players = [human_player, computer_player] #list of players
-main_deck =
-# game loop
+main_deck = deck.Deck(StartingMainDeck)
+super_villain_deck = deck.Deck(SuperVillainDeckList)
+
+#shuffle the deck
+super_villain_deck.shuffle()
+super_villain_deck.add_to_front(The_Flash) #put the flash on top
+main_deck.shuffle()
+human_player.own_deck.shuffle()
+computer_player.own_deck.shuffle()
+
+cards.append(Aquamans_Trident)
+
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
 
@@ -301,10 +377,9 @@ while not done:
     # do this before you draw anything on the screen so you don't cover anything up
     screen.blit(bkg, (0, 0))
     for card in cards:
-        # if the mouse is on this card
+        # if the mouse is on this card, show zoomed card
         if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
             screen.blit(card.zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
-            #TODO get the card to increase in size when moused over (or something like that)
             #info = card.inform()
             #screen.blit(info, (0, SCREEN_HEIGHT - info.get_height()))
         if click:
