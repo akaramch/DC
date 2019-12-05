@@ -19,7 +19,7 @@ SCREEN_NAME = "DC Game"
 GAME_BKG_COLOR = (112, 208, 127)
 
 """
-card class
+Card class
 __init__(image_name, name, type, cost, power, draw, vp, text): loads card face image and info namedtuple
 get_width(), get_height(): get width and height of card face image
 move(dx, dy): move the card by that distance
@@ -122,7 +122,7 @@ StartingPlayerDeck = [Punch] * 7 + [Vulnerability] * 3
 EquipmentList = []
 
 Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", vp=1, text="+2 Power. You may put any one card you buy or gain this turn on top of your deck.") #3
-Batarang = Card("cardimgs/aquamanstrident.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") #2
+Batarang = Card("cardimgs/imagename.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") #2
 Soultaker_Sword = Card("cardimgs/imagename.jpg", cost=4, power=(2,0), name="Soultaker Sword", vp=1, type="Equipment", text="+2 Power. You may destroy a card in your hand.", destroy_hand=1) #3
 Legion_Flight_Ring = Card("cardimgs/imagename.jpg", cost=2, name="Legion Flight Ring", vp=1, type="Equipment", text="Draw a card.", draw=(1,0)) #2
 Lasso_of_Truth = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
