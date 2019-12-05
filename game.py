@@ -7,9 +7,13 @@ import pygame
 pygame.init()
 from collections import namedtuple
 
+# card dimensions
+CARD_WIDTH = 123
+CARD_HEIGHT = 175
+CARD_SPACE = 35
 # window dimensions
-SCREEN_WIDTH = 1525
-SCREEN_HEIGHT = 950
+SCREEN_WIDTH = CARD_WIDTH * 7 + CARD_SPACE * 3 + 100
+SCREEN_HEIGHT = CARD_HEIGHT * 3 + CARD_SPACE * 5
 SCREEN_NAME = "DC Game"
 # background color for the whole screen
 GAME_BKG_COLOR = (112, 208, 127)
@@ -47,18 +51,20 @@ class Card:
         """move the card to new coordinates on the screen"""
         self.pos = (self.pos[0] + dx, self.pos[1] + dy)
 
-    def inform(self):
-        """return a text surface containing the information about the card (name, type, cost, power, draw, VPs, text)"""
-        # the aforementioned text surface
-        text = pygame.Surface((SCREEN_WIDTH, Card.font.get_linesize() * 7)) # as wide as the screen for 7 lines: name, type, cost, power, draw, VPs, text
-        text.fill(GAME_BKG_COLOR) # get rid of text background
-        linenum = 0
-        for field in self.info.fields:
-            # make a surface containing the text of this line ("Name: Aquaman's Trident" or "Type: Supervillain" or whatever)
-            line = Card.font.render(" " + field + ": " + getattr(self.info, field), False, (255, 255, 255))
-            text.blit(line, (0, Card.font.get_linesize() * linenum)) # draw the line onto the text at the appropriate line height
-            linenum += 1
-        return text
+    #TODO figure out of this is actually needed anymore (probably outdated because of resizing the cards)
+
+    # def inform(self):
+    #     """return a text surface containing the information about the card (name, type, cost, power, draw, VPs, text)"""
+    #     # the aforementioned text surface
+    #     text = pygame.Surface((SCREEN_WIDTH, Card.font.get_linesize() * 7)) # as wide as the screen for 7 lines: name, type, cost, power, draw, VPs, text
+    #     text.fill(GAME_BKG_COLOR) # get rid of text background
+    #     linenum = 0
+    #     for field in self.info.fields:
+    #         # make a surface containing the text of this line ("Name: Aquaman's Trident" or "Type: Supervillain" or whatever)
+    #         line = Card.font.render(" " + field + ": " + getattr(self.info, field), False, (255, 255, 255))
+    #         text.blit(line, (0, Card.font.get_linesize() * linenum)) # draw the line onto the text at the appropriate line height
+    #         linenum += 1
+    #     return text
     
     def get_name(self):
         return self.info[0]
@@ -187,7 +193,11 @@ Doomsday = Card("cardimgs/imagename.jpg", cost=6, power=(4,0), name="Doomsday", 
 Red_Lantern_Corps = Card("cardimgs/imagename.jpg", cost=5, power=(1,6), name="Red Lantern Corps", vp=1, type="Villain", destroy_hand=1, text="You may destroy a card in your hand. If you do, additional +2 Power.") #2
 Lobo = Card("cardimgs/imagename.jpg", cost=7, power=(3,0), name="Lobo", vp=2, type="Villain", destroy_hand_or_discard=2, text="You may destroy up to two cards in your hand and/or discard pile.") #1
 Gorilla_Grod = Card("cardimgs/imagename.jpg", cost=5, power=(3,0), name="Gorilla Grod", vp=2, type="Villain", text="") #2
+<<<<<<< HEAD
 Jervis_Tetch = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True,2), text="") #2
+=======
+Jervis_Tetch = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True, 2), text="") #2
+>>>>>>> 5aeb82b567e999587ecde6e3647a3862db02c9c3
 Killer_Croc = Card("cardimgs/imagename.jpg", cost=4, power=(2,7), name="Killer Croc", vp=1, type="Villain", text="If you play or have played another Villain this turn, additional +1 Power.") #2
 Two_Face = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Two-Face", vp=1, type="Villain", draw=(0,1), text="Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.") #2
 
@@ -230,26 +240,26 @@ screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
 bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 bkg.fill(GAME_BKG_COLOR)
-card_outline = pygame.Surface((185, 260))
+card_outline = pygame.Surface((CARD_WIDTH + 10, CARD_HEIGHT + 10))
 card_outline.fill((127, 127, 127))
-card_interior = pygame.Surface((165, 240))
+card_interior = pygame.Surface((CARD_WIDTH - 10, CARD_HEIGHT - 10))
 card_interior.fill(GAME_BKG_COLOR)
 card_outline.blit(card_interior, (10, 10))
 # outline the weakness, kick, supervillain, and main decks
-bkg.blit(card_outline, (45, 45))
-bkg.blit(card_outline, (270, 45))
-bkg.blit(card_outline, (45, 345))
-bkg.blit(card_outline, (270, 345))
+bkg.blit(card_outline, (CARD_SPACE - 5, CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_WIDTH + CARD_SPACE * 2 - 5, CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE - 5, CARD_HEIGHT + CARD_SPACE * 2 - 5))
+bkg.blit(card_outline, (CARD_WIDTH + CARD_SPACE * 2 - 5, CARD_HEIGHT + CARD_SPACE * 2 - 5))
 # outline the lineup
-bkg.blit(card_outline, (495, 305))
-bkg.blit(card_outline, (695, 305))
-bkg.blit(card_outline, (895, 305))
-bkg.blit(card_outline, (1095, 305))
-bkg.blit(card_outline, (1295, 305))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 3 + 15, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 4 + 35, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 5 + 55, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 6 + 75, CARD_HEIGHT + CARD_SPACE + 5))
 # outline the player's hand
 hand_outline = pygame.Surface((SCREEN_WIDTH, 10))
 hand_outline.fill((127, 127, 127))
-bkg.blit(hand_outline, (0, 745))
+bkg.blit(hand_outline, (0, CARD_HEIGHT * 2 + CARD_SPACE * 5 - 5))
 
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
@@ -277,8 +287,10 @@ while not done:
     for card in cards:
         # if the mouse is on this card
         if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
-            info = card.inform()
-            screen.blit(info, (0, SCREEN_HEIGHT - info.get_height()))
+            pass
+            #TODO get the card to increase in size when moused over (or something like that)
+            #info = card.inform()
+            #screen.blit(info, (0, SCREEN_HEIGHT - info.get_height()))
         if click:
             dx, dy = pygame.mouse.get_pos()[0] - mouse_pos[0], pygame.mouse.get_pos()[1] - mouse_pos[1] # get the change in mouse position between frames
             # if the mouse is on this card
