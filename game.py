@@ -112,6 +112,8 @@ Kick = Card("cardimgs/imagename.jpg", type="Super", cost=3, vp=1, name="Kick", p
 
 StartingPlayerDeck = [Punch] * 7 + [Vulnerability] * 3
 
+StartingMainDeck = [] #will be used to build the card list for the main deck
+
 """  DEFAULT CARD
  = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="SuperVillain", text="") #
 """
@@ -273,6 +275,12 @@ pos = (0, 0) # position of the mouse
 dx, dy = 0, 0 # the change in the mouse coordinates between frames
 i = 1
 done = False
+
+#initialize game variables (decks and players)
+human_player = dc_player.Player(StartingPlayerDeck, False) #makes the human player
+computer_player = dc_player.Player(StartingPlayerDeck, True) #makes computer player
+players = [human_player, computer_player] #list of players
+main_deck =
 # game loop
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
