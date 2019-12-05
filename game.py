@@ -18,6 +18,7 @@ SCREEN_HEIGHT = CARD_HEIGHT * 3 + CARD_SPACE * 5
 SCREEN_NAME = "DC Game"
 # background color for the whole screen
 GAME_BKG_COLOR = (112, 208, 127)
+GAME_FONT = pygame.font.SysFont("ubuntucondensed", 14) # the font to be used to write all things card-related
 
 """
 Card class
@@ -27,7 +28,6 @@ move(dx, dy): move the card by that distance
 inform(): returns a text pygame.surface that shows the info namedtuple in text form
 """
 class Card:
-    font = pygame.font.SysFont("ubuntucondensed", 24) # the font to be used to write all things card-related
 
     def __init__(self, image_name, type, cost, vp=0, text="", name="", custom=0, power=(0,0), draw=(0,0), destroy_top=(False,0), destroy_hand=0, destroy_discard=0, destroy_hand_or_discard=0, puts_on_top=False, discard=0, op_discard=0, weakness=(False,0), defense=(False, 0), first_appearance=0):
         """
@@ -54,7 +54,7 @@ class Card:
         self.op_discard = op_discard # number of cards this card makes each opponent discard
         self.weakness = weakness # tuple of (T/F this card gives an opponent a weakness, code number for when that happens)
         self.defense = defense # tuple of (T/F this card is a defense, code number for what it does)
-        self.first_appearance = first_appearance # TODO what is this? I don't know
+        self.first_appearance = first_appearance # an index into a hardcoded list of supervillain first-appearance attacks
         self.pos = (0, 0) # the coordinates of the top left corner of the card
     
     def __str__(self):
@@ -383,7 +383,9 @@ while not done:
     # do this before you draw anything on the screen so you don't cover anything up
     screen.blit(bkg, (0, 0))
     screen.blit(super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
-    screen.blit(main_deck.peek().img, (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented the same way)
+    screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
+    screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
+    screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
     for i in range(hand_scroll, len(human_player.own_deck.hand)):
         #TODO draw the hand and let the hand display scroll
         screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
@@ -394,26 +396,26 @@ while not done:
     
     # is the mouse on the supervillain deck
     if mouse_pos[0] > CARD_SPACE and mouse_pos[0] < CARD_SPACE + CARD_WIDTH and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
-        screen.blit(super_villain_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+        screen.blit(super_villain_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE - 5))
         if click:
             # TODO the player buys the top card of the supervillain deck
             pass
     # is the mouse on the main deck
     elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
-        screen.blit(main_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
         if click:
             # TODO the player buys the top card off the main deck (is this a thing? I don't know)
             pass
+        pass
     # is the mouse on any of the top 4 lineup cards
     for i in range(4):
         if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * (i + 1):
-            screen.blit(lineup[i].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+            screen.blit(lineup[i].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE - 5))
             if click:
                 # TODO the player buys this card and it leaves a blank space
                 pass
     # is the mouse on the last lineup card
     if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * 4 and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * 4 + CARD_HEIGHT:
-        screen.blit(lineup[4].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+        screen.blit(lineup[4].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE - 5))
         if click:
             # TODO the player buys this card and it leaves a blank space
             pass
