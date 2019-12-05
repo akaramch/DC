@@ -187,7 +187,7 @@ Doomsday = Card("cardimgs/imagename.jpg", cost=6, power=(4,0), name="Doomsday", 
 Red_Lantern_Corps = Card("cardimgs/imagename.jpg", cost=5, power=(1,6), name="Red Lantern Corps", vp=1, type="Villain", destroy_hand=1, text="You may destroy a card in your hand. If you do, additional +2 Power.") #2
 Lobo = Card("cardimgs/imagename.jpg", cost=7, power=(3,0), name="Lobo", vp=2, type="Villain", destroy_hand_or_discard=2, text="You may destroy up to two cards in your hand and/or discard pile.") #1
 Gorilla_Grod = Card("cardimgs/imagename.jpg", cost=5, power=(3,0), name="Gorilla Grod", vp=2, type="Villain", text="") #2
-Jervis_Tetch = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True2,), text="") #2
+Jervis_Tetch = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True,2), text="") #2
 Killer_Croc = Card("cardimgs/imagename.jpg", cost=4, power=(2,7), name="Killer Croc", vp=1, type="Villain", text="If you play or have played another Villain this turn, additional +1 Power.") #2
 Two_Face = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Two-Face", vp=1, type="Villain", draw=(0,1), text="Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.") #2
 
