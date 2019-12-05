@@ -56,7 +56,9 @@ class Card:
         self.defense = defense # tuple of (T/F this card is a defense, code number for what it does)
         self.first_appearance = first_appearance # TODO what is this? I don't know
         self.pos = (0, 0) # the coordinates of the top left corner of the card
-
+    
+    def __str__(self):
+        return self.name
 
     def get_width(self):
         return self.img.get_width()
@@ -117,11 +119,11 @@ TO COPY:  = Card("cardimgs/imagename.jpg", card_info("N", "T", "C", "P", "D", "V
 """
 
 # STARTERS, WEAKNESSES, KICKS (oh my)
-Punch = Card("cardimgs/imagename.jpg", type="Starter", cost=0, name="Punch")
-Vulnerability = Card("cardimgs/imagename.jpg", type="Starter", cost=0, name="Vulnerability")
-Weakness = Card("cardimgs/imagename.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") #HOWEVER MANY
+Punch = Card("cardimgs/punch.jpg", type="Starter", cost=0, name="Punch")
+Vulnerability = Card("cardimgs/vulnerability.jpg", type="Starter", cost=0, name="Vulnerability")
+Weakness = Card("cardimgs/weakness.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") #HOWEVER MANY
 
-StartingPlayerDeck = [Punch] * 7 + [Vulnerability] * 3
+StartingPlayerDeck = [Vulnerability] * 3 + [Punch] * 7
 
 StartingMainDeck = [] #will be used to build the card list for the main deck
 
@@ -135,13 +137,13 @@ StartingMainDeck = [] #will be used to build the card list for the main deck
 EquipmentList = []
 
 Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", vp=1, text="+2 Power. You may put any one card you buy or gain this turn on top of your deck.") #3
-Batarang = Card("cardimgs/imagename.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") #2
-Soultaker_Sword = Card("cardimgs/imagename.jpg", cost=4, power=(2,0), name="Soultaker Sword", vp=1, type="Equipment", text="+2 Power. You may destroy a card in your hand.", destroy_hand=1) #3
-Legion_Flight_Ring = Card("cardimgs/imagename.jpg", cost=2, name="Legion Flight Ring", vp=1, type="Equipment", text="Draw a card.", draw=(1,0)) #2
-Lasso_of_Truth = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
-Power_Ring = Card("cardimgs/imagename.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="+2 Power. Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") #3
-Nth_Metal = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="+1 Power. Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) #3
-White_Lantern_Power_Battery = Card("cardimgs/imagename.jpg", cost=7, name="White Lantern Power Battery", vp=2, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") #1
+Batarang = Card("cardimgs/batarang.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") #2
+Soultaker_Sword = Card("cardimgs/soultakersword.jpg", cost=4, power=(2,0), name="Soultaker Sword", vp=1, type="Equipment", text="+2 Power. You may destroy a card in your hand.", destroy_hand=1) #3
+Legion_Flight_Ring = Card("cardimgs/legionflightring.jpg", cost=2, name="Legion Flight Ring", vp=1, type="Equipment", text="Draw a card.", draw=(1,0)) #2
+Lasso_of_Truth = Card("cardimgs/lassooftruth.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
+Power_Ring = Card("cardimgs/powerring.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="+2 Power. Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") #3
+Nth_Metal = Card("cardimgs/nthmetal.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="+1 Power. Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) #3
+White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") #1
 
 EquipmentList.append(Aquamans_Trident)
 EquipmentList.append(Batarang)
@@ -165,15 +167,15 @@ StartingMainDeck += [White_Lantern_Power_Battery] *1
 # SUPER POWERS
 PowerList = []
 
-Kick = Card("cardimgs/imagename.jpg", cost=3, power=(2,0), name="Kick", vp=1, type="Power", text="+2 Power.") #HOWEVER MANY
-Shazam = Card("cardimgs/imagename.jpg", cost=7, name="Shazam!", type="Power", text="Reveal and play the top card of the main deck, then return it to the top of the main deck.", custom=2) #1
-Super_Strength = Card("cardimgs/imagename.jpg", cost=7, power=(5,0), name="Super Strength", vp=2, type="Power", text="+5 Power.") #2
-Starbolt  = Card("cardimgs/imagename.jpg", cost=5, power=(2,2), name="Starbolt", vp=1, type="Power", text="+1 additional Power for each Super Power in your discard pile.") #3
-Bulletproof = Card("cardimgs/imagename.jpg", cost=4, power=(2,0), name="Bulletproof", vp=1, type="Power", defense=(True,2), text="+1 Power\nDefense: You may discard this card to avoid an Attack. If you do, draw a card and you may destroy a card in your discard pile.") #2
-Giant_Growth = Card("cardimgs/imagename.jpg", cost=2, power=(2,0), name="Giant Growth", vp=1, type="Power", text="+2 Power.") #2
-X_Ray_Vision = Card("cardimgs/imagename.jpg", cost=4, name="X-Ray Vision", vp=1, type="Power", custom=4, text="Each foe reveals the top card of their deck. Choose a non-Location card revealed this way, play it, then return it to the top of its owner's deck.") #1
-Ultra_Strength = Card("cardimgs/imagename.jpg", cost=9, power=(3,0), name="Ultra Strength", vp=3, draw=(2,0), type="Power", text="+3 Power and draw 2 cards.") #1
-Heat_Vision = Card("cardimgs/imagename.jpg", cost=6, power=(3,0), name="Heat Vision", vp=2, type="Power", destroy_hand_or_discard=1, text="+3 Power and you may destroy a card in your hand or discard pile.") #3
+Kick = Card("cardimgs/kick.jpg", cost=3, power=(2,0), name="Kick", vp=1, type="Power", text="+2 Power.") #HOWEVER MANY
+Shazam = Card("cardimgs/shazam.jpg", cost=7, name="Shazam!", type="Power", text="Reveal and play the top card of the main deck, then return it to the top of the main deck.", custom=2) #1
+Super_Strength = Card("cardimgs/superstrength.jpg", cost=7, power=(5,0), name="Super Strength", vp=2, type="Power", text="+5 Power.") #2
+Starbolt  = Card("cardimgs/starbolt.jpg", cost=5, power=(2,2), name="Starbolt", vp=1, type="Power", text="+1 additional Power for each Super Power in your discard pile.") #3
+Bulletproof = Card("cardimgs/bulletproof.jpg", cost=4, power=(2,0), name="Bulletproof", vp=1, type="Power", defense=(True,2), text="+1 Power\nDefense: You may discard this card to avoid an Attack. If you do, draw a card and you may destroy a card in your discard pile.") #2
+Giant_Growth = Card("cardimgs/giantgrowth.jpg", cost=2, power=(2,0), name="Giant Growth", vp=1, type="Power", text="+2 Power.") #2
+X_Ray_Vision = Card("cardimgs/xrayvision.jpg", cost=4, name="X-Ray Vision", vp=1, type="Power", custom=4, text="Each foe reveals the top card of their deck. Choose a non-Location card revealed this way, play it, then return it to the top of its owner's deck.") #1
+Ultra_Strength = Card("cardimgs/ultrastrength.jpg", cost=9, power=(3,0), name="Ultra Strength", vp=3, draw=(2,0), type="Power", text="+3 Power and draw 2 cards.") #1
+Heat_Vision = Card("cardimgs/heatvision.jpg", cost=6, power=(3,0), name="Heat Vision", vp=2, type="Power", destroy_hand_or_discard=1, text="+3 Power and you may destroy a card in your hand or discard pile.") #3
 
 PowerList.append(Bulletproof)
 PowerList.append(Giant_Growth)
@@ -198,21 +200,23 @@ StartingMainDeck += [X_Ray_Vision] *3
 # HEROES
 HeroList = []
 
-Raven = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Raven", draw=(1,0), vp=1, type="Hero", text="+1 Power and draw a card.") #3
+Raven = Card("cardimgs/raven.jpg", cost=3, power=(1,0), name="Raven", draw=(1,0), vp=1, type="Hero", text="+1 Power and draw a card.") #3
+# TODO scan Catwoman
 Catwoman = Card("cardimgs/imagename.jpg", cost=2, power=(2,0), name="Catwoman", vp=1, type="Hero", text="+2 Power.") #2
-Katana = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Katana", vp=1, type="Hero", defense=(True,1), text="+1 Power.\nDefense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
-Winged_Warrior = Card("cardimgs/imagename.jpg", cost=6, power=(2,3), name="Winged Warrior", vp=2, type="Hero", text="+2 Power.\nIf you play or have played another Hero this turn, additional +3 Power.") #1
-Power_Girl = Card("cardimgs/imagename.jpg", cost=5, power=(3,0), name="Power Girl", vp=2, type="Hero", text="+3 Power.") #3
-Hawkgirl = Card("cardimgs/imagename.jpg", cost=2, power=(1,4), name="Hawkgirl", vp=1, type="Hero", text="+1 Power and and additional +1 Power for each Hero in your discard pile.") #2
-Kid_Flash = Card("cardimgs/imagename.jpg", cost=2, name="Kid Flash", vp=1, draw=(1,0), type="Hero", text="Draw a card.") #2
-Supergirl = Card("cardimgs/imagename.jpg", cost=4, name="Supergirl", vp=1, type="Hero", custom=5, text="You may put a Kick from the Kick stack into your hand.") #2
-Jonn_Jonnz = Card("cardimgs/imagename.jpg", cost=6, name="J'onn J'onnz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") #1
-The_Fastest_Man_Alive = Card("cardimgs/imagename.jpg", cost=5, name="The Fastest Man Alive", vp=1, draw=(2,0), type="Hero", text="Draw two cards.") #1
-King_of_Atlantis = Card("cardimgs/imagename.jpg", cost=5, power=(1,5), name="King of Atlantis", vp=1, destroy_discard=1, type="Hero", text="You may destroy a card in your discard pile. If you do, +3 Power. Otherwise, +1 Power.") #1
+Katana = Card("cardimgs/katana.jpg", cost=2, power=(1,0), name="Katana", vp=1, type="Hero", defense=(True,1), text="+1 Power.\nDefense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
+Winged_Warrior = Card("cardimgs/wingedwarrior.jpg", cost=6, power=(2,3), name="Winged Warrior", vp=2, type="Hero", text="+2 Power.\nIf you play or have played another Hero this turn, additional +3 Power.") #1
+Power_Girl = Card("cardimgs/powergirl.jpg", cost=5, power=(3,0), name="Power Girl", vp=2, type="Hero", text="+3 Power.") #3
+Hawkgirl = Card("cardimgs/hawkgirl.jpg", cost=2, power=(1,4), name="Hawkgirl", vp=1, type="Hero", text="+1 Power and and additional +1 Power for each Hero in your discard pile.") #2
+Kid_Flash = Card("cardimgs/kidflash.jpg", cost=2, name="Kid Flash", vp=1, draw=(1,0), type="Hero", text="Draw a card.") #2
+Supergirl = Card("cardimgs/supergirl.jpg", cost=4, name="Supergirl", vp=1, type="Hero", custom=5, text="You may put a Kick from the Kick stack into your hand.") #2
+# TODO scan J'onn J'onzz
+Jonn_Jonzz = Card("cardimgs/imagename.jpg", cost=6, name="J'onn J'onzz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") #1
+The_Fastest_Man_Alive = Card("cardimgs/thefastestmanalive.jpg", cost=5, name="The Fastest Man Alive", vp=1, draw=(2,0), type="Hero", text="Draw two cards.") #1
+King_of_Atlantis = Card("cardimgs/kingofatlantis.jpg", cost=5, power=(1,5), name="King of Atlantis", vp=1, destroy_discard=1, type="Hero", text="You may destroy a card in your discard pile. If you do, +3 Power. Otherwise, +1 Power.") #1
 
 HeroList.append(Catwoman)
 HeroList.append(Hawkgirl)
-HeroList.append(Jonn_Jonnz)
+HeroList.append(Jonn_Jonzz)
 HeroList.append(Katana)
 HeroList.append(Kid_Flash)
 HeroList.append(King_of_Atlantis)
@@ -225,7 +229,7 @@ HeroList.append(Winged_Warrior)
 #add heroes to main deck list
 StartingMainDeck += [Catwoman] *2
 StartingMainDeck += [Hawkgirl] *2
-StartingMainDeck += [Jonn_Jonnz] *1
+StartingMainDeck += [Jonn_Jonzz] *1
 StartingMainDeck += [Katana] *2
 StartingMainDeck += [Kid_Flash] *2
 StartingMainDeck += [King_of_Atlantis] *1
@@ -238,21 +242,21 @@ StartingMainDeck += [Winged_Warrior] *1
 # VILLAINS
 VillainList = []
 
-Johnny_Quick = Card("cardimgs/imagename.jpg", cost=2, draw=(1,0), name="Johnny Quick", vp=1, type="Villain", text="Draw a card.") #2
-Bane = Card("cardimgs/imagename.jpg", cost=4, power=(2,0), name="Bane", vp=1, op_discard=1, type="Villain", text="+2 Power.\nAttack: Each foe chooses and discards a card.") #UNDECIDED NUMBER
-Mr_Zsasz = Card("cardimgs/imagename.jpg", cost=3, power=(2,0), name="Mr. Zsasz", vp=1, weakness=(True,1), type="Villain", text="+2 Power.\nAttack: Each foe reveals the top card of his deck. If its cost is odd, that player gains a Weakness.") #UNDECIDED NUMBER
-Scarecrow = Card("cardimgs/imagename.jpg", cost=5, power=(2,0), name="Scarecrow", vp=1, weakness=(True,2), type="Villain", text="+2 Power.\nAttack: Each foe gains a Weakness.") #UNDECIDED NUMBER
-Doomsday = Card("cardimgs/imagename.jpg", cost=6, power=(4,0), name="Doomsday", vp=2, type="Villain", text="+4 Power.") #2
-Red_Lantern_Corps = Card("cardimgs/imagename.jpg", cost=5, power=(1,6), name="Red Lantern Corps", vp=1, type="Villain", destroy_hand=1, text="+1 Power. You may destroy a card in your hand. If you do, additional +2 Power.") #2
-Lobo = Card("cardimgs/imagename.jpg", cost=7, power=(3,0), name="Lobo", vp=2, type="Villain", destroy_hand_or_discard=2, text="+3 Power. You may destroy up to two cards in your hand and/or discard pile.") #1
-Gorilla_Grod = Card("cardimgs/imagename.jpg", cost=5, power=(3,0), name="Gorilla Grod", vp=2, type="Villain", text="+3 Power.") #2
-Jervis_Tetch = Card("cardimgs/imagename.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True,2), text="+1 Power. Look at the top card of your deck. Destroy it or discard it.") #2
-Killer_Croc = Card("cardimgs/imagename.jpg", cost=4, power=(2,7), name="Killer Croc", vp=1, type="Villain", text="+2 Power. If you play or have played another Villain this turn, additional +1 Power.") #2
-Two_Face = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Two-Face", vp=1, type="Villain", draw=(0,1), text="+1 Power. Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.") #2
+Johnny_Quick = Card("cardimgs/johnnyquick.jpg", cost=2, draw=(1,0), name="Johnny Quick", vp=1, type="Villain", text="Draw a card.") #2
+Bane = Card("cardimgs/bane.jpg", cost=4, power=(2,0), name="Bane", vp=1, op_discard=1, type="Villain", text="+2 Power.\nAttack: Each foe chooses and discards a card.") #UNDECIDED NUMBER
+Mr_Zsasz = Card("cardimgs/mrzsasz.jpg", cost=3, power=(2,0), name="Mr. Zsasz", vp=1, weakness=(True,1), type="Villain", text="+2 Power.\nAttack: Each foe reveals the top card of his deck. If its cost is odd, that player gains a Weakness.") #UNDECIDED NUMBER
+Scarecrow = Card("cardimgs/scarecrow.jpg", cost=5, power=(2,0), name="Scarecrow", vp=1, weakness=(True,2), type="Villain", text="+2 Power.\nAttack: Each foe gains a Weakness.") #UNDECIDED NUMBER
+Doomsday = Card("cardimgs/doomsday.jpg", cost=6, power=(4,0), name="Doomsday", vp=2, type="Villain", text="+4 Power.") #2
+Red_Lantern_Corps = Card("cardimgs/redlanterncorps.jpg", cost=5, power=(1,6), name="Red Lantern Corps", vp=1, type="Villain", destroy_hand=1, text="+1 Power. You may destroy a card in your hand. If you do, additional +2 Power.") #2
+Lobo = Card("cardimgs/lobo.jpg", cost=7, power=(3,0), name="Lobo", vp=2, type="Villain", destroy_hand_or_discard=2, text="+3 Power. You may destroy up to two cards in your hand and/or discard pile.") #1
+Gorilla_Grodd = Card("cardimgs/gorillagrodd.jpg", cost=5, power=(3,0), name="Gorilla Grodd", vp=2, type="Villain", text="+3 Power.") #2
+Jervis_Tetch = Card("cardimgs/jervistetch.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True,2), text="+1 Power. Look at the top card of your deck. Destroy it or discard it.") #2
+Killer_Croc = Card("cardimgs/killercroc.jpg", cost=4, power=(2,7), name="Killer Croc", vp=1, type="Villain", text="+2 Power. If you play or have played another Villain this turn, additional +1 Power.") #2
+Two_Face = Card("cardimgs/twoface.jpg", cost=2, power=(1,0), name="Two-Face", vp=1, type="Villain", draw=(0,1), text="+1 Power. Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.") #2
 
 VillainList.append(Bane)  # NUMBER UNDECIDED
 VillainList.append(Doomsday)
-VillainList.append(Gorilla_Grod)
+VillainList.append(Gorilla_Grodd)
 VillainList.append(Jervis_Tetch)
 VillainList.append(Johnny_Quick)
 VillainList.append(Killer_Croc)
@@ -265,7 +269,7 @@ VillainList.append(Two_Face)
 #add villains to main deck list
 # TODO StartingMainDeck += [Bane] *
 StartingMainDeck += [Doomsday] *2
-StartingMainDeck += [Gorilla_Grod] *2
+StartingMainDeck += [Gorilla_Grodd] *2
 StartingMainDeck += [Jervis_Tetch] *2
 StartingMainDeck += [Johnny_Quick] *2
 StartingMainDeck += [Killer_Croc] *2
@@ -279,24 +283,24 @@ StartingMainDeck += [Two_Face] *2
 # SUPER VILLAINS
 SuperVillainList = []
 
-Lex_Luthor = Card("cardimgs/imagename.jpg", cost=10, draw=(3,0), first_appearance=1, name="Lex Luthor", vp=5, type="SuperVillain", text="Draw three cards.\nFirst Appearance--Attack: Each player gains a Weakness for each villain in the Line-Up.")
-Black_Manta = Card("cardimgs/imagename.jpg", cost=8, power=(3,0), draw=(1,0), first_appearance=2, name="Black Manta", vp=4, type="SuperVillain", text="+3 Power and draw a card.\nFirst Appearance--Attack: Each player discards the top card of their deck. If you discarded a card with cost 1 or more, choose one: Destroy it; or discard your hand.")
-The_Flash = Card("cardimgs/imagename.jpg", cost=8, draw=(3,0), discard=1, name="The Flash", vp=4, type="SuperVillain", text="Draw three cards, and then discard a card.")
-Mongol = Card("cardimgs/imagename.jpg", cost=11, power=(2,0), draw=(2,0), destroy_hand=1, first_appearance=3, name="Mongol", vp=6, type="SuperVillain", text="+2 Power and draw two cards. Then destroy a card in your hand.\nFirst Appearance--Attack: Each player discards two random cards from their hand.")
-Parallax = Card("cardimgs/imagename.jpg", cost=12, first_appearance=6, name="Parallax", vp=6, custom=6, type="SuperVillain", text="Double your current Power this turn.\nFirst Appearance--Attack: Each player reveals their hand and discards all cards with cost 2 or less.")
-Trigon = Card("cardimgs/imagename.jpg", cost=12, first_appearance=7, name="Trigon", vp=6, custom=7, type="SuperVillain", text="Look at the top two cards of the main deck. Put one into your hand and the other on the bottom of the main deck.\nFirst Appearance--Attack: Each player destroys a card with cost 1 or greater in their hand.")
-Graves = Card("cardimgs/imagename.jpg", cost=9, first_appearance=8, name="Graves", vp=5, custom=8, type="SuperVillain", text="+4 Power and you may put a card from your discard pile on top of your deck.\nFirst Appearance--Attack: Each player puts a card from their hand face down. Destroy those cards. If one player destroyed a card with cost higher than each other player, they draw two cards.")
-Nekron = Card("cardimgs/imagename.jpg", cost=12, first_appearance=9, name="Nekron", vp=6, custom=9, type="SuperVillain", text="Destroy up to three cards in your hand and/or discard pile. For each you destroy, draw a card.\nFirst Appearance--Attack: Each player totals the cost of the cards in their hand. The player(s) with the highest total destroys a random card in their hand. Each other player chooses and destroys a card in their hand.")
-Bart_Allen = Card("cardimgs/imagename.jpg", cost=14, first_appearance=10, name="Bart Allen", vp=7, custom=10, type="SuperVillain", text="Gain two cards from the Line-Up and put them into your hand. Then refill the Line-Up.\nFirst Appearance--Attack: Each player reveals their hand and gains a Weakness for each different card with VP value 1 or greater revealed this way.")
-Black_Adam = Card("cardimgs/imagename.jpg", cost=11, first_appearance=11, name="Black Adam", vp=6, custom=11, type="SuperVillain", text="+2 Power for each different card type you play or have played this turn.\nFirst Appearance--Attack: Each player destroys a Hero in their hand or discard pile.")
-Hel = Card("cardimgs/imagename.jpg", cost=9, first_appearance=12, name="H'el", vp=5, custom=12, type="SuperVillain", text="Reveal and draw cards from the top of your deck until you have drawn 7 or greater cost worth of cards.\nFirst Appearance--Attack: Each player reveals the top three cards of their deck. Choose one of them with cost 1 or greater, then destroy it. Discard the rest.")
-Arkillo = Card("cardimgs/imagename.jpg", cost=10, first_appearance=13, name="Arkillo", vp=5, custom=13, type="SuperVillain", text="+2 Power and put all Equipment from your discard pile into your hand.\nFirst Appearance--Attack: Each player totals the cost of cards in their hand. The player(s) with the highest total gains three Weakness cards.")
+Lex_Luthor = Card("cardimgs/lexluthor.jpg", cost=10, draw=(3,0), first_appearance=1, name="Lex Luthor", vp=5, type="SuperVillain", text="Draw three cards.\nFirst Appearance--Attack: Each player gains a Weakness for each villain in the Line-Up.")
+Black_Manta = Card("cardimgs/blackmanta.jpg", cost=8, power=(3,0), draw=(1,0), first_appearance=2, name="Black Manta", vp=4, type="SuperVillain", text="+3 Power and draw a card.\nFirst Appearance--Attack: Each player discards the top card of their deck. If you discarded a card with cost 1 or more, choose one: Destroy it; or discard your hand.")
+The_Flash = Card("cardimgs/theflash.jpg", cost=8, draw=(3,0), discard=1, name="The Flash", vp=4, type="SuperVillain", text="Draw three cards, and then discard a card.")
+Mongul = Card("cardimgs/mongul.jpg", cost=11, power=(2,0), draw=(2,0), destroy_hand=1, first_appearance=3, name="Mongul", vp=6, type="SuperVillain", text="+2 Power and draw two cards. Then destroy a card in your hand.\nFirst Appearance--Attack: Each player discards two random cards from their hand.")
+Parallax = Card("cardimgs/parallax.jpg", cost=12, first_appearance=6, name="Parallax", vp=6, custom=6, type="SuperVillain", text="Double your current Power this turn.\nFirst Appearance--Attack: Each player reveals their hand and discards all cards with cost 2 or less.")
+Trigon = Card("cardimgs/trigon.jpg", cost=12, first_appearance=7, name="Trigon", vp=6, custom=7, type="SuperVillain", text="Look at the top two cards of the main deck. Put one into your hand and the other on the bottom of the main deck.\nFirst Appearance--Attack: Each player destroys a card with cost 1 or greater in their hand.")
+Graves = Card("cardimgs/graves.jpg", cost=9, first_appearance=8, name="Graves", vp=5, custom=8, type="SuperVillain", text="+4 Power and you may put a card from your discard pile on top of your deck.\nFirst Appearance--Attack: Each player puts a card from their hand face down. Destroy those cards. If one player destroyed a card with cost higher than each other player, they draw two cards.")
+Nekron = Card("cardimgs/nekron.jpg", cost=12, first_appearance=9, name="Nekron", vp=6, custom=9, type="SuperVillain", text="Destroy up to three cards in your hand and/or discard pile. For each you destroy, draw a card.\nFirst Appearance--Attack: Each player totals the cost of the cards in their hand. The player(s) with the highest total destroys a random card in their hand. Each other player chooses and destroys a card in their hand.")
+Bart_Allen = Card("cardimgs/bartallen.jpg", cost=14, first_appearance=10, name="Bart Allen", vp=7, custom=10, type="SuperVillain", text="Gain two cards from the Line-Up and put them into your hand. Then refill the Line-Up.\nFirst Appearance--Attack: Each player reveals their hand and gains a Weakness for each different card with VP value 1 or greater revealed this way.")
+Black_Adam = Card("cardimgs/blackadam.jpg", cost=11, first_appearance=11, name="Black Adam", vp=6, custom=11, type="SuperVillain", text="+2 Power for each different card type you play or have played this turn.\nFirst Appearance--Attack: Each player destroys a Hero in their hand or discard pile.")
+Hel = Card("cardimgs/hel.jpg", cost=9, first_appearance=12, name="H'el", vp=5, custom=12, type="SuperVillain", text="Reveal and draw cards from the top of your deck until you have drawn 7 or greater cost worth of cards.\nFirst Appearance--Attack: Each player reveals the top three cards of their deck. Choose one of them with cost 1 or greater, then destroy it. Discard the rest.")
+Arkillo = Card("cardimgs/arkillo.jpg", cost=10, first_appearance=13, name="Arkillo", vp=5, custom=13, type="SuperVillain", text="+2 Power and put all Equipment from your discard pile into your hand.\nFirst Appearance--Attack: Each player totals the cost of cards in their hand. The player(s) with the highest total gains three Weakness cards.")
 
 #list of villains not including the Flash who goes on top
 SuperVillainDeckList = []
 SuperVillainDeckList.append(Lex_Luthor)
 SuperVillainDeckList.append(Black_Manta)
-SuperVillainDeckList.append(Mongol)
+SuperVillainDeckList.append(Mongul)
 SuperVillainDeckList.append(Parallax)
 SuperVillainDeckList.append(Trigon)
 SuperVillainDeckList.append(Graves)
@@ -338,7 +342,7 @@ bkg.blit(hand_outline, (0, CARD_HEIGHT * 2 + CARD_SPACE * 5 - 5))
 click = False # is the mouse button down
 pos = (0, 0) # position of the mouse
 dx, dy = 0, 0 # the change in the mouse coordinates between frames
-i = 1
+hand_scroll = 0 # the player's hand can scroll to view more cards; that is done by this many cards
 done = False
 
 #initialize game variables (decks and players)
@@ -359,6 +363,8 @@ computer_player.own_deck.shuffle()
 # fill the lineup
 for i in range(5):
     lineup[i] = main_deck.draw()
+for i in range(5):
+    human_player.own_deck.draw()
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
@@ -378,9 +384,9 @@ while not done:
     screen.blit(bkg, (0, 0))
     screen.blit(super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
     screen.blit(main_deck.peek().img, (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented the same way)
-    for card in human_player.own_deck.hand:
+    for i in range(hand_scroll, len(human_player.own_deck.hand)):
         #TODO draw the hand and let the hand display scroll
-        pass
+        screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
     for i in range(5): # draw the lineup
         if lineup[i] == None:
             lineup[i] = main_deck.draw()

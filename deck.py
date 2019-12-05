@@ -104,6 +104,10 @@ class PlayerDeck(Deck):
         self.discard = [] #discard pile
         self.played = [] #cards played this turn
 
+    # Shuffles the undrawn portion of the deck since that's what we care about
+    def shuffle(self):
+        random.shuffle(self.undrawn)
+    
     #destroy a card from the player deck
     def destroy_from_deck(self, card):
         if card.get_type() == "Power":
