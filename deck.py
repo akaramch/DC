@@ -1,6 +1,7 @@
 #Will have the deck class (more or less lists of cards, but with some other implemented fields
 import cards
 import random
+import copy
 
 """
 deck class
@@ -50,7 +51,7 @@ class Deck:
 
     #draws card from deck and returns it
     def draw(self):
-        card = self.pop(0)
+        card = self.contents.pop(0)
         if card.get_type() == "Power":
             self.num_super_powers -= 1
         elif card.get_type() == "Hero":
@@ -95,10 +96,88 @@ class PlayerDeck(Deck):
     def __init__(self, card_list):
         super().__init__(card_list)
         self.undrawn = [] #cards in face down deck
+        for card in self.contents:
+            self.undrawn.append(card) #deep copy cards from initial content to start
         self.hand = [] #player hand
         self.discard = [] #discard pile
-        #TODO implement currently played list as well
+        self.played = [] #cards played this turn
 
+    #destroy a card from the player deck
+    def destroy_from_deck(self, card):
+        if card.get_type() == "Power":
+            self.num_super_powers -= 1
+        elif card.get_type() == "Hero":
+            self.num_heroes -= 1
+        elif card.get_type() == "Equipment":
+            self.num_equipment -= 1
+        elif card.get_type() == "Starter":
+            self.num_starters -= 1
+        elif card.get_type() == "Villain":
+            self.num_villains -= 1
+        elif card.get_type() == "Weakness":
+            self.num_weaknesses -= 1
+        self.contents.remove(card)
+        self.undrawn.remove(card)
+
+    #destroy card from hand
+    def destroy_from_hand(self, card):
+        if card.get_type() == "Power":
+            self.num_super_powers -= 1
+        elif card.get_type() == "Hero":
+            self.num_heroes -= 1
+        elif card.get_type() == "Equipment":
+            self.num_equipment -= 1
+        elif card.get_type() == "Starter":
+            self.num_starters -= 1
+        elif card.get_type() == "Villain":
+            self.num_villains -= 1
+        elif card.get_type() == "Weakness":
+            self.num_weaknesses -= 1
+        self.contents.remove(card)
+        self.hand.remove(card)
+    #destroy card from played
+    def destroy_from_played(self, card):
+        if card.get_type() == "Power":
+            self.num_super_powers -= 1
+        elif card.get_type() == "Hero":
+            self.num_heroes -= 1
+        elif card.get_type() == "Equipment":
+            self.num_equipment -= 1
+        elif card.get_type() == "Starter":
+            self.num_starters -= 1
+        elif card.get_type() == "Villain":
+            self.num_villains -= 1
+        elif card.get_type() == "Weakness":
+            self.num_weaknesses -= 1
+        self.contents.remove(card)
+        self.played.remove(card)
+    #destroy card from discard
+    def destroy_from_discard(self, card):
+        if card.get_type() == "Power":
+            self.num_super_powers -= 1
+        elif card.get_type() == "Hero":
+            self.num_heroes -= 1
+        elif card.get_type() == "Equipment":
+            self.num_equipment -= 1
+        elif card.get_type() == "Starter":
+            self.num_starters -= 1
+        elif card.get_type() == "Villain":
+            self.num_villains -= 1
+        elif card.get_type() == "Weakness":
+            self.num_weaknesses -= 1
+        self.contents.remove(card)
+        self.discard.remove(card)
+
+    #moves a card from hand to played
+    def hand_to_played(self, card):
+        self.hand.remove(card)
+        self.played.append(card)
+
+    #dumps all played cards into discard at end of turn
+    def played_to_discard(self):
+        self.discard += self.discard
+        self.played = []
+    
     #draw a card from undrawn to hand
     def draw(self):
         card = self.undrawn.pop(0)
@@ -112,15 +191,15 @@ class PlayerDeck(Deck):
     def peek(self):
         return self.undrawn[0]
 
-    #add card to discard
+    #add card to discard (must be paired with self.add when new card to deck)
     def add_to_discard(self, card):
         self.discard.append(card)
 
-    #add card to undrawn top
+    #add card to undrawn top (must be paired with self.add when new card to deck)
     def add_to_undrawn_top(self, card):
         self.undrawn.insert(0, card)
 
-    #add card to undrawn bottom
+    #add card to undrawn bottom (must be paired with self.add when new card to deck)
     def add_to_undrawn_bottom(self, card):
         self.undrawn.append(card)
 
@@ -130,5 +209,3 @@ class PlayerDeck(Deck):
             self.add_to_undrawn_bottom(card)
             random.shuffle(self.undrawn)
             self.discard = []
-
-#TODO implement subclass for player decks that includes a discard pile and functions for discarding and hand functions and different draw function
