@@ -64,6 +64,7 @@ class Deck:
             self.num_villains -= 1
         elif card.get_type() == "Weakness":
             self.num_weaknesses -= 1
+        return card
 
     #look at the top card of the deck without drawing
     def peek(self):

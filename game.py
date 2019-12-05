@@ -20,7 +20,7 @@ SCREEN_NAME = "DC Game"
 GAME_BKG_COLOR = (112, 208, 127)
 
 """
-card class
+Card class
 __init__(image_name, name, type, cost, power, draw, vp, text): loads card face image and info namedtuple
 get_width(), get_height(): get width and height of card face image
 move(dx, dy): move the card by that distance
@@ -37,24 +37,24 @@ class Card:
         """
         self.img_name = image_name
         self.img = pygame.image.load(image_name[:-4] + "small.jpg") # the image corresponding to the small card
-        self.name = name # will be read from DCCardsList below
-        self.type = type # will be read from DCCardsList below
-        self.cost = cost # will be read from DCCardsList below
-        self.vp = vp # will be read from DCCardsList below
-        self.text = text # will be read from DCCardsList below
-        self.custom = custom
-        self.power = power
-        self.draw = draw
-        self.destroy_top = destroy_top
-        self.destroy_hand = destroy_hand
-        self.destroy_discard = destroy_discard
-        self.destroy_hand_or_discard = destroy_hand_or_discard
-        self.puts_on_top = puts_on_top
-        self.discard = discard
-        self.op_discard = op_discard
-        self.weakness = weakness
-        self.defense = defense
-        self.first_appearance = first_appearance
+        self.name = name # the card's name
+        self.type = type # the type of the card, e.g. "starter" or "superpower"
+        self.cost = cost # cost to buy the card
+        self.vp = vp # victory point value of the card
+        self.text = text # text of the card
+        self.custom = custom # custom "value" of the card
+        self.power = power # tuple of (unconditional power generated, total power according to the algorithm)
+        self.draw = draw # tuple of (unconditional cards drawn, int corresponding to type of conditional draw)
+        self.destroy_top = destroy_top # tuple of (T/F this card destroys the top card of the library, where the card goes if it isn't destroyed (1 for discard, 2 for back on top))
+        self.destroy_hand = destroy_hand # number of cards this card can destroy from your hand
+        self.destroy_discard = destroy_discard # number of cards this card can destroy from your discard
+        self.destroy_hand_or_discard = destroy_hand_or_discard # number of cards this card can destroy from either your hand or your discard
+        self.puts_on_top = puts_on_top # T/F whether this card lets you put a card you buy on top of your deck
+        self.discard = discard # number of cards this card makes you discard
+        self.op_discard = op_discard # number of cards this card makes each opponent discard
+        self.weakness = weakness # tuple of (T/F this card gives an opponent a weakness, code number for when that happens)
+        self.defense = defense # tuple of (T/F this card is a defense, code number for what it does)
+        self.first_appearance = first_appearance # TODO what is this? I don't know
         self.pos = (0, 0) # the coordinates of the top left corner of the card
 
 
@@ -109,9 +109,6 @@ class Card:
         return self.text
 
 
-# list containing all the images to be used
-cards = []
-
 """
 DC Card List
 A namedtuple to hold the card's information
@@ -138,7 +135,7 @@ StartingMainDeck = [] #will be used to build the card list for the main deck
 EquipmentList = []
 
 Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", vp=1, text="+2 Power. You may put any one card you buy or gain this turn on top of your deck.") #3
-Batarang = Card("cardimgs/aquamanstrident.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") #2
+Batarang = Card("cardimgs/imagename.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") #2
 Soultaker_Sword = Card("cardimgs/imagename.jpg", cost=4, power=(2,0), name="Soultaker Sword", vp=1, type="Equipment", text="+2 Power. You may destroy a card in your hand.", destroy_hand=1) #3
 Legion_Flight_Ring = Card("cardimgs/imagename.jpg", cost=2, name="Legion Flight Ring", vp=1, type="Equipment", text="Draw a card.", draw=(1,0)) #2
 Lasso_of_Truth = Card("cardimgs/imagename.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
@@ -347,9 +344,11 @@ done = False
 #initialize game variables (decks and players)
 human_player = dc_player.Player(StartingPlayerDeck, False) #makes the human player
 computer_player = dc_player.Player(StartingPlayerDeck, True) #makes computer player
-players = [human_player, computer_player] #list of players
+players = [human_player, computer_player] #list of players (there are only 2 for now)
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
+# the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
+lineup = [None, None, None, None, None]
 
 #shuffle the deck
 super_villain_deck.shuffle()
@@ -357,8 +356,9 @@ super_villain_deck.add_to_front(The_Flash) #put the flash on top
 main_deck.shuffle()
 human_player.own_deck.shuffle()
 computer_player.own_deck.shuffle()
-
-cards.append(Aquamans_Trident)
+# fill the lineup
+for i in range(5):
+    lineup[i] = main_deck.draw()
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
@@ -376,19 +376,41 @@ while not done:
 
     # do this before you draw anything on the screen so you don't cover anything up
     screen.blit(bkg, (0, 0))
-    for card in cards:
-        # if the mouse is on this card, show zoomed card
-        if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
-            screen.blit(card.zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
-            #info = card.inform()
-            #screen.blit(info, (0, SCREEN_HEIGHT - info.get_height()))
+    screen.blit(super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
+    screen.blit(main_deck.peek().img, (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented the same way)
+    for card in human_player.own_deck.hand:
+        #TODO draw the hand and let the hand display scroll
+        pass
+    for i in range(5): # draw the lineup
+        if lineup[i] == None:
+            lineup[i] = main_deck.draw()
+        screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 3, CARD_HEIGHT // 3 * i + CARD_SPACE))
+    
+    # is the mouse on the supervillain deck
+    if mouse_pos[0] > CARD_SPACE and mouse_pos[0] < CARD_SPACE + CARD_WIDTH and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
+        screen.blit(super_villain_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
         if click:
-            dx, dy = pygame.mouse.get_pos()[0] - mouse_pos[0], pygame.mouse.get_pos()[1] - mouse_pos[1] # get the change in mouse position between frames
-            # if the mouse is on this card
-            if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
-                card.move(dx, dy)
-            mouse_pos = (mouse_pos[0] + dx, mouse_pos[1] + dy)
-        screen.blit(card.img, card.pos)
+            # TODO the player buys the top card of the supervillain deck
+            pass
+    # is the mouse on the main deck
+    elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
+        screen.blit(main_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+        if click:
+            # TODO the player buys the top card off the main deck (is this a thing? I don't know)
+            pass
+    # is the mouse on any of the top 4 lineup cards
+    for i in range(4):
+        if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * (i + 1):
+            screen.blit(lineup[i].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+            if click:
+                # TODO the player buys this card and it leaves a blank space
+                pass
+    # is the mouse on the last lineup card
+    if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * 4 and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * 4 + CARD_HEIGHT:
+        screen.blit(lineup[4].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+        if click:
+            # TODO the player buys this card and it leaves a blank space
+            pass
 
     # last thing done in the loop: update the display to reflect everything you just drew
     pygame.display.flip()

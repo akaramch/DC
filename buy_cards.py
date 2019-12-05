@@ -13,46 +13,43 @@ Parameter list:
 Return:
     list of cards to buy
 """
-def max_vp_lineup(power, lineup):
-    cards_to_buy = []
+def max_vp_lineup(power, lineup, lineup1):
+    """
+    lineup is sorted by vp value, highest to lowest, with the tiebreaker for cards with
+    equal value being cards with lowest cost first
+    lineup1 is sorted by vp value/cost ratio, highest to lowest, with the tiebreaker for
+    cards with equal ratio being cards with highest cost first 
+    """
+    cards_to_buy_val = [] #cards bought by sorting by val
+    cards_to_buy_ratio = [] #cards bought by sorting by ratio
+    val_buy_total = 0 #value of cards bought by sorting by val
+    ratio_buy_total= 0 #value of cards bought by sorting by ratio
     leftovers = []
     #Buy in order as we can the highest values
     while len(lineup) > 0:
-        if power > lineup[0].get_vp(): #if we can buy the most vp
+        if power > lineup[0].get_power(): #if we can buy the most vp
             card = lineup.remove[0] #most vp left on lineup
-            power -= card.get_powerSW()
-            cards_to_buy.append(card) #add most vp to cards to buy
+            power -= card.get_power()
+            val_buy_total += card.get_vp
+            cards_to_buy_val.append(card) #add most vp to cards to buy
         else: #if we can't buy it, add it to leftovers
-            cards_to_buy.append(lineup.remove[0])
-    #bought the entire lineup or all but last card which we know isn't worth more
-    if len(leftovers) <= 1:
-        return cards_to_buy
+            leftovers.append(lineup.remove[0])
+    #bought the entire lineup so can just return
+    if len(leftovers) < 1:
+        return cards_to_buy_val
 
-    index = -1
-    #need to check we actually have the top value deepcopy because we'll mess with cards_to_buy
-    for card in deepcopy(cards_to_buy):
-        index += 1
-        leftover_copy = deepcopy(leftovers)
-        replacement = []
-        new_cost = 0
-        new_value = 0
-        #add leftovers to replacement as we can
-        while new_cost < (power + card.power) and leftover_copy:
-            new_card = leftover_copy.remove[0]
-            #highest vp we could buy if we got rid of card and bought others
-            if power + card.power > new_card.get_vp():
-                new_cost += new_card.get_cost()
-                new_value += new_card.get_vp()
-                replacement.append(new_card)
-            else:
-                leftover_copy.append(new_card) #put back on end because it's still there
-        #switch out to get more vp
-        if new_value > card.get_vp:
-            cards_to_buy.pop(index)
-            leftovers = leftover_copy
-            cards_to_buy.extend(replacement)
-
-    return cards_to_buy
+    while len(lineup1) > 0:
+        if power > lineup1[0].get_power(): #if we can buy the most vp
+            card = lineup1.remove[0] #most vp left on lineup
+            power -= card.get_power()
+            ratio_buy_total += card.get_vp
+            cards_to_buy_ratio.append(card) #add most vp to cards to buy
+        else: #if we can't buy it, add it to leftovers
+            leftovers.append(lineup1.remove[0])
+    if val_buy_total > ratio_buy_total: #if we get higher victory points sorting by val, return that
+        return cards_to_buy_val
+    else:
+        return cards_to_buy_ratio #otherwise return the cards bought by sorting by ratio
 
 
 
