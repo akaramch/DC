@@ -109,9 +109,6 @@ class Card:
         return self.text
 
 
-# list containing all the images to be used
-cards = []
-
 """
 DC Card List
 A namedtuple to hold the card's information
@@ -347,9 +344,11 @@ done = False
 #initialize game variables (decks and players)
 human_player = dc_player.Player(StartingPlayerDeck, False) #makes the human player
 computer_player = dc_player.Player(StartingPlayerDeck, True) #makes computer player
-players = [human_player, computer_player] #list of players
+players = [human_player, computer_player] #list of players (there are only 2 for now)
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
+# the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
+lineup = [None, None, None, None, None]
 
 #shuffle the deck
 super_villain_deck.shuffle()
@@ -357,8 +356,9 @@ super_villain_deck.add_to_front(The_Flash) #put the flash on top
 main_deck.shuffle()
 human_player.own_deck.shuffle()
 computer_player.own_deck.shuffle()
-
-cards.append(Aquamans_Trident)
+# fill the lineup
+for i in range(5):
+    lineup[i] = main_deck.draw()
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
@@ -376,19 +376,38 @@ while not done:
 
     # do this before you draw anything on the screen so you don't cover anything up
     screen.blit(bkg, (0, 0))
-    for card in cards:
-        # if the mouse is on this card, show zoomed card
-        if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
-            screen.blit(card.zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
-            #info = card.inform()
-            #screen.blit(info, (0, SCREEN_HEIGHT - info.get_height()))
+    screen.blit(super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
+    screen.blit(main_deck.peek().img, (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented the same way)
+    for i in range(5): # draw the lineup
+        if lineup[i] == None:
+            lineup[i] = main_deck.draw()
+        screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 3, CARD_HEIGHT // 3 * i + CARD_SPACE))
+    
+    # is the mouse on the supervillain deck
+    if mouse_pos[0] > CARD_SPACE and mouse_pos[0] < CARD_SPACE + CARD_WIDTH and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
+        screen.blit(super_villain_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
         if click:
-            dx, dy = pygame.mouse.get_pos()[0] - mouse_pos[0], pygame.mouse.get_pos()[1] - mouse_pos[1] # get the change in mouse position between frames
-            # if the mouse is on this card
-            if mouse_pos[0] > card.pos[0] and mouse_pos[1] > card.pos[1] and mouse_pos[0] < card.pos[0] + card.get_width() and mouse_pos[1] < card.pos[1] + card.get_height():
-                card.move(dx, dy)
-            mouse_pos = (mouse_pos[0] + dx, mouse_pos[1] + dy)
-        screen.blit(card.img, card.pos)
+            # TODO the player buys the top card of the supervillain deck
+            pass
+    # is the mouse on the main deck
+    elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
+        screen.blit(main_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+        if click:
+            # TODO the player buys the top card off the main deck (is this a thing? I don't know)
+            pass
+    # is the mouse on any of the top 4 lineup cards
+    for i in range(4):
+        if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * (i + 1):
+            screen.blit(lineup[i].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+            if click:
+                # TODO the player buys this card and it leaves a blank space
+                pass
+    # is the mouse on the last lineup card
+    if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * 4 and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * 4 + CARD_HEIGHT:
+        screen.blit(lineup[4].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE))
+        if click:
+            # TODO the player buys this card and it leaves a blank space
+            pass
 
     # last thing done in the loop: update the display to reflect everything you just drew
     pygame.display.flip()
