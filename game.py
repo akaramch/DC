@@ -37,24 +37,24 @@ class Card:
         """
         self.img_name = image_name
         self.img = pygame.image.load(image_name[:-4] + "small.jpg") # the image corresponding to the small card
-        self.name = name # will be read from DCCardsList below
-        self.type = type # will be read from DCCardsList below
-        self.cost = cost # will be read from DCCardsList below
-        self.vp = vp # will be read from DCCardsList below
-        self.text = text # will be read from DCCardsList below
-        self.custom = custom
-        self.power = power
-        self.draw = draw
-        self.destroy_top = destroy_top
-        self.destroy_hand = destroy_hand
-        self.destroy_discard = destroy_discard
-        self.destroy_hand_or_discard = destroy_hand_or_discard
-        self.puts_on_top = puts_on_top
-        self.discard = discard
-        self.op_discard = op_discard
-        self.weakness = weakness
-        self.defense = defense
-        self.first_appearance = first_appearance
+        self.name = name # the card's name
+        self.type = type # the type of the card, e.g. "starter" or "superpower"
+        self.cost = cost # cost to buy the card
+        self.vp = vp # victory point value of the card
+        self.text = text # text of the card
+        self.custom = custom # custom "value" of the card
+        self.power = power # tuple of (unconditional power generated, total power according to the algorithm)
+        self.draw = draw # tuple of (unconditional cards drawn, int corresponding to type of conditional draw)
+        self.destroy_top = destroy_top # tuple of (T/F this card destroys the top card of the library, where the card goes if it isn't destroyed (1 for discard, 2 for back on top))
+        self.destroy_hand = destroy_hand # number of cards this card can destroy from your hand
+        self.destroy_discard = destroy_discard # number of cards this card can destroy from your discard
+        self.destroy_hand_or_discard = destroy_hand_or_discard # number of cards this card can destroy from either your hand or your discard
+        self.puts_on_top = puts_on_top # T/F whether this card lets you put a card you buy on top of your deck
+        self.discard = discard # number of cards this card makes you discard
+        self.op_discard = op_discard # number of cards this card makes each opponent discard
+        self.weakness = weakness # tuple of (T/F this card gives an opponent a weakness, code number for when that happens)
+        self.defense = defense # tuple of (T/F this card is a defense, code number for what it does)
+        self.first_appearance = first_appearance # TODO what is this? I don't know
         self.pos = (0, 0) # the coordinates of the top left corner of the card
 
 
