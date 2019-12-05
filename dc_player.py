@@ -6,13 +6,13 @@ import pygame
 """
 Class for each player entity
 Created by dc_player.player(own_deck, isComputer)
-own_deck: the player's deck to start
-isComptuer: whether this is a computer or human player 
+card_list: list of cards in the player's deck to start
+isComptuer: boolean whether this is a computer or human player 
 """
 class Player:
 
-    def __init__(self, own_deck, isComputer):
-        self.own_deck = own_deck
+    def __init__(self, card_list, isComputer):
+        self.own_deck = deck.PlayerDeck(card_list)
         self.isComputer = isComputer
 
 """
