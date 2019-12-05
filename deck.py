@@ -97,6 +97,7 @@ class PlayerDeck(Deck):
         self.undrawn = [] #cards in face down deck
         self.hand = [] #player hand
         self.discard = [] #discard pile
+        #TODO implement currently played list as well
 
     #draw a card from undrawn to hand
     def draw(self):
