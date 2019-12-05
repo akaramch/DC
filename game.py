@@ -7,9 +7,13 @@ import pygame
 pygame.init()
 from collections import namedtuple
 
+# card dimensions
+CARD_WIDTH = 123
+CARD_HEIGHT = 175
+CARD_SPACE = 35
 # window dimensions
-SCREEN_WIDTH = 1525
-SCREEN_HEIGHT = 950
+SCREEN_WIDTH = CARD_WIDTH * 7 + CARD_SPACE * 3 + 100
+SCREEN_HEIGHT = CARD_HEIGHT * 3 + CARD_SPACE * 5
 SCREEN_NAME = "DC Game"
 # background color for the whole screen
 GAME_BKG_COLOR = (112, 208, 127)
@@ -232,26 +236,26 @@ screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
 bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 bkg.fill(GAME_BKG_COLOR)
-card_outline = pygame.Surface((185, 260))
+card_outline = pygame.Surface((CARD_WIDTH + 10, CARD_HEIGHT + 10))
 card_outline.fill((127, 127, 127))
-card_interior = pygame.Surface((165, 240))
+card_interior = pygame.Surface((CARD_WIDTH - 10, CARD_HEIGHT - 10))
 card_interior.fill(GAME_BKG_COLOR)
 card_outline.blit(card_interior, (10, 10))
 # outline the weakness, kick, supervillain, and main decks
-bkg.blit(card_outline, (45, 45))
-bkg.blit(card_outline, (270, 45))
-bkg.blit(card_outline, (45, 345))
-bkg.blit(card_outline, (270, 345))
+bkg.blit(card_outline, (CARD_SPACE - 5, CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_WIDTH + CARD_SPACE * 2 - 5, CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE - 5, CARD_HEIGHT + CARD_SPACE * 2 - 5))
+bkg.blit(card_outline, (CARD_WIDTH + CARD_SPACE * 2 - 5, CARD_HEIGHT + CARD_SPACE * 2 - 5))
 # outline the lineup
-bkg.blit(card_outline, (495, 305))
-bkg.blit(card_outline, (695, 305))
-bkg.blit(card_outline, (895, 305))
-bkg.blit(card_outline, (1095, 305))
-bkg.blit(card_outline, (1295, 305))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 3 + 15, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 4 + 35, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 5 + 55, CARD_HEIGHT + CARD_SPACE + 5))
+bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 6 + 75, CARD_HEIGHT + CARD_SPACE + 5))
 # outline the player's hand
 hand_outline = pygame.Surface((SCREEN_WIDTH, 10))
 hand_outline.fill((127, 127, 127))
-bkg.blit(hand_outline, (0, 745))
+bkg.blit(hand_outline, (0, CARD_HEIGHT * 2 + CARD_SPACE * 5 - 5))
 
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
