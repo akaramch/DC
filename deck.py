@@ -98,6 +98,7 @@ class PlayerDeck(Deck):
         self.undrawn = [] #cards in face down deck
         for card in self.contents:
             self.undrawn.append(card) #deep copy cards from initial content to start
+        random.shuffle(self.contents) #need to shuffle the starters in undrawn deck
         self.hand = [] #player hand
         self.discard = [] #discard pile
         self.played = [] #cards played this turn
@@ -135,6 +136,7 @@ class PlayerDeck(Deck):
             self.num_weaknesses -= 1
         self.contents.remove(card)
         self.hand.remove(card)
+
     #destroy card from played
     def destroy_from_played(self, card):
         if card.get_type() == "Power":
@@ -151,6 +153,7 @@ class PlayerDeck(Deck):
             self.num_weaknesses -= 1
         self.contents.remove(card)
         self.played.remove(card)
+
     #destroy card from discard
     def destroy_from_discard(self, card):
         if card.get_type() == "Power":
