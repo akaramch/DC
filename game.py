@@ -5,6 +5,7 @@ Created mostly for purposes of learning pygame
 
 import pygame
 pygame.init()
+import dc_player
 
 # card dimensions
 CARD_WIDTH = 123
