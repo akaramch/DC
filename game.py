@@ -19,6 +19,8 @@ SCREEN_NAME = "DC Game"
 # background color for the whole screen
 GAME_BKG_COLOR = (112, 208, 127)
 GAME_FONT = pygame.font.SysFont("ubuntucondensed", 14) # the font to be used to write all things card-related
+# clock in the game to time framerate
+GAME_CLOCK = pygame.time.Clock()
 
 """
 Card class
@@ -188,7 +190,7 @@ PowerList.append(X_Ray_Vision)
 #add non-kick powers to main deck list
 StartingMainDeck += [Bulletproof] * 2
 StartingMainDeck += [Giant_Growth] * 2
-StartingMainDeck += [Heat_Vision] * 3
+StartingMainDeck += [Heat_Vision] * 2 # changed
 StartingMainDeck += [Shazam] * 1
 StartingMainDeck += [Starbolt] * 3
 StartingMainDeck += [Super_Strength] * 2
@@ -252,30 +254,30 @@ Jervis_Tetch = Card("cardimgs/jervistetch.jpg", cost=3, power=(1,0), name="Jervi
 Killer_Croc = Card("cardimgs/killercroc.jpg", cost=4, power=(2,7), name="Killer Croc", vp=1, type="Villain", text="+2 Power. If you play or have played another Villain this turn, additional +1 Power.") #2
 Two_Face = Card("cardimgs/twoface.jpg", cost=2, power=(1,0), name="Two-Face", vp=1, type="Villain", draw=(0,1), text="+1 Power. Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.") #2
 
-VillainList.append(Bane)  # NUMBER UNDECIDED
+VillainList.append(Bane)
 VillainList.append(Doomsday)
 VillainList.append(Gorilla_Grodd)
 VillainList.append(Jervis_Tetch)
 VillainList.append(Johnny_Quick)
 VillainList.append(Killer_Croc)
 VillainList.append(Lobo)
-VillainList.append(Mr_Zsasz)  #NUMBER UNDECIDED
+VillainList.append(Mr_Zsasz)
 VillainList.append(Red_Lantern_Corps)
-VillainList.append(Scarecrow)  #NUMBER UNDECIDED
+VillainList.append(Scarecrow)
 VillainList.append(Two_Face)
 
 #add villains to main deck list
-# TODO StartingMainDeck += [Bane] *
+StartingMainDeck += [Bane] * 2
 StartingMainDeck += [Doomsday] * 2
 StartingMainDeck += [Gorilla_Grodd] * 2
 StartingMainDeck += [Jervis_Tetch] * 2
 StartingMainDeck += [Johnny_Quick] * 2
 StartingMainDeck += [Killer_Croc] * 2
 StartingMainDeck += [Lobo] * 1
-# TODO StartingMainDeck += [Mr_Zsasz] *
+StartingMainDeck += [Mr_Zsasz] * 2
 StartingMainDeck += [Red_Lantern_Corps] * 2
-# TODO StartingMainDeck += [Scarecrow] *
-StartingMainDeck += [Two_Face] * 2
+StartingMainDeck += [Scarecrow] * 2
+StartingMainDeck += [Two_Face] * 3
 
 # SUPER VILLAINS
 SuperVillainList = []
@@ -307,7 +309,26 @@ SuperVillainDeckList.append(Black_Adam)
 SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
-
+# player buys card
+# checks how much power the player has and whether that's enough to buy the card
+# puts the card where it needs to go (depending on what cards you've played this turn)
+# TODO do that ^
+# decreases player.power by the cost of the card
+# returns boolean whether the buy was successful
+def buy(player, card):
+    if player.power < card.cost:
+        return False
+    # player spends power
+    player.power -= card.cost
+    if card.type == "Kick":
+        kick_deck.draw() # don't need to catch it because it's already card
+    elif card.type == "Supervillain":
+        super_villain_deck.draw() # same
+    else: # everything else comes from the main deck
+        main_deck.draw()
+    # TODO make this depend on cards played
+    player.gain_card_discard(card)
+    return True
 
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
@@ -341,6 +362,8 @@ bkg.blit(hand_outline, (0, CARD_HEIGHT * 2 + CARD_SPACE * 5 - 5))
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
 hand_scroll = 0 # the player's hand can scroll to view more cards; that is done by this many cards
+super_villain_bought = False # if the supervillain was bought this turn, don't flip the next one until next turn
+enough_power_num = 0 # number of frames remaining to tick through to stop displaying "not enough power" if the player tries to buy a card that they can't afford
 done = False
 
 #initialize game variables (decks and players)
@@ -349,6 +372,7 @@ computer_player = dc_player.Player(StartingPlayerDeck, True) #makes computer pla
 players = [human_player, computer_player] #list of players (there are only 2 for now)
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
+kick_deck = deck.Deck([Kick] * 16)
 # the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
 lineup = [None, None, None, None, None]
 
@@ -375,15 +399,13 @@ while not done:
             done = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click = True
-        #elif event.type == pygame.MOUSEBUTTONUP:
-        #    click = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q: # have a quit key
                 done = True
 
     # do this before you draw anything on the screen so you don't cover anything up
     screen.blit(bkg, (0, 0))
-    screen.blit(super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
+    screen.blit(pygame.image.load("cardimgs/cardback.jpg") if super_villain_bought else super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
     screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
     screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
     screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
@@ -394,7 +416,7 @@ while not done:
     screen.blit(GAME_FONT.render("Cards remaining: " + str(len(human_player.own_deck.undrawn)), True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() - 5))
     # the player's discard pile, represented by the top card or nothing (if the discard is empty)
     if len(human_player.own_deck.discard) != 0:
-        screen.blit(human_player.own_deck.discard[-1], (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 6))
+        screen.blit(human_player.own_deck.discard[-1].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 6))
     screen.blit(GAME_FONT.render("Your discard", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
     screen.blit(GAME_FONT.render("Click to expand", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT))
     screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - GAME_FONT.get_height() - 5))
@@ -409,23 +431,28 @@ while not done:
         if lineup[i] == None:
             lineup[i] = main_deck.draw()
         screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 4, CARD_HEIGHT // 4 * i + CARD_SPACE))
+    if enough_power_num:
+        enough_power_num -= 1
+        screen.blit(GAME_FONT.render("Not enough power.", True, (0, 0, 0), GAME_BKG_COLOR), (5, 5))
     
     # is the mouse on the supervillain deck
     if mouse_pos[0] > CARD_SPACE and mouse_pos[0] < CARD_SPACE + CARD_WIDTH and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
-        screen.blit(super_villain_deck.peek().zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+        screen.blit(super_villain_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
         if click:
-            # TODO the player buys the top card of the supervillain deck
-            pass
+            if not buy(human_player, super_villain_deck.peek()):
+                enough_power_num = 20
+            super_villain_bought = True
     # is the mouse on the main deck
-    elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
-        if click:
-            # TODO the player buys the top card off the main deck (is this a thing? I don't know)
-            pass
-        pass
+    #elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
+    #    if click:
+    #        # TODO the player buys the top card off the main deck (is this a thing? I don't know)
+    #        pass
+    #    pass
     # is the mouse on a card in the hand
     elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
         screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
         if click: # click on a card to play it
+            # TODO play the actual effect of the card rather than just move it to the played cards
             human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
     # is the mouse on any of the played cards
     for i in range(len(human_player.own_deck.played)):
@@ -439,13 +466,13 @@ while not done:
                     screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
     # is the mouse on any of the top 4 lineup cards
     for i in range(4):
-        if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * (i + 1):
+        if mouse_pos[0] > CARD_SPACE * 4 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 4 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 4 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 4 * (i + 1):
             screen.blit(lineup[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click:
                 # TODO the player buys this card and it leaves a blank space
                 pass
     # is the mouse on the last lineup card
-    if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * 4 and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * 4 + CARD_HEIGHT:
+    if mouse_pos[0] > CARD_SPACE * 4 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 4 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 4 * 4 and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 4 * 4 + CARD_HEIGHT:
         screen.blit(lineup[4].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
         if click:
             # TODO the player buys this card and it leaves a blank space
@@ -454,6 +481,7 @@ while not done:
 
     # last thing done in the loop: update the display to reflect everything you just drew
     pygame.display.flip()
+    GAME_CLOCK.tick(20)
 
 pygame.quit()
 
