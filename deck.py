@@ -1,5 +1,5 @@
 #Will have the deck class (more or less lists of cards, but with some other implemented fields
-import cards
+
 import random
 
 

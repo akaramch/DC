@@ -201,7 +201,6 @@ StartingMainDeck += [X_Ray_Vision] * 3
 HeroList = []
 
 Raven = Card("cardimgs/raven.jpg", cost=3, power=(1,0), name="Raven", draw=(1,0), vp=1, type="Hero", text="+1 Power and draw a card.") #3
-# TODO scan Catwoman
 Catwoman = Card("cardimgs/catwoman.jpg", cost=2, power=(2,0), name="Catwoman", vp=1, type="Hero", text="+2 Power.") #2
 Katana = Card("cardimgs/katana.jpg", cost=2, power=(1,0), name="Katana", vp=1, type="Hero", defense=(True,1), text="+1 Power.\nDefense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
 Winged_Warrior = Card("cardimgs/wingedwarrior.jpg", cost=6, power=(2,3), name="Winged Warrior", vp=2, type="Hero", text="+2 Power.\nIf you play or have played another Hero this turn, additional +3 Power.") #1
@@ -209,7 +208,6 @@ Power_Girl = Card("cardimgs/powergirl.jpg", cost=5, power=(3,0), name="Power Gir
 Hawkgirl = Card("cardimgs/hawkgirl.jpg", cost=2, power=(1,4), name="Hawkgirl", vp=1, type="Hero", text="+1 Power and and additional +1 Power for each Hero in your discard pile.") #2
 Kid_Flash = Card("cardimgs/kidflash.jpg", cost=2, name="Kid Flash", vp=1, draw=(1,0), type="Hero", text="Draw a card.") #2
 Supergirl = Card("cardimgs/supergirl.jpg", cost=4, name="Supergirl", vp=1, type="Hero", custom=5, text="You may put a Kick from the Kick stack into your hand.") #2
-# TODO scan J'onn J'onzz
 Jonn_Jonzz = Card("cardimgs/jonnjonzz.jpg", cost=6, name="J'onn J'onzz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") #1
 The_Fastest_Man_Alive = Card("cardimgs/thefastestmanalive.jpg", cost=5, name="The Fastest Man Alive", vp=1, draw=(2,0), type="Hero", text="Draw two cards.") #1
 King_of_Atlantis = Card("cardimgs/kingofatlantis.jpg", cost=5, power=(1,5), name="King of Atlantis", vp=1, destroy_discard=1, type="Hero", text="You may destroy a card in your discard pile. If you do, +3 Power. Otherwise, +1 Power.") #1
@@ -310,12 +308,13 @@ SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
 # player buys card
+# if the card is in the lineup, need an index in case there's more than one of the same card in the lineup
 # checks how much power the player has and whether that's enough to buy the card
 # puts the card where it needs to go (depending on what cards you've played this turn)
 # TODO do that ^
 # decreases player.power by the cost of the card
 # returns boolean whether the buy was successful
-def buy(player, card):
+def buy(player, card, i=0):
     if player.power < card.cost:
         return False
     # player spends power
@@ -324,8 +323,8 @@ def buy(player, card):
         kick_deck.draw() # don't need to catch it because it's already card
     elif card.type == "Supervillain":
         super_villain_deck.draw() # same
-    else: # everything else comes from the main deck
-        main_deck.draw()
+    else: # everything else comes from the lineup
+        lineup[i] = None # remove it and keep its spot
     # TODO make this depend on cards played
     player.gain_card_discard(card)
     return True
@@ -385,6 +384,7 @@ computer_player.own_deck.shuffle()
 # fill the lineup
 for i in range(5):
     lineup[i] = main_deck.draw()
+# fill the player's hand
 for i in range(5):
     human_player.own_deck.draw()
 
@@ -428,9 +428,8 @@ while not done:
         #TODO draw the hand and let the hand display scroll
         screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
     for i in range(5): # draw the lineup
-        if lineup[i] == None:
-            lineup[i] = main_deck.draw()
-        screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 4, CARD_HEIGHT // 4 * i + CARD_SPACE))
+        if lineup[i] is not None:
+            screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 4, CARD_HEIGHT // 4 * i + CARD_SPACE))
     if enough_power_num:
         enough_power_num -= 1
         screen.blit(GAME_FONT.render("Not enough power.", True, (0, 0, 0), GAME_BKG_COLOR), (5, 5))
@@ -464,23 +463,25 @@ while not done:
             else:
                 if mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2 + 1):
                     screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
-    # is the mouse on any of the top 4 lineup cards
-    for i in range(4):
-        if mouse_pos[0] > CARD_SPACE * 4 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 4 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 4 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 4 * (i + 1):
+    # is the mouse on any of the lineup cards
+    if CARD_SPACE * 4 + CARD_WIDTH * 2 < mouse_pos[0] < CARD_SPACE * 4 + CARD_WIDTH * 3 and CARD_SPACE < mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 4 * 4 + CARD_HEIGHT:
+        i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 4), 4)
+        # if you mouse over an empty spot in the lineup, show the next card down instead
+        while i >= 0:
+            if lineup[i] is None:
+                i -= 1
+            else:
+                break
+        if i >= 0:
             screen.blit(lineup[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click:
-                # TODO the player buys this card and it leaves a blank space
-                pass
-    # is the mouse on the last lineup card
-    if mouse_pos[0] > CARD_SPACE * 4 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 4 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 4 * 4 and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 4 * 4 + CARD_HEIGHT:
-        screen.blit(lineup[4].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
-        if click:
-            # TODO the player buys this card and it leaves a blank space
-            pass
+                if not buy(human_player, lineup[i], i):
+                    enough_power_num = 20
     # TODO expand the discard pile when the player clicks on it
 
     # last thing done in the loop: update the display to reflect everything you just drew
     pygame.display.flip()
+    # makes the game run no faster than 2o fps (for timing)
     GAME_CLOCK.tick(20)
 
 pygame.quit()
