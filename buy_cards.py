@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-import cards
+#import cards -- commented out because throwing an error, assuming no longer needed.
 import deck
 
 
@@ -9,7 +9,9 @@ Finds cards in the lineup to buy with given power that maximizes VP gain
 *ONLY CALL WHEN A SOLUTION EXISTS*
 Parameter list:
     power: buying power
-    lineup: lineup (any sorting)
+    lineup: lineup (sorted by descending vp value)
+    lineup1: lineup (sorted by decreasing vp to cost ratio)
+
 Return:
     list of cards to buy
 """
@@ -18,7 +20,8 @@ def max_vp_lineup(power, lineup, lineup1):
     lineup is sorted by vp value, highest to lowest, with the tiebreaker for cards with
     equal value being cards with lowest cost first
     lineup1 is sorted by vp value/cost ratio, highest to lowest, with the tiebreaker for
-    cards with equal ratio being cards with highest cost first 
+    cards with equal ratio being cards with highest cost first
+    Both need to be sorted before entered for the function
     """
     cards_to_buy_val = [] #cards bought by sorting by val
     cards_to_buy_ratio = [] #cards bought by sorting by ratio
@@ -54,7 +57,7 @@ def max_vp_lineup(power, lineup, lineup1):
 
 
 """
-Wrapper for card.get_vp for the sort function
+Wrapper for various functions for the sort function
 """
 def cost(card):
     return card.cost #returns cost
@@ -64,6 +67,60 @@ def vp(card):
 
 def vp_ratio(card):
     return ((card.get_vp()/card.get_cost()) + (0.01*card.cost)) #Returns vp to cost ratio, breaks ties towards cards with higher cost
+"""
+Now for the fun stuff- getting the power a card generates. This looks at power for cards in your deck, so drawing not considered
+"""
+def get_power_deck(card, self_deck, kick_deck, main_deck_size, opponent_deck, player):
+    power = 0 #The power the card generates, both directly and through other means
+    if (card.custom != 0): #customs are various cards with precalculated power generation, mostly supervillains
+        if (card.custom == 1):
+            return 6
+        if (card.custom == 2):
+            return 5
+        if (card.custom == 3):
+            return 6
+        if (card.custom == 4):
+            return 0
+            #TODO implement X-ray vision
+        if (card.custom == 5): #Supergirl is worth different things depending on how many kicks are left
+            if (kick_deck.size >= 12):
+                return 4
+            if (kick_deck.size >= 9):
+                return 3
+            if (kick_deck.size >= 5):
+                return 2
+            else:
+                return 0
+        if (card.custom == 6):
+            power_in_deck = 0 #going to look at the total power in the deck to calculate average
+            for tempcard in self_deck:
+                if(tempcard.custom != 6): #don't want to look at Parallax itself when calculating average power
+                    power_in_deck += get_power_deck(tempcard, self_deck, kick_deck, main_deck_size, opponent_deck, player)
+            average_power = power_in_deck/(main_deck_size-1)
+            average_power = 4*average_power
+            return average_power
+            
+        if (card.custom == 7):
+            return 8
+        if (card.custom == 8):
+            return 6
+        if (card.custom == 9):
+            return 9
+        if (card.custom == 10):
+            return 15
+        if (card.custom == 11):
+            return 7
+        if (card.custom == 12):
+            return 6
+        if (card.custom == 13):
+            power += 2
+            for tempcard in self_deck:
+                if (tempcard.type == "Equipment"):
+                    power += 1
+            return power
+        
+        return power
+
 
 """
 Sorts the lineup by vp values (method doesn't really matter, the list will only be at most 8 or 9 cards)
@@ -164,5 +221,6 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup)
         max_vp = max_vp_lineup(power, vp_sorted, ratio_sorted) #set of cards that can be bought that maximize vp
         cards_to_buy.extend(max_vp) #adds the cards found above to the cards to buy
         return cards_to_buy
+    
     
     return None
