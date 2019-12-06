@@ -15,6 +15,21 @@ class Player:
         self.own_deck = deck.PlayerDeck(card_list)
         self.isComputer = isComputer
 
+    #takes card from lineup and adds to discard pile
+    def get_card_discard(self, card):
+        self.own_deck.add_card(card)  # adds to deck contents for stats
+        self.own_deck.add_to_discard(card) #adds to discard pile
+
+    #takes card from lineup and adds to top of undrawn
+    def get_card_top(self, card):
+        self.own_deck.add_card(card) #adds to deck contents for stats
+        self.own_deck.add_to_undrawn_top(card)  #adds to the top of the undrawn list
+
+    #takes card from lineup and adds to hand
+    def get_card_hand(self, card):
+        self.own_deck.add_card(card)  # adds to deck contents for stats
+        self.own_deck.add_to_hand(card) #adds to hand
+
 """
 Sets up main deck.
 Parameter list: 
