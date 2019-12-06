@@ -7,6 +7,7 @@ import pygame
 pygame.init()
 import dc_player
 import deck
+import card_effect
 
 # card dimensions
 CARD_WIDTH = 123
@@ -121,7 +122,7 @@ TO COPY:  = Card("cardimgs/imagename.jpg", card_info("N", "T", "C", "P", "D", "V
 """
 
 # STARTERS, WEAKNESSES, KICKS (oh my)
-Punch = Card("cardimgs/punch.jpg", type="Starter", cost=0, name="Punch")
+Punch = Card("cardimgs/punch.jpg", type="Starter", cost=0, power=(1,0), name="Punch", text="+1 Power.")
 Vulnerability = Card("cardimgs/vulnerability.jpg", type="Starter", cost=0, name="Vulnerability")
 Weakness = Card("cardimgs/weakness.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") #HOWEVER MANY
 
@@ -452,6 +453,7 @@ while not done:
         screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
         if click: # click on a card to play it
             # TODO play the actual effect of the card rather than just move it to the played cards
+            card_effect.card_effect(human_player, human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll])
             human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
     # is the mouse on any of the played cards
     for i in range(len(human_player.own_deck.played)):
