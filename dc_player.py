@@ -12,8 +12,9 @@ isComptuer: boolean whether this is a computer or human player
 class Player:
 
     def __init__(self, card_list, isComputer):
-        self.own_deck = deck.PlayerDeck(card_list)
-        self.isComputer = isComputer
+        self.own_deck = deck.PlayerDeck(card_list) #player's deck
+        self.isComputer = isComputer #is this the human or computer player
+        self.power = 0 #power tracker for turns
 
     #takes card from lineup and adds to discard pile
     def get_card_discard(self, card):
