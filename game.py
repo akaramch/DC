@@ -479,6 +479,11 @@ while not done:
             if click:
                 if not buy(human_player, lineup[i], i):
                     enough_power_num = 20
+                    
+    
+    end_turn_button= pygame.draw.rect(screen,(0,0,240),(650,0,40,25));
+    
+    
     # TODO expand the discard pile when the player clicks on it
 
     # last thing done in the loop: update the display to reflect everything you just drew
