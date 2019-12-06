@@ -92,6 +92,24 @@ class Deck:
         elif card.get_type() == "Weakness":
             self.num_weaknesses += 1
 
+    #adds card to bottom of deck
+    def add_to_bottom(self, card):
+        self.contents.append(card) #add to back of contents
+        self.num_cards += 1
+        # increment the proper field given card type
+        if card.get_type() == "Power":
+            self.num_super_powers += 1
+        elif card.get_type() == "Hero":
+            self.num_heroes += 1
+        elif card.get_type() == "Equipment":
+            self.num_equipment += 1
+        elif card.get_type() == "Starter":
+            self.num_starters += 1
+        elif card.get_type() == "Villain":
+            self.num_villains += 1
+        elif card.get_type() == "Weakness":
+            self.num_weaknesses += 1
+
 
 class PlayerDeck(Deck):
     def __init__(self, card_list):
