@@ -64,13 +64,6 @@ def load_villain_deck(super_villains):
     villain_deck.shuffle()
     return villain_deck
 
-#remove card from lineup
-def remove_from_lineup(card):
-    pass
-
-#called when a card is bought
-def buy_card(player, card):
-    pass
 
 
 #run the computer turn
@@ -83,6 +76,4 @@ def computer_turn(player, super_villain_deck, main_deck, kick_deck, lineup):
         buy_card(player, card)
     pass
 
-#loop to run while the player is taking their turn
-def player_turn():
-    pass
+
