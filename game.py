@@ -1,6 +1,6 @@
 """
-Potential first iteration of the GUI?
-Created mostly for purposes of learning pygame
+Holds the working version of the GUI including the game loop
+and also the Card class and all the instantiantions and lists of cards
 """
 
 import pygame
@@ -12,8 +12,6 @@ import deck
 CARD_WIDTH = 123
 CARD_HEIGHT = 175
 CARD_SPACE = 35
-LARGE_CARD_WIDTH = 316
-LARGE_CARD_HEIGHT = 450
 # window dimensions
 SCREEN_WIDTH = CARD_WIDTH * 7 + CARD_SPACE * 3 + 100
 SCREEN_HEIGHT = CARD_HEIGHT * 3 + CARD_SPACE * 5
@@ -133,8 +131,6 @@ StartingMainDeck = [] #will be used to build the card list for the main deck
  = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="SuperVillain", text="") #
 """
 
-
-
 # EQUIPMENT
 EquipmentList = []
 
@@ -157,14 +153,14 @@ EquipmentList.append(Soultaker_Sword)
 EquipmentList.append(White_Lantern_Power_Battery)
 
 #add equipment to main deck
-StartingMainDeck += [Aquamans_Trident] *3
-StartingMainDeck += [Batarang] *2
-StartingMainDeck += [Lasso_of_Truth] *2
-StartingMainDeck += [Legion_Flight_Ring] *2
-StartingMainDeck += [Nth_Metal] *3
-StartingMainDeck += [Power_Ring] *3
-StartingMainDeck += [Soultaker_Sword] *3
-StartingMainDeck += [White_Lantern_Power_Battery] *1
+StartingMainDeck += [Aquamans_Trident] * 3
+StartingMainDeck += [Batarang] * 2
+StartingMainDeck += [Lasso_of_Truth] * 2
+StartingMainDeck += [Legion_Flight_Ring] * 2
+StartingMainDeck += [Nth_Metal] * 3
+StartingMainDeck += [Power_Ring] * 3
+StartingMainDeck += [Soultaker_Sword] * 3
+StartingMainDeck += [White_Lantern_Power_Battery] * 1
 
 # SUPER POWERS
 PowerList = []
@@ -190,21 +186,21 @@ PowerList.append(Ultra_Strength)
 PowerList.append(X_Ray_Vision)
 
 #add non-kick powers to main deck list
-StartingMainDeck += [Bulletproof] *2
-StartingMainDeck += [Giant_Growth] *2
-StartingMainDeck += [Heat_Vision] *3
-StartingMainDeck += [Shazam] *1
-StartingMainDeck += [Starbolt] *3
-StartingMainDeck += [Super_Strength] *2
-StartingMainDeck += [Ultra_Strength] *1
-StartingMainDeck += [X_Ray_Vision] *3
+StartingMainDeck += [Bulletproof] * 2
+StartingMainDeck += [Giant_Growth] * 2
+StartingMainDeck += [Heat_Vision] * 3
+StartingMainDeck += [Shazam] * 1
+StartingMainDeck += [Starbolt] * 3
+StartingMainDeck += [Super_Strength] * 2
+StartingMainDeck += [Ultra_Strength] * 1
+StartingMainDeck += [X_Ray_Vision] * 3
 
 # HEROES
 HeroList = []
 
 Raven = Card("cardimgs/raven.jpg", cost=3, power=(1,0), name="Raven", draw=(1,0), vp=1, type="Hero", text="+1 Power and draw a card.") #3
 # TODO scan Catwoman
-Catwoman = Card("cardimgs/imagename.jpg", cost=2, power=(2,0), name="Catwoman", vp=1, type="Hero", text="+2 Power.") #2
+Catwoman = Card("cardimgs/catwoman.jpg", cost=2, power=(2,0), name="Catwoman", vp=1, type="Hero", text="+2 Power.") #2
 Katana = Card("cardimgs/katana.jpg", cost=2, power=(1,0), name="Katana", vp=1, type="Hero", defense=(True,1), text="+1 Power.\nDefense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
 Winged_Warrior = Card("cardimgs/wingedwarrior.jpg", cost=6, power=(2,3), name="Winged Warrior", vp=2, type="Hero", text="+2 Power.\nIf you play or have played another Hero this turn, additional +3 Power.") #1
 Power_Girl = Card("cardimgs/powergirl.jpg", cost=5, power=(3,0), name="Power Girl", vp=2, type="Hero", text="+3 Power.") #3
@@ -212,7 +208,7 @@ Hawkgirl = Card("cardimgs/hawkgirl.jpg", cost=2, power=(1,4), name="Hawkgirl", v
 Kid_Flash = Card("cardimgs/kidflash.jpg", cost=2, name="Kid Flash", vp=1, draw=(1,0), type="Hero", text="Draw a card.") #2
 Supergirl = Card("cardimgs/supergirl.jpg", cost=4, name="Supergirl", vp=1, type="Hero", custom=5, text="You may put a Kick from the Kick stack into your hand.") #2
 # TODO scan J'onn J'onzz
-Jonn_Jonzz = Card("cardimgs/imagename.jpg", cost=6, name="J'onn J'onzz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") #1
+Jonn_Jonzz = Card("cardimgs/jonnjonzz.jpg", cost=6, name="J'onn J'onzz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") #1
 The_Fastest_Man_Alive = Card("cardimgs/thefastestmanalive.jpg", cost=5, name="The Fastest Man Alive", vp=1, draw=(2,0), type="Hero", text="Draw two cards.") #1
 King_of_Atlantis = Card("cardimgs/kingofatlantis.jpg", cost=5, power=(1,5), name="King of Atlantis", vp=1, destroy_discard=1, type="Hero", text="You may destroy a card in your discard pile. If you do, +3 Power. Otherwise, +1 Power.") #1
 
@@ -229,17 +225,17 @@ HeroList.append(The_Fastest_Man_Alive)
 HeroList.append(Winged_Warrior)
 
 #add heroes to main deck list
-StartingMainDeck += [Catwoman] *2
-StartingMainDeck += [Hawkgirl] *2
-StartingMainDeck += [Jonn_Jonzz] *1
-StartingMainDeck += [Katana] *2
-StartingMainDeck += [Kid_Flash] *2
-StartingMainDeck += [King_of_Atlantis] *1
-StartingMainDeck += [Power_Girl] *3
-StartingMainDeck += [Raven] *3
-StartingMainDeck += [Supergirl] *2
-StartingMainDeck += [The_Fastest_Man_Alive] *1
-StartingMainDeck += [Winged_Warrior] *1
+StartingMainDeck += [Catwoman] * 2
+StartingMainDeck += [Hawkgirl] * 2
+StartingMainDeck += [Jonn_Jonzz] * 1
+StartingMainDeck += [Katana] * 2
+StartingMainDeck += [Kid_Flash] * 2
+StartingMainDeck += [King_of_Atlantis] * 1
+StartingMainDeck += [Power_Girl] * 3
+StartingMainDeck += [Raven] * 3
+StartingMainDeck += [Supergirl] * 2
+StartingMainDeck += [The_Fastest_Man_Alive] * 1
+StartingMainDeck += [Winged_Warrior] * 1
 
 # VILLAINS
 VillainList = []
@@ -270,17 +266,16 @@ VillainList.append(Two_Face)
 
 #add villains to main deck list
 # TODO StartingMainDeck += [Bane] *
-StartingMainDeck += [Doomsday] *2
-StartingMainDeck += [Gorilla_Grodd] *2
-StartingMainDeck += [Jervis_Tetch] *2
-StartingMainDeck += [Johnny_Quick] *2
-StartingMainDeck += [Killer_Croc] *2
-StartingMainDeck += [Lobo] *1
+StartingMainDeck += [Doomsday] * 2
+StartingMainDeck += [Gorilla_Grodd] * 2
+StartingMainDeck += [Jervis_Tetch] * 2
+StartingMainDeck += [Johnny_Quick] * 2
+StartingMainDeck += [Killer_Croc] * 2
+StartingMainDeck += [Lobo] * 1
 # TODO StartingMainDeck += [Mr_Zsasz] *
-StartingMainDeck += [Red_Lantern_Corps] *2
+StartingMainDeck += [Red_Lantern_Corps] * 2
 # TODO StartingMainDeck += [Scarecrow] *
-StartingMainDeck += [Two_Face] *2
-
+StartingMainDeck += [Two_Face] * 2
 
 # SUPER VILLAINS
 SuperVillainList = []
@@ -313,7 +308,7 @@ SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
 
-    
+
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
@@ -330,11 +325,14 @@ bkg.blit(card_outline, (CARD_WIDTH + CARD_SPACE * 2 - 5, CARD_SPACE - 5))
 bkg.blit(card_outline, (CARD_SPACE - 5, CARD_HEIGHT + CARD_SPACE * 2 - 5))
 bkg.blit(card_outline, (CARD_WIDTH + CARD_SPACE * 2 - 5, CARD_HEIGHT + CARD_SPACE * 2 - 5))
 # outline the lineup
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_SPACE - 5))
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 3 + CARD_SPACE - 5))
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 3 * 2 + CARD_SPACE - 5))
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 3 * 3 + CARD_SPACE - 5))
-bkg.blit(card_outline, (CARD_SPACE * 3 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 3 * 4 + CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 4 + CARD_WIDTH * 2 - 5, CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 4 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 4 + CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 4 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 4 * 2 + CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 4 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 4 * 3 + CARD_SPACE - 5))
+bkg.blit(card_outline, (CARD_SPACE * 4 + CARD_WIDTH * 2 - 5, CARD_HEIGHT // 4 * 4 + CARD_SPACE - 5))
+# outline the player's deck and discard pile
+bkg.blit(card_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE + GAME_FONT.get_height() * 2 - 4))
+bkg.blit(card_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 1))
 # outline the player's hand
 hand_outline = pygame.Surface((SCREEN_WIDTH, 10))
 hand_outline.fill((127, 127, 127))
@@ -388,19 +386,29 @@ while not done:
     screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
     screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
     screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
-    screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - 23))
-    screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3 + LARGE_CARD_WIDTH, CARD_SPACE - 20))
+    # the player's deck, represented either by a card back or nothing (if the deck is empty)
+    if human_player.own_deck.undrawn != 0:
+        screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() * 2 + 1))
+    screen.blit(GAME_FONT.render("Your deck", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5))
+    screen.blit(GAME_FONT.render("Cards remaining: " + str(len(human_player.own_deck.undrawn)), True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() - 5))
+    # the player's discard pile, represented by the top card or nothing (if the discard is empty)
+    if len(human_player.own_deck.discard) != 0:
+        screen.blit(human_player.own_deck.discard[-1], (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 6))
+    screen.blit(GAME_FONT.render("Your discard", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
+    screen.blit(GAME_FONT.render("Click to expand", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT))
+    screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - GAME_FONT.get_height() - 5))
+    screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
     for i in range(hand_scroll, len(human_player.own_deck.hand)):
         #TODO draw the hand and let the hand display scroll
         screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
     for i in range(5): # draw the lineup
         if lineup[i] == None:
             lineup[i] = main_deck.draw()
-        screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 3, CARD_HEIGHT // 3 * i + CARD_SPACE))
+        screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 4, CARD_HEIGHT // 4 * i + CARD_SPACE))
     
     # is the mouse on the supervillain deck
     if mouse_pos[0] > CARD_SPACE and mouse_pos[0] < CARD_SPACE + CARD_WIDTH and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
-        screen.blit(super_villain_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE - 5))
+        screen.blit(super_villain_deck.peek().zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
         if click:
             # TODO the player buys the top card of the supervillain deck
             pass
@@ -412,19 +420,19 @@ while not done:
         pass
     # is the mouse on a card in the hand
     elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
-        screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE - 5))
+        screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
         if click:
             human_player.own_deck.hand_to_played(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH])
     # is the mouse on any of the top 4 lineup cards
     for i in range(4):
         if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * (i + 1):
-            screen.blit(lineup[i].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE - 5))
+            screen.blit(lineup[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click:
                 # TODO the player buys this card and it leaves a blank space
                 pass
     # is the mouse on the last lineup card
     if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * 4 and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * 4 + CARD_HEIGHT:
-        screen.blit(lineup[4].zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 4, CARD_SPACE - 5))
+        screen.blit(lineup[4].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
         if click:
             # TODO the player buys this card and it leaves a blank space
             pass
