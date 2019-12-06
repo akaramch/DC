@@ -48,7 +48,6 @@ Parameter list:
 Returns: loaded main deck
 """
 def load_player_deck(card_list):
-    #TODO make subclass for player decks
     player_deck = deck.Deck(card_list)
     player_deck.shuffle()
     return player_deck
