@@ -56,8 +56,14 @@ def max_vp_lineup(power, lineup, lineup1):
 """
 Wrapper for card.get_vp for the sort function
 """
+def cost(card):
+    return card.cost #returns cost
+
 def vp(card):
-    return card.get_vp()
+    return (card.get_vp() - (0.01*card.cost)) #Returns vp, breaks ties towards cards with lower cost
+
+def vp_ratio(card):
+    return ((card.get_vp()/card.get_cost()) + (0.01*card.cost)) #Returns vp to cost ratio, breaks ties towards cards with higher cost
 
 """
 Sorts the lineup by vp values (method doesn't really matter, the list will only be at most 8 or 9 cards)
@@ -66,10 +72,18 @@ Parameter list:
 Return:
     lineup: lineup sorted by vp values
 """
+def sort_by_cost(lineup):
+    lineup.sort(key=cost) #sorts lineup in ascending order of cost
+    return lineup
+
 def sort_by_vp(lineup):
     lineup.sort(key=vp, reverse=True) #sorts lineup in place based on result of vp called on its elements
     return lineup
 
+def sort_by_ratio(lineup):
+    lineup.sort(key=vp_ratio, reverse=True) #sorts lineup in place based on result of vp ratio called on its elements
+    return lineup
+    
 """
 Checks if it can end the game and returns whether it can and the cards to buy.
 Doesn't need kick deck because kicks are worth at most 1 vp
@@ -82,46 +96,36 @@ Parameter list:
 Return:
     boolean, cards_to_buy, remaining_power
 """
-def check_end_game(power, super_villain, super_deck_size, main_deck_size, lineup):
-    cards_to_buy = []
-    if super_deck_size == 1 and super_villain.cost < power: #can buy the last super_villain
-        cards_to_buy.append(super_villain)
-        power -= super_villain.cost #less power to buy other stuff
-        max_vp = max_vp_lineup(power, lineup()) #(cards_to_buy, power_left)
-        cards_to_buy = cards_to_buy + max_vp[0] #add whatever other cards from lineup maximize power
-        power = max_vp[1]
-        return True, cards_to_buy, power
-
+def check_end_game(power, super_villain_deck, main_deck_size, lineup, kick_deck):
     needed_to_end = main_deck_size + 1  # number of cards to buy from the lineup to end the game
-    if needed_to_end > 4: #can't buy enough cards to end game
+    if needed_to_end > 5: #can't buy enough cards to end game
         return False, []
     power_needed = 0
+    lineup = sort_by_cost(lineup)
     for i in range(0, needed_to_end-1):
         power_needed += lineup[i] #minimum power needed to end game
     if power_needed < power: #not enough power
         return False, []
     #calculate max vp by backtracking we know there is at least one solution
     else:
-        vp_lineup = sort_by_vp(lineup)
-        sofar = [] #keep track of current guess
-        index = 0
-        attempt = 0
-        power_left = power #remaining power to buy (can't go below 0 in a solution)
-        while True:
-            sofar.append(vp_lineup[index])
-            power_left -= vp_lineup[index]
-            if power_left >= 0:
-                if len(sofar) == needed_to_end: #we have our solution
-                    return True, sofar, power_left
-                else: #we can still potentially build a solution off of this
-                    index += 1
-                    continue
-            else: #current attempt cannot be the solution
-                attempt += 1 #track number of attempts
-                index = attempt #continue with next attempt ignoring the most costly card
-                sofar = [] #reset sofar
-                power_left = power #reset power_left
-                continue
+        cost_lineup = sort_by_cost(lineup)
+        tobuy = [] #keep track of what you're buying to trigger end of game        
+        while (len(tobuy)<needed_to_end): #keeps buying the cheapest card till we have enough to end game
+            power -= cost_lineup[0]
+            tobuy.append(cost_lineup.pop(0)) #remove card from the lineup and add it to tobuy -- does this work?
+        if super_villain_deck.peek().get_cost() <= power: #if we can buy the supervillain, buy it
+            power -= super_villain_deck.peek().get_cost()
+            tobuy.append(super_villain_deck.peek()) #add the super villain to the cards to buy
+            if power <= 1: #buying super spent all power so no need to check other stuff
+                return True, tobuy
+        lineup.append(kick_deck) #adds the kick deck to stuff we can buy, because we want to optimize buying, kick deck included
+        vp_sorted = lineup.copy()
+        vp_sorted = sort_by_vp(vp_sorted)
+        ratio_sorted = lineup.copy()
+        ratio_sorted = sort_by_ratio(ratio_sorted)
+        max_vp = max_vp_lineup(power, vp_sorted, ratio_sorted) #set of cards that can be bought that maximize vp
+        tobuy.extend(max_vp) #adds the cards found above to the cards to buy. This and the above 4 lines are the same as in buy_cards during almost end game
+        return True, tobuy
     return False, [] #should never reach this line, but I'll leave it here just in case
 
 """
@@ -139,14 +143,9 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup)
     #first, we'll play to try to end the game when possible
     cards_to_buy = []
     #(bool can_end_game, cards_to_buy, remaining_power)
-    end_game = check_end_game(power, super_villain_deck.peek(), super_villain_deck.num_size, main_deck.size, lineup)
+    end_game = check_end_game(power, super_villain_deck, main_deck.size, lineup, kick_deck)
     if end_game[0]:
-        cards_to_buy += end_game[1]
-        kicks = end_game[2]//3 #of kicks able to buy with remaining power
-        for i in range(1, kicks):
-            if kick_deck.size == 0:
-                break
-            #TODO add kicks to cards to buy (not certain how this will look based on how other stuff is implemented)
+        cards_to_buy.append(end_game[1]) #end_game[1] should be a list
         return cards_to_buy
 
     #can buy super_villain
@@ -155,17 +154,15 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup)
         cards_to_buy.append(super_villain_deck.peek()) #add the super villain to the cards to buy
         if power <= 1: #buying super spent all power so no need to check other stuff
             return cards_to_buy
-
+    lineup.extend(kick_deck) #from here on in, we need to add kicks to the lineup to consider optimal buy
     #end game coming soon, but cannot end it on our turn
     if super_villain_deck.num_cards <= 3 or main_deck.num_cards <= 15:
-        #cards to add to cards to buy from lineup
-        max_vp = max_vp_lineup(power, lineup)
-        spent = 0
-        #figure out the cost of the cards
-        for card in max_vp:
-            spent += card.get_vp()
-        power -= spent #get leftover power
-        cards_to_buy.extend(max_vp[0])
-        #TODO add as many kicks as possible
-
+        vp_sorted = lineup.copy()
+        vp_sorted = sort_by_vp(vp_sorted)
+        ratio_sorted = lineup.copy()
+        ratio_sorted = sort_by_ratio(ratio_sorted)
+        max_vp = max_vp_lineup(power, vp_sorted, ratio_sorted) #set of cards that can be bought that maximize vp
+        cards_to_buy.extend(max_vp) #adds the cards found above to the cards to buy
+        return cards_to_buy
+    
     return None
