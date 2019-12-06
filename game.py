@@ -340,8 +340,6 @@ bkg.blit(hand_outline, (0, CARD_HEIGHT * 2 + CARD_SPACE * 5 - 5))
 
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
-pos = (0, 0) # position of the mouse
-dx, dy = 0, 0 # the change in the mouse coordinates between frames
 hand_scroll = 0 # the player's hand can scroll to view more cards; that is done by this many cards
 done = False
 
@@ -369,13 +367,16 @@ for i in range(5):
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
 
+    # click should only be true on the frame when the button is pressed
+    if click:
+        click = False
     for event in pygame.event.get(): # evaluate all the current events
         if event.type == pygame.QUIT:
             done = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click = True
-        elif event.type == pygame.MOUSEBUTTONUP:
-            click = False
+        #elif event.type == pygame.MOUSEBUTTONUP:
+        #    click = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q: # have a quit key
                 done = True
@@ -397,6 +398,9 @@ while not done:
     screen.blit(GAME_FONT.render("Your discard", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
     screen.blit(GAME_FONT.render("Click to expand", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT))
     screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - GAME_FONT.get_height() - 5))
+    # all the cards the player has played this turn
+    for i in range(len(human_player.own_deck.played)):
+        screen.blit(human_player.own_deck.played[i].img, (CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5, CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2)))
     screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
     for i in range(hand_scroll, len(human_player.own_deck.hand)):
         #TODO draw the hand and let the hand display scroll
@@ -421,8 +425,18 @@ while not done:
     # is the mouse on a card in the hand
     elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
         screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
-        if click:
-            human_player.own_deck.hand_to_played(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH])
+        if click: # click on a card to play it
+            human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
+    # is the mouse on any of the played cards
+    for i in range(len(human_player.own_deck.played)):
+        if mouse_pos[0] > CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5 and mouse_pos[0] < CARD_WIDTH * (4 + i % 2) + CARD_SPACE * 5 and mouse_pos[1] > CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2):
+            # treat the last two played cards differently because they're shown in full and are thus much taller
+            if i + 2 >= len(human_player.own_deck.played):
+                if mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + CARD_HEIGHT + (CARD_HEIGHT // 6) * (i // 2):
+                    screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+            else:
+                if mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2 + 1):
+                    screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
     # is the mouse on any of the top 4 lineup cards
     for i in range(4):
         if mouse_pos[0] > CARD_SPACE * 3 + CARD_WIDTH * 2 and mouse_pos[0] < CARD_SPACE * 3 + CARD_WIDTH * 3 and mouse_pos[1] > CARD_SPACE + CARD_HEIGHT // 3 * i and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 3 * (i + 1):
@@ -436,6 +450,7 @@ while not done:
         if click:
             # TODO the player buys this card and it leaves a blank space
             pass
+    # TODO expand the discard pile when the player clicks on it
 
     # last thing done in the loop: update the display to reflect everything you just drew
     pygame.display.flip()
