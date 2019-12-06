@@ -1,6 +1,5 @@
 from copy import deepcopy
 
-import cards
 import deck
 
 
