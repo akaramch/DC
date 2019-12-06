@@ -144,7 +144,7 @@ class PlayerDeck(Deck):
         self.undrawn.remove(card)
 
     #destroy card from hand
-    def destroy_from_hand(self, card):
+    def destroy_from_hand(self, index):
         if card.get_type() == "Power":
             self.num_super_powers -= 1
         elif card.get_type() == "Hero":
@@ -157,11 +157,12 @@ class PlayerDeck(Deck):
             self.num_villains -= 1
         elif card.get_type() == "Weakness":
             self.num_weaknesses -= 1
+        card = self.hand.pop(index)
         self.contents.remove(card)
-        self.hand.remove(card)
+
 
     #destroy card from played
-    def destroy_from_played(self, card):
+    def destroy_from_played(self, index):
         if card.get_type() == "Power":
             self.num_super_powers -= 1
         elif card.get_type() == "Hero":
@@ -174,8 +175,9 @@ class PlayerDeck(Deck):
             self.num_villains -= 1
         elif card.get_type() == "Weakness":
             self.num_weaknesses -= 1
+        card = self.played.pop(index)
         self.contents.remove(card)
-        self.played.remove(card)
+
 
     #destroy card from discard
     def destroy_from_discard(self, card):
@@ -195,13 +197,13 @@ class PlayerDeck(Deck):
         self.discard.remove(card)
 
     #moves a card from hand to played
-    def hand_to_played(self, card):
-        self.hand.remove(card)
+    def hand_to_played(self, index):
+        card = self.hand.pop(index)
         self.played.append(card)
 
     #dumps all played cards into discard at end of turn
     def played_to_discard(self):
-        self.discard += self.discard
+        self.discard += self.played
         self.played = []
     
     #draw a card from undrawn to hand
