@@ -199,7 +199,6 @@ StartingMainDeck += [X_Ray_Vision] * 3
 HeroList = []
 
 Raven = Card("cardimgs/raven.jpg", cost=3, power=(1,0), name="Raven", draw=(1,0), vp=1, type="Hero", text="+1 Power and draw a card.") #3
-# TODO scan Catwoman
 Catwoman = Card("cardimgs/catwoman.jpg", cost=2, power=(2,0), name="Catwoman", vp=1, type="Hero", text="+2 Power.") #2
 Katana = Card("cardimgs/katana.jpg", cost=2, power=(1,0), name="Katana", vp=1, type="Hero", defense=(True,1), text="+1 Power.\nDefense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
 Winged_Warrior = Card("cardimgs/wingedwarrior.jpg", cost=6, power=(2,3), name="Winged Warrior", vp=2, type="Hero", text="+2 Power.\nIf you play or have played another Hero this turn, additional +3 Power.") #1
@@ -207,7 +206,6 @@ Power_Girl = Card("cardimgs/powergirl.jpg", cost=5, power=(3,0), name="Power Gir
 Hawkgirl = Card("cardimgs/hawkgirl.jpg", cost=2, power=(1,4), name="Hawkgirl", vp=1, type="Hero", text="+1 Power and and additional +1 Power for each Hero in your discard pile.") #2
 Kid_Flash = Card("cardimgs/kidflash.jpg", cost=2, name="Kid Flash", vp=1, draw=(1,0), type="Hero", text="Draw a card.") #2
 Supergirl = Card("cardimgs/supergirl.jpg", cost=4, name="Supergirl", vp=1, type="Hero", custom=5, text="You may put a Kick from the Kick stack into your hand.") #2
-# TODO scan J'onn J'onzz
 Jonn_Jonzz = Card("cardimgs/jonnjonzz.jpg", cost=6, name="J'onn J'onzz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") #1
 The_Fastest_Man_Alive = Card("cardimgs/thefastestmanalive.jpg", cost=5, name="The Fastest Man Alive", vp=1, draw=(2,0), type="Hero", text="Draw two cards.") #1
 King_of_Atlantis = Card("cardimgs/kingofatlantis.jpg", cost=5, power=(1,5), name="King of Atlantis", vp=1, destroy_discard=1, type="Hero", text="You may destroy a card in your discard pile. If you do, +3 Power. Otherwise, +1 Power.") #1
