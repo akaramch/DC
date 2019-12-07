@@ -131,7 +131,7 @@ class PlayerDeck(Deck):
     def undrawn_top_to_discard(self):
         card = self.undrawn.pop(0)
         self.add_to_discard(card)
-        
+
     #destroy a card from the player deck
     def destroy_from_deck(self, card):
         if card.get_type() == "Power":
