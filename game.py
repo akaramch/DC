@@ -515,7 +515,6 @@ while not done:
             if click:
                 card_selection = human_player.prompt[2][i]
         # draw the card selection if there is one
-            
         
         
     else:
@@ -537,7 +536,7 @@ while not done:
         # the player's discard pile, represented by the top card or nothing (if the discard is empty)
         if len(human_player.own_deck.discard) != 0:
             screen.blit(human_player.own_deck.discard[-1].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 6))
-        screen.blit(GAME_FONT.render("Your discard", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
+        screen.blit(GAME_FONT.render("Your discard pile", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
         screen.blit(GAME_FONT.render("Click to expand", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT))
         screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - GAME_FONT.get_height() - 5))
         # end turn button
@@ -561,7 +560,7 @@ while not done:
         if enough_power_num:
             enough_power_num -= 1
             screen.blit(GAME_FONT.render("Not enough power.", True, (0, 0, 0), GAME_BKG_COLOR), (5, 5))
-        
+            
         # is the mouse on the supervillain deck
         if mouse_pos[0] > CARD_SPACE and mouse_pos[0] < CARD_SPACE + CARD_WIDTH and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
             # can only interact with the supervillain deck once per turn
@@ -572,9 +571,11 @@ while not done:
                         enough_power_num = 20
                     else:
                         super_villain_bought = True
+                        
         # is the mouse over the weakness deck
         elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + CARD_WIDTH and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
             screen.blit(weakness_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
+            
         # is the mouse over the kick deck
         elif CARD_SPACE * 2 + CARD_WIDTH < mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
             screen.blit(kick_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
@@ -582,10 +583,12 @@ while not done:
             if click:
                 if not buy(human_player, kick_deck.peek()):
                     enough_power_num = 20
+                    
         # is the mouse over end turn
         elif mouse_pos[0] > END_TURN_BUTTON_LEFT and mouse_pos[0] < (END_TURN_BUTTON_LEFT + END_TURN_BUTTON_WIDTH) and mouse_pos[1] > END_TURN_BUTTON_TOP and mouse_pos[1] < END_TURN_BUTTON_TOP + END_TURN_BUTTON_HEIGHT:
             if click:
                 end_turn(human_player)
+                
         # is the mouse on the main deck
         # elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
         #    if click:
@@ -593,11 +596,13 @@ while not done:
         #        pass
         #    pass
         # is the mouse on a card in the hand
+        
         elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
             screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click: # click on a card to play it
                 card_effect.card_effect(human_player, human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll])
                 human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
+                
         # is the mouse on any of the played cards
         for i in range(len(human_player.own_deck.played)):
             if mouse_pos[0] > CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5 and mouse_pos[0] < CARD_WIDTH * (4 + i % 2) + CARD_SPACE * 5 and mouse_pos[1] > CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2):
@@ -608,6 +613,7 @@ while not done:
                 else:
                     if mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2 + 1):
                         screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+                        
         # is the mouse on any of the lineup cards
         if CARD_SPACE * 4 + CARD_WIDTH * 2 < mouse_pos[0] < CARD_SPACE * 4 + CARD_WIDTH * 3 and CARD_SPACE < mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 4 * 4 + CARD_HEIGHT:
             i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 4), 4)
@@ -622,7 +628,7 @@ while not done:
                 if click:
                     if not buy(human_player, lineup[i], i):
                         enough_power_num = 20
-        # TODO expand the discard pile when the player clicks on it
+        
         # is the mouse on the discard pile
         if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 6 < mouse_pos[1] < CARD_SPACE * 3 + CARD_HEIGHT * 2 + GAME_FONT.get_height() + 6:
             if len(human_player.own_deck.discard) > 0:
@@ -633,7 +639,7 @@ while not done:
 
     # last thing done in the loop: update the display to reflect everything you just drew
     pygame.display.flip()
-    # makes the game run no faster than 2o fps (for timing)
+    # makes the game run no faster than 20 fps (for timing)
     GAME_CLOCK.tick(20)
 
 pygame.quit()
