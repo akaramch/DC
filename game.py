@@ -8,6 +8,7 @@ pygame.init()
 import dc_player
 import deck
 import card_effect
+from random import randint
 
 # card dimensions
 CARD_WIDTH = 123
@@ -20,7 +21,7 @@ SCREEN_WIDTH = CARD_WIDTH * 7 + CARD_SPACE * 3 + 100
 SCREEN_HEIGHT = CARD_HEIGHT * 3 + CARD_SPACE * 5
 SCREEN_NAME = "DC Game"
 # background color for the whole screen
-GAME_BKG_COLOR = (112, 208, 127)
+GAME_BKG_COLOR = (randint(0, 255), randint(0, 255), randint(0, 255)) # 112, 208, 127
 GAME_FONT = pygame.font.SysFont("ubuntucondensed", 14) # the font to be used to write all things card-related
 # clock in the game to time framerate
 GAME_CLOCK = pygame.time.Clock()
@@ -423,6 +424,7 @@ players = [human_player, computer_player] # list of players (there are only 2 fo
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
 kick_deck = deck.Deck([Kick] * 16)
+weakness_deck = deck.Deck([Weakness] * 20)
 # the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
 lineup = [None, None, None, None, None]
 
@@ -475,10 +477,11 @@ while not done:
         else:
             screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
             screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
-        
+        # is the mouse on a card in the discard pile
         if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + (len(human_player.own_deck.discard) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT:
             i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.own_deck.discard) - 1)
             screen.blit(human_player.own_deck.discard[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
+        # close the discard pile screen on click
         if click:
             discard_pile = False
         
@@ -489,6 +492,10 @@ while not done:
         screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
         screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
         screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
+        screen.blit(pygame.Surface() if kick_deck.isEmpty() else kick_deck.peek().img, (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT))
+        screen.blit(GAME_FONT.render("Kicks remaining: " + str(kick_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
+        screen.blit(pygame.Surface() if weakness_deck.isEmpty() else weakness_deck.peek().img, (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT))
+        screen.blit(GAME_FONT.render("Weaknesses remaining: " + str(weakness_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
         # the player's deck, represented either by a card back or nothing (if the deck is empty)
         if human_player.own_deck.undrawn != 0:
             screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() * 2 + 1))
@@ -532,6 +539,16 @@ while not done:
                         enough_power_num = 20
                     else:
                         super_villain_bought = True
+        # is the mouse over the weakness deck
+        elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + CARD_WIDTH and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
+            screen.blit(weakness_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
+        # is the mouse over the kick deck
+        elif CARD_SPACE * 2 + CARD_WIDTH < mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
+            screen.blit(kick_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
+            # click to buy a kick
+            if click:
+                if not buy(human_player, kick_deck.peek()):
+                    enough_power_num = 20
         # is the mouse over end turn
         elif mouse_pos[0] > END_TURN_BUTTON_LEFT and mouse_pos[0] < (END_TURN_BUTTON_LEFT + END_TURN_BUTTON_WIDTH) and mouse_pos[1] > END_TURN_BUTTON_TOP and mouse_pos[1] < END_TURN_BUTTON_TOP + END_TURN_BUTTON_HEIGHT:
             if click:
