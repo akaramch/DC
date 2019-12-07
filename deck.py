@@ -202,10 +202,10 @@ class PlayerDeck(Deck):
         self.played.append(card)
 
     #moves card from hand to discard
-    def hand_to_discard(self, card):
-        self.hand.remove(card)
+    def hand_to_discard(self, index):
+        card = self.hand.pop(index)
         self.discard.append(card)
-        
+
     #dumps all played cards into discard at end of turn
     def played_to_discard(self):
         self.discard += self.played

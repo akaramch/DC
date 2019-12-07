@@ -330,6 +330,14 @@ def buy(player, card, i=0):
     player.gain_card_discard(card)
     return True
 
+def end_turn(player):
+    #move cards to discard
+    player.end_turn()
+    #refill lineup
+    while len(lineup) != 5:
+        lineup.append(main_deck.draw())
+    #TODO super villain flip and attacks
+
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
@@ -421,6 +429,15 @@ while not done:
     screen.blit(GAME_FONT.render("Your discard", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
     screen.blit(GAME_FONT.render("Click to expand", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT))
     screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - GAME_FONT.get_height() - 5))
+    #end turn button
+    END_TURN_BUTTON_LEFT = 420
+    END_TURN_BUTTON_TOP = 400
+    END_TURN_BUTTON_WIDTH = 53
+    END_TURN_BUTTON_HEIGHT = 18
+    #end_turn_button = pygame.draw.rect(screen, (0, 0, 240), (END_TURN_BUTTON_LEFT, END_TURN_BUTTON_TOP, END_TURN_BUTTON_WIDTH, END_TURN_BUTTON_HEIGHT))
+    GAME_FONT.set_underline(True) #underline the text
+    screen.blit(GAME_FONT.render("END TURN", True, (0, 0, 0), GAME_BKG_COLOR), (END_TURN_BUTTON_LEFT, END_TURN_BUTTON_TOP))
+    GAME_FONT.set_underline(False)
     # all the cards the player has played this turn
     for i in range(len(human_player.own_deck.played)):
         screen.blit(human_player.own_deck.played[i].img, (CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5, CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2)))
@@ -442,6 +459,10 @@ while not done:
             if not buy(human_player, super_villain_deck.peek()):
                 enough_power_num = 20
             super_villain_bought = True
+    #is the mouse over end turn
+    elif mouse_pos[0] > END_TURN_BUTTON_LEFT and mouse_pos[0] < (END_TURN_BUTTON_LEFT + END_TURN_BUTTON_WIDTH) and mouse_pos[1] > END_TURN_BUTTON_TOP and mouse_pos[1] < END_TURN_BUTTON_TOP + END_TURN_BUTTON_HEIGHT:
+        if click:
+            end_turn(human_player)
     # is the mouse on the main deck
     #elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
     #    if click:
@@ -481,7 +502,7 @@ while not done:
                     enough_power_num = 20
                     
     
-    end_turn_button= pygame.draw.rect(screen,(0,0,240),(650,0,40,25));
+
     
     
     # TODO expand the discard pile when the player clicks on it

@@ -31,13 +31,16 @@ class Player:
         self.own_deck.add_card(card)  # adds to deck contents for stats
         self.own_deck.add_to_hand(card) #adds to hand
 
-    #ends the turn by discarding all cards from hand and played
+    #ends the turn by discarding all cards from hand and played and draws new hand
     def end_turn(self):
         #move cards from hand to discard
-        for card in self.own_deck.hand:
-            self.own_deck.hand_to_discard(card)
+        for i in range(len(self.own_deck.hand)):
+            self.own_deck.hand_to_discard(0)
         #move from played to discard
         self.own_deck.played_to_discard()
+        #draw new hand
+        while len(self.own_deck.hand) < 5:
+            self.own_deck.draw()
 """
 Sets up main deck.
 Parameter list: 
