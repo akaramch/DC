@@ -31,6 +31,13 @@ class Player:
         self.own_deck.add_card(card)  # adds to deck contents for stats
         self.own_deck.add_to_hand(card) #adds to hand
 
+    #ends the turn by discarding all cards from hand and played
+    def end_turn(self):
+        #move cards from hand to discard
+        for card in self.own_deck.hand:
+            self.own_deck.hand_to_discard(card)
+        #move from played to discard
+        self.own_deck.played_to_discard()
 """
 Sets up main deck.
 Parameter list: 
@@ -72,8 +79,9 @@ def computer_turn(player, super_villain_deck, main_deck, kick_deck, lineup):
     power = 0
     #list of cards to buy
     cards_to_buy = buy_cards.buy_cards(power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup)
-    for card in cards_to_buy:
-        buy_card(player, card)
+    for card in cards_to_buy
+        pass
+        #buy_card(player, card)
     pass
 
 
