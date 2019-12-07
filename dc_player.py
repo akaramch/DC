@@ -41,6 +41,8 @@ class Player:
         #draw new hand
         while len(self.own_deck.hand) < 5:
             self.own_deck.draw()
+        #reset power to 0
+        self.power = 0
 """
 Sets up main deck.
 Parameter list: 

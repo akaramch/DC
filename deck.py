@@ -52,6 +52,7 @@ class Deck:
     #draws card from deck and returns it
     def draw(self):
         card = self.contents.pop(0)
+        self.num_cards -= 1
         if card.get_type() == "Power":
             self.num_super_powers -= 1
         elif card.get_type() == "Hero":
@@ -213,6 +214,9 @@ class PlayerDeck(Deck):
     
     #draw a card from undrawn to hand
     def draw(self):
+        #if the deck is empty, shuffle discard into deck
+        if len(self.undrawn) == 0:
+            self.refill_deck()
         card = self.undrawn.pop(0)
         self.add_to_hand(card)
 

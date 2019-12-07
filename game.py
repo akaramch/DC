@@ -334,8 +334,9 @@ def end_turn(player):
     #move cards to discard
     player.end_turn()
     #refill lineup
-    while len(lineup) != 5:
-        lineup.append(main_deck.draw())
+    for i in range(0,5):
+        if not lineup[i]:
+            lineup[i] = main_deck.draw()
     #TODO super villain flip and attacks
 
 # make the game window

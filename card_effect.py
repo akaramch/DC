@@ -18,7 +18,7 @@ def card_effect(player, card):
     if power_bonus_type != 0: #has a bonus power chance
         if power_bonus_type == 1: #power ring
             #if the top of the undrawn deck has cost > 0, +1 power
-            if player.own_deck.peek.get_cost() > 0:
+            if player.own_deck.peek().get_cost() > 0:
                 power_bonus += 1
 
         elif power_bonus_type == 2: #starbolt
