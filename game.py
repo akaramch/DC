@@ -234,7 +234,7 @@ StartingMainDeck += [Hawkgirl] * 2
 StartingMainDeck += [Jonn_Jonzz] * 1
 StartingMainDeck += [Katana] * 2
 StartingMainDeck += [Kid_Flash] * 2
-StartingMainDeck += [King_of_Atlantis] * 1
+StartingMainDeck += [King_of_Atlantis] * 50
 StartingMainDeck += [Power_Girl] * 3
 StartingMainDeck += [Raven] * 3
 StartingMainDeck += [Supergirl] * 2
@@ -323,9 +323,9 @@ def buy(player, card, i=0):
         return False
     # player spends power
     player.power -= card.cost
-    if card.type == "Kick":
+    if card.name == "Kick":
         kick_deck.draw() # don't need to catch it because it's already card
-    elif card.type == "Supervillain":
+    elif card.type == "SuperVillain":
         super_villain_deck.draw() # same
     else: # everything else comes from the lineup
         lineup[i] = None # remove it and keep its spot
