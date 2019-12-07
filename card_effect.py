@@ -64,6 +64,7 @@ choose_none = GAME_FONT.render("None", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_S
 
 GAME_FONT.set_underline(False)
 def prompt_player(message, choices, none_choice_possible):
+    print(message)
     click = False
     scroll = 0  # how far the pile is scrolled
     #when card is selected, the function returns
@@ -82,7 +83,8 @@ def prompt_player(message, choices, none_choice_possible):
         for i in range(len(choices)):
             screen.blit(choices[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
         # draw the choose_none buttons
-        screen.blit(choose_none[0], (SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - choose_none[0].get_width(), CARD_SPACE * 2 + CARD_ZOOM_HEIGHT - GAME_FONT.get_height()))
+        if none_choice_possible:
+            screen.blit(choose_none[0], (SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - choose_none[0].get_width(), CARD_SPACE * 2 + CARD_ZOOM_HEIGHT - GAME_FONT.get_height()))
         # draw the scroll buttons light or dark depending on whether the mouse is over them
         if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
             screen.blit(scroll_button_u_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
@@ -105,7 +107,8 @@ def prompt_player(message, choices, none_choice_possible):
                 return choices[i]
         elif SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - choose_none[0].get_width() < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH and CARD_SPACE * 2 + CARD_ZOOM_HEIGHT - GAME_FONT.get_height() < mouse_pos[1] < CARD_SPACE * 2 + CARD_ZOOM_HEIGHT:
             if click:
-                return None
+                if none_choice_possible:
+                    return None
         pygame.display.flip()
 
 
@@ -172,6 +175,7 @@ def card_effect(player, card):
                     player.own_deck.destroy_from_discard(selection) #destroy the card
 
         elif power_bonus_type == 6: #red lantern corps
+            selection = None
             #+2 additional power if you destroy a card in hand
             if len(player.own_deck.hand) != 0: #if there's a card in hand
                 #prompt the player with the choice
@@ -228,7 +232,14 @@ def card_effect(player, card):
             else: #if they didn't destroy
                 player.own_deck.undrawn_top_to_discard() #put the card in discard
 
+    if card.name == "Soultaker Sword":
+        if not (len(player.own_deck.hand == 0)): #make sure there is a card in the hand
+            selection = prompt_player("Chose a card to destroy from hand. If you don't wish to destroy, click none.", player.own_deck.hand, True)
+            if selection: #if the player chose one
+                player.own_deck.destroy_from_hand(selection) #destroy it
+
     if card.destroy_hand_or_discard == 2: #lobo
+        #discard up to 2 cards from hand and discard pile
         selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, click none", player.own_deck.discard, True) #check if first destroyed from discard
         selection1_hand = None
         if not selection1_discard: #if not check if they want to destroy from hand
@@ -248,6 +259,9 @@ def card_effect(player, card):
             else:  # selection 2 destroy from discard
                 player.own_deck.destroy_from_discard(selection2_discard)
 
-
-        hand_size = len(player.own_deck.hand) #update hand size in case they selected one from hand
-    #TODO any type of destruction (can't do this at all without prompting users
+    if card.discard == 1: #the flash(discard)
+        #draw 3, discard 1 (draw is implemented above)
+        selection = prompt_player("Select a card in your hand to discard.", player.own_deck.hand, False)
+        # can't move over because selection isn't a hand index, so we will destroy it and add a new copy to discard
+        player.own_deck.destroy_from_hand(selection)
+        player.gain_card_discard(selection)
