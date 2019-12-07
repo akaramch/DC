@@ -1,13 +1,15 @@
 #various individual functions for card effects
 
 """
+
 Takes a player that played the card and the card and executes the effects of the card
 Parameter list:
     player: the player who played the card
     card: the card to be played
 Return:
-    list of cards to buy
+    none
 """
+
 def card_effect(player, card):
     #add the base, unconditional power to the player's power
     player.power += card.power[0]
@@ -29,6 +31,10 @@ def card_effect(player, card):
     power_bonus_type = card.power[1] #sig
     if power_bonus_type != 0: #has a bonus power chance
         if power_bonus_type == 1: #power ring
+            #check if deck is empty
+            if len(player.own_deck.undrawn) == 0:
+                #if it's empty, refill it from discard
+                player.own_deck.refill_deck()
             #if the top of the undrawn deck has cost > 0, +1 power
             if player.own_deck.peek().get_cost() > 0:
                 power_bonus += 1
