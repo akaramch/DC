@@ -423,7 +423,7 @@ computer_player = dc_player.Player(StartingPlayerDeck, True) # makes computer pl
 players = [human_player, computer_player] # list of players (there are only 2 for now)
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
-kick_deck = deck.Deck([Kick] * 16)
+kick_deck = deck.Deck([Kick] * 16) #Should be 16
 weakness_deck = deck.Deck([Weakness] * 20)
 # the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
 lineup = [None, None, None, None, None]
@@ -525,7 +525,15 @@ while not done:
         screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
         screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
         screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
-        screen.blit(pygame.Surface() if kick_deck.isEmpty() else kick_deck.peek().img, (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT))
+        #screen.blit(pygame.Surface() if kick_deck.isEmpty() else kick_deck.peek().img, (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT))
+
+        if kick_deck.isEmpty():
+            #screen.blit(pygame.Surface(),(CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT))
+            screen.blit(pygame.Surface(),(0,0))
+        else:
+            screen.blit(kick_deck.peek().img,(CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT))
+
+
         screen.blit(GAME_FONT.render("Kicks remaining: " + str(kick_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
         screen.blit(pygame.Surface() if weakness_deck.isEmpty() else weakness_deck.peek().img, (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT))
         screen.blit(GAME_FONT.render("Weaknesses remaining: " + str(weakness_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
