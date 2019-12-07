@@ -63,7 +63,6 @@ GAME_FONT.set_underline(True)
 choose_none = GAME_FONT.render("None", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height())
 
 GAME_FONT.set_underline(False)
-print(type(choose_none[0]))
 def prompt_player(message, choices, none_choice_possible):
     click = False
     scroll = 0  # how far the pile is scrolled
@@ -213,4 +212,19 @@ def card_effect(player, card):
     for i in range(0, draw):
         player.own_deck.draw()
 
+
+    #cards that can destroy top of deck
+    top_destroy = card.destroy_top[0]
+    if top_destroy: #is this a top destroy card?
+        top_destroy_option = card.destroy_top[1]
+        if top_destroy_option == 1: #nth metal
+            selection = prompt_player("This is the top card of your deck. If you wish to destroy, click the card. Otherwise, click none.", [player.own_deck.peek()], True) #player.own_deck.peek is the top card of their deck
+            if selection: #if they decided to destroy
+                player.own_deck.destroy_from_deck(selection) #remove the card from the deck
+        if top_destroy_option == 2: #jervis tetch
+            selection = prompt_player("This is the top card of your deck. If you wish to destroy, click the card. Otherwise, click and it will be discarded.", [player.own_deck.peek()], True)  # player.own_deck.peek is the top card of their deck
+            if selection:  # if they decided to destroy
+                player.own_deck.destroy_from_deck(selection)  # remove the card from the deck
+            else: #if they didn't destroy
+                player.own_deck.undrawn_top_to_discard() #put the card in discard
     #TODO any type of destruction (can't do this at all without prompting users
