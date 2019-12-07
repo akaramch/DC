@@ -79,7 +79,7 @@ class Card:
         # load the big image and return it to blit to the screen where big images go
         return pygame.image.load(self.img_name)
     
-    #TODO figure out if this is actually needed anymore (probably outdated because of resizing the cards)
+    # TODO figure out if this is actually needed anymore (probably outdated because of resizing the cards)
 
     # def inform(self):
     #     """return a text surface containing the information about the card (name, type, cost, power, draw, VPs, text)"""
@@ -126,27 +126,27 @@ TO COPY:  = Card("cardimgs/imagename.jpg", card_info("N", "T", "C", "P", "D", "V
 # STARTERS, WEAKNESSES, KICKS (oh my)
 Punch = Card("cardimgs/punch.jpg", type="Starter", cost=0, power=(1,0), name="Punch", text="+1 Power.")
 Vulnerability = Card("cardimgs/vulnerability.jpg", type="Starter", cost=0, name="Vulnerability")
-Weakness = Card("cardimgs/weakness.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") #HOWEVER MANY
+Weakness = Card("cardimgs/weakness.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") # HOWEVER MANY
 
 StartingPlayerDeck = [Vulnerability] * 3 + [Punch] * 7
 
-StartingMainDeck = [] #will be used to build the card list for the main deck
+StartingMainDeck = [] # will be used to build the card list for the main deck
 
 """  DEFAULT CARD
- = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="SuperVillain", text="") #
+ = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="SuperVillain", text="") # 
 """
 
 # EQUIPMENT
 EquipmentList = []
 
-Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", vp=1, text="+2 Power. You may put any one card you buy or gain this turn on top of your deck.") #3
-Batarang = Card("cardimgs/batarang.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") #2
-Soultaker_Sword = Card("cardimgs/soultakersword.jpg", cost=4, power=(2,0), name="Soultaker Sword", vp=1, type="Equipment", text="+2 Power. You may destroy a card in your hand.", destroy_hand=1) #3
-Legion_Flight_Ring = Card("cardimgs/legionflightring.jpg", cost=2, name="Legion Flight Ring", vp=1, type="Equipment", text="Draw a card.", draw=(1,0)) #2
-Lasso_of_Truth = Card("cardimgs/lassooftruth.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
-Power_Ring = Card("cardimgs/powerring.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="+2 Power. Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") #3
-Nth_Metal = Card("cardimgs/nthmetal.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="+1 Power. Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) #3
-White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") #1
+Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", vp=1, text="+2 Power. You may put any one card you buy or gain this turn on top of your deck.") # 3
+Batarang = Card("cardimgs/batarang.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") # 2
+Soultaker_Sword = Card("cardimgs/soultakersword.jpg", cost=4, power=(2,0), name="Soultaker Sword", vp=1, type="Equipment", text="+2 Power. You may destroy a card in your hand.", destroy_hand=1) # 3
+Legion_Flight_Ring = Card("cardimgs/legionflightring.jpg", cost=2, name="Legion Flight Ring", vp=1, type="Equipment", text="Draw a card.", draw=(1,0)) # 2
+Lasso_of_Truth = Card("cardimgs/lassooftruth.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") # 2
+Power_Ring = Card("cardimgs/powerring.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="+2 Power. Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") # 3
+Nth_Metal = Card("cardimgs/nthmetal.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="+1 Power. Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) # 3
+White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") # 1
 
 EquipmentList.append(Aquamans_Trident)
 EquipmentList.append(Batarang)
@@ -157,7 +157,7 @@ EquipmentList.append(Power_Ring)
 EquipmentList.append(Soultaker_Sword)
 EquipmentList.append(White_Lantern_Power_Battery)
 
-#add equipment to main deck
+# add equipment to main deck
 StartingMainDeck += [Aquamans_Trident] * 3
 StartingMainDeck += [Batarang] * 2
 StartingMainDeck += [Lasso_of_Truth] * 2
@@ -190,7 +190,7 @@ PowerList.append(Super_Strength)
 PowerList.append(Ultra_Strength)
 PowerList.append(X_Ray_Vision)
 
-#add non-kick powers to main deck list
+# add non-kick powers to main deck list
 StartingMainDeck += [Bulletproof] * 2
 StartingMainDeck += [Giant_Growth] * 2
 StartingMainDeck += [Heat_Vision] * 2 # changed
@@ -203,17 +203,17 @@ StartingMainDeck += [X_Ray_Vision] * 3
 # HEROES
 HeroList = []
 
-Raven = Card("cardimgs/raven.jpg", cost=3, power=(1,0), name="Raven", draw=(1,0), vp=1, type="Hero", text="+1 Power and draw a card.") #3
-Catwoman = Card("cardimgs/catwoman.jpg", cost=2, power=(2,0), name="Catwoman", vp=1, type="Hero", text="+2 Power.") #2
-Katana = Card("cardimgs/katana.jpg", cost=2, power=(1,0), name="Katana", vp=1, type="Hero", defense=(True,1), text="+1 Power.\nDefense: You may discard this card to avoid an Attack. If you do, draw a card.") #2
-Winged_Warrior = Card("cardimgs/wingedwarrior.jpg", cost=6, power=(2,3), name="Winged Warrior", vp=2, type="Hero", text="+2 Power.\nIf you play or have played another Hero this turn, additional +3 Power.") #1
-Power_Girl = Card("cardimgs/powergirl.jpg", cost=5, power=(3,0), name="Power Girl", vp=2, type="Hero", text="+3 Power.") #3
-Hawkgirl = Card("cardimgs/hawkgirl.jpg", cost=2, power=(1,4), name="Hawkgirl", vp=1, type="Hero", text="+1 Power and and additional +1 Power for each Hero in your discard pile.") #2
-Kid_Flash = Card("cardimgs/kidflash.jpg", cost=2, name="Kid Flash", vp=1, draw=(1,0), type="Hero", text="Draw a card.") #2
-Supergirl = Card("cardimgs/supergirl.jpg", cost=4, name="Supergirl", vp=1, type="Hero", custom=5, text="You may put a Kick from the Kick stack into your hand.") #2
-Jonn_Jonzz = Card("cardimgs/jonnjonzz.jpg", cost=6, name="J'onn J'onzz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") #1
-The_Fastest_Man_Alive = Card("cardimgs/thefastestmanalive.jpg", cost=5, name="The Fastest Man Alive", vp=1, draw=(2,0), type="Hero", text="Draw two cards.") #1
-King_of_Atlantis = Card("cardimgs/kingofatlantis.jpg", cost=5, power=(1,5), name="King of Atlantis", vp=1, destroy_discard=1, type="Hero", text="You may destroy a card in your discard pile. If you do, +3 Power. Otherwise, +1 Power.") #1
+Raven = Card("cardimgs/raven.jpg", cost=3, power=(1,0), name="Raven", draw=(1,0), vp=1, type="Hero", text="+1 Power and draw a card.") # 3
+Catwoman = Card("cardimgs/catwoman.jpg", cost=2, power=(2,0), name="Catwoman", vp=1, type="Hero", text="+2 Power.") # 2
+Katana = Card("cardimgs/katana.jpg", cost=2, power=(1,0), name="Katana", vp=1, type="Hero", defense=(True,1), text="+1 Power.\nDefense: You may discard this card to avoid an Attack. If you do, draw a card.") # 2
+Winged_Warrior = Card("cardimgs/wingedwarrior.jpg", cost=6, power=(2,3), name="Winged Warrior", vp=2, type="Hero", text="+2 Power.\nIf you play or have played another Hero this turn, additional +3 Power.") # 1
+Power_Girl = Card("cardimgs/powergirl.jpg", cost=5, power=(3,0), name="Power Girl", vp=2, type="Hero", text="+3 Power.") # 3
+Hawkgirl = Card("cardimgs/hawkgirl.jpg", cost=2, power=(1,4), name="Hawkgirl", vp=1, type="Hero", text="+1 Power and and additional +1 Power for each Hero in your discard pile.") # 2
+Kid_Flash = Card("cardimgs/kidflash.jpg", cost=2, name="Kid Flash", vp=1, draw=(1,0), type="Hero", text="Draw a card.") # 2
+Supergirl = Card("cardimgs/supergirl.jpg", cost=4, name="Supergirl", vp=1, type="Hero", custom=5, text="You may put a Kick from the Kick stack into your hand.") # 2
+Jonn_Jonzz = Card("cardimgs/jonnjonzz.jpg", cost=6, name="J'onn J'onzz", vp=2, custom=1, type="Hero", text="Play the top card of the Super-Villain stack, then return it to the top of the stack.") # 1
+The_Fastest_Man_Alive = Card("cardimgs/thefastestmanalive.jpg", cost=5, name="The Fastest Man Alive", vp=1, draw=(2,0), type="Hero", text="Draw two cards.") # 1
+King_of_Atlantis = Card("cardimgs/kingofatlantis.jpg", cost=5, power=(1,5), name="King of Atlantis", vp=1, destroy_discard=1, type="Hero", text="You may destroy a card in your discard pile. If you do, +3 Power. Otherwise, +1 Power.") # 1
 
 HeroList.append(Catwoman)
 HeroList.append(Hawkgirl)
@@ -227,7 +227,7 @@ HeroList.append(Supergirl)
 HeroList.append(The_Fastest_Man_Alive)
 HeroList.append(Winged_Warrior)
 
-#add heroes to main deck list
+# add heroes to main deck list
 StartingMainDeck += [Catwoman] * 2
 StartingMainDeck += [Hawkgirl] * 2
 StartingMainDeck += [Jonn_Jonzz] * 1
@@ -243,17 +243,17 @@ StartingMainDeck += [Winged_Warrior] * 1
 # VILLAINS
 VillainList = []
 
-Johnny_Quick = Card("cardimgs/johnnyquick.jpg", cost=2, draw=(1,0), name="Johnny Quick", vp=1, type="Villain", text="Draw a card.") #2
-Bane = Card("cardimgs/bane.jpg", cost=4, power=(2,0), name="Bane", vp=1, op_discard=1, type="Villain", text="+2 Power.\nAttack: Each foe chooses and discards a card.") #UNDECIDED NUMBER
-Mr_Zsasz = Card("cardimgs/mrzsasz.jpg", cost=3, power=(2,0), name="Mr. Zsasz", vp=1, weakness=(True,1), type="Villain", text="+2 Power.\nAttack: Each foe reveals the top card of his deck. If its cost is odd, that player gains a Weakness.") #UNDECIDED NUMBER
-Scarecrow = Card("cardimgs/scarecrow.jpg", cost=5, power=(2,0), name="Scarecrow", vp=1, weakness=(True,2), type="Villain", text="+2 Power.\nAttack: Each foe gains a Weakness.") #UNDECIDED NUMBER
-Doomsday = Card("cardimgs/doomsday.jpg", cost=6, power=(4,0), name="Doomsday", vp=2, type="Villain", text="+4 Power.") #2
-Red_Lantern_Corps = Card("cardimgs/redlanterncorps.jpg", cost=5, power=(1,6), name="Red Lantern Corps", vp=1, type="Villain", destroy_hand=1, text="+1 Power. You may destroy a card in your hand. If you do, additional +2 Power.") #2
-Lobo = Card("cardimgs/lobo.jpg", cost=7, power=(3,0), name="Lobo", vp=2, type="Villain", destroy_hand_or_discard=2, text="+3 Power. You may destroy up to two cards in your hand and/or discard pile.") #1
-Gorilla_Grodd = Card("cardimgs/gorillagrodd.jpg", cost=5, power=(3,0), name="Gorilla Grodd", vp=2, type="Villain", text="+3 Power.") #2
-Jervis_Tetch = Card("cardimgs/jervistetch.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True,2), text="+1 Power. Look at the top card of your deck. Destroy it or discard it.") #2
-Killer_Croc = Card("cardimgs/killercroc.jpg", cost=4, power=(2,7), name="Killer Croc", vp=1, type="Villain", text="+2 Power. If you play or have played another Villain this turn, additional +1 Power.") #2
-Two_Face = Card("cardimgs/twoface.jpg", cost=2, power=(1,0), name="Two-Face", vp=1, type="Villain", draw=(0,1), text="+1 Power. Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.") #2
+Johnny_Quick = Card("cardimgs/johnnyquick.jpg", cost=2, draw=(1,0), name="Johnny Quick", vp=1, type="Villain", text="Draw a card.") # 2
+Bane = Card("cardimgs/bane.jpg", cost=4, power=(2,0), name="Bane", vp=1, op_discard=1, type="Villain", text="+2 Power.\nAttack: Each foe chooses and discards a card.") # UNDECIDED NUMBER
+Mr_Zsasz = Card("cardimgs/mrzsasz.jpg", cost=3, power=(2,0), name="Mr. Zsasz", vp=1, weakness=(True,1), type="Villain", text="+2 Power.\nAttack: Each foe reveals the top card of his deck. If its cost is odd, that player gains a Weakness.") # UNDECIDED NUMBER
+Scarecrow = Card("cardimgs/scarecrow.jpg", cost=5, power=(2,0), name="Scarecrow", vp=1, weakness=(True,2), type="Villain", text="+2 Power.\nAttack: Each foe gains a Weakness.") # UNDECIDED NUMBER
+Doomsday = Card("cardimgs/doomsday.jpg", cost=6, power=(4,0), name="Doomsday", vp=2, type="Villain", text="+4 Power.") # 2
+Red_Lantern_Corps = Card("cardimgs/redlanterncorps.jpg", cost=5, power=(1,6), name="Red Lantern Corps", vp=1, type="Villain", destroy_hand=1, text="+1 Power. You may destroy a card in your hand. If you do, additional +2 Power.") # 2
+Lobo = Card("cardimgs/lobo.jpg", cost=7, power=(3,0), name="Lobo", vp=2, type="Villain", destroy_hand_or_discard=2, text="+3 Power. You may destroy up to two cards in your hand and/or discard pile.") # 1
+Gorilla_Grodd = Card("cardimgs/gorillagrodd.jpg", cost=5, power=(3,0), name="Gorilla Grodd", vp=2, type="Villain", text="+3 Power.") # 2
+Jervis_Tetch = Card("cardimgs/jervistetch.jpg", cost=3, power=(1,0), name="Jervis Tetch", vp=1, type="Villain", destroy_top=(True,2), text="+1 Power. Look at the top card of your deck. Destroy it or discard it.") # 2
+Killer_Croc = Card("cardimgs/killercroc.jpg", cost=4, power=(2,7), name="Killer Croc", vp=1, type="Villain", text="+2 Power. If you play or have played another Villain this turn, additional +1 Power.") # 2
+Two_Face = Card("cardimgs/twoface.jpg", cost=2, power=(1,0), name="Two-Face", vp=1, type="Villain", draw=(0,1), text="+1 Power. Choose even or odd, then reveal the top card of your deck. If its cost matches your choice, draw it. If not, discard it.") # 2
 
 VillainList.append(Bane)
 VillainList.append(Doomsday)
@@ -267,7 +267,7 @@ VillainList.append(Red_Lantern_Corps)
 VillainList.append(Scarecrow)
 VillainList.append(Two_Face)
 
-#add villains to main deck list
+# add villains to main deck list
 StartingMainDeck += [Bane] * 2
 StartingMainDeck += [Doomsday] * 2
 StartingMainDeck += [Gorilla_Grodd] * 2
@@ -296,7 +296,7 @@ Black_Adam = Card("cardimgs/blackadam.jpg", cost=11, first_appearance=11, name="
 Hel = Card("cardimgs/hel.jpg", cost=9, first_appearance=12, name="H'el", vp=5, custom=12, type="SuperVillain", text="Reveal and draw cards from the top of your deck until you have drawn 7 or greater cost worth of cards.\nFirst Appearance--Attack: Each player reveals the top three cards of their deck. Choose one of them with cost 1 or greater, then destroy it. Discard the rest.")
 Arkillo = Card("cardimgs/arkillo.jpg", cost=10, first_appearance=13, name="Arkillo", vp=5, custom=13, type="SuperVillain", text="+2 Power and put all Equipment from your discard pile into your hand.\nFirst Appearance--Attack: Each player totals the cost of cards in their hand. The player(s) with the highest total gains three Weakness cards.")
 
-#list of villains not including the Flash who goes on top
+# list of villains not including the Flash who goes on top
 SuperVillainDeckList = []
 SuperVillainDeckList.append(Lex_Luthor)
 SuperVillainDeckList.append(Black_Manta)
@@ -333,13 +333,13 @@ def buy(player, card, i=0):
     return True
 
 def end_turn(player):
-    #move cards to discard
+    # move cards to discard
     player.end_turn()
-    #refill lineup
+    # refill lineup
     for i in range(0,5):
         if not lineup[i]:
             lineup[i] = main_deck.draw()
-    #TODO super villain flip and attacks
+    # TODO super villain flip and attacks
 
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
@@ -371,11 +371,41 @@ bkg.blit(card_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE *
 hand_outline = pygame.Surface((SCREEN_WIDTH, 10))
 hand_outline.fill((127, 127, 127))
 bkg.blit(hand_outline, (0, CARD_HEIGHT * 2 + CARD_SPACE * 5 - 5))
-# draw an alternate background for showing the player's hand
+hand_outline = pygame.Surface((5, CARD_HEIGHT))
+hand_outline.fill((127, 127, 127))
+bkg.blit(hand_outline, (0, CARD_HEIGHT * 2 + CARD_SPACE * 5))
+bkg.blit(hand_outline, (SCREEN_WIDTH - 5, CARD_HEIGHT * 2 + CARD_SPACE * 5))
+# draw an alternate background for showing the player's discard pile
 discard_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 discard_bkg.fill(GAME_BKG_COLOR)
-discard_bkg.blit(GAME_FONT.render("Select a card", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE))
-discard_bkg.blit(GAME_FONT.render("Selection (click to confirm):", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_ZOOM_WIDTH + CARD_SPACE * 2, CARD_SPACE))
+discard_bkg.blit(GAME_FONT.render("Your discard pile", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height()))
+pile_outline = pygame.Surface((CARD_WIDTH + 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) + 10))
+pile_interior = pygame.Surface((CARD_WIDTH - 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) - 10))
+pile_outline.fill((127, 127, 127))
+pile_interior.fill(GAME_BKG_COLOR)
+pile_outline.blit(pile_interior, (10, 10))
+discard_bkg.blit(pile_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE - 5))
+# scroll buttons for scrolling through the discard pile or a too-large hand
+scroll_button_u = pygame.Surface((CARD_WIDTH, CARD_SPACE - 5))
+scroll_button_u_dark = scroll_button_u.copy()
+scroll_button_u.fill(GAME_BKG_COLOR)
+scroll_button_u_dark.fill((GAME_BKG_COLOR[0] // 1.5, GAME_BKG_COLOR[1] // 1.5, GAME_BKG_COLOR[2] // 1.5))
+scroll_button_d = scroll_button_u.copy()
+scroll_button_d_dark = scroll_button_u_dark.copy()
+pygame.draw.polygon(scroll_button_u, (127, 127, 127), [(CARD_WIDTH // 2 - CARD_SPACE // 4, int(CARD_SPACE * (3/4))), (CARD_WIDTH // 2, CARD_SPACE // 4), (CARD_WIDTH // 2 + CARD_SPACE // 4, int(CARD_SPACE * (3/4)))])
+pygame.draw.polygon(scroll_button_u_dark, (95, 95, 95), [(CARD_WIDTH // 2 - CARD_SPACE // 4, int(CARD_SPACE * (3/4))), (CARD_WIDTH // 2, CARD_SPACE // 4), (CARD_WIDTH // 2 + CARD_SPACE // 4, int(CARD_SPACE * (3/4)))])
+pygame.draw.polygon(scroll_button_d, (127, 127, 127), [(CARD_WIDTH // 2 - CARD_SPACE // 4, CARD_SPACE // 4), (CARD_WIDTH // 2, int(CARD_SPACE * (3/4))), (CARD_WIDTH // 2 + CARD_SPACE // 4, CARD_SPACE // 4)])
+pygame.draw.polygon(scroll_button_d_dark, (95, 95, 95), [(CARD_WIDTH // 2 - CARD_SPACE // 4, CARD_SPACE // 4), (CARD_WIDTH // 2, int(CARD_SPACE * (3/4))), (CARD_WIDTH // 2 + CARD_SPACE // 4, CARD_SPACE // 4)])
+scroll_button_l = pygame.Surface((CARD_SPACE - 5, CARD_HEIGHT))
+scroll_button_l_dark = scroll_button_l.copy()
+scroll_button_l.fill(GAME_BKG_COLOR)
+scroll_button_l_dark.fill((GAME_BKG_COLOR[0] // 1.5, GAME_BKG_COLOR[1] // 1.5, GAME_BKG_COLOR[2] // 1.5))
+scroll_button_r = scroll_button_l.copy()
+scroll_button_r_dark = scroll_button_l_dark.copy()
+pygame.draw.polygon(scroll_button_l, (127, 127, 127), [(int(CARD_SPACE * (3/4)) - 5, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)), (CARD_SPACE // 4 - 5, CARD_HEIGHT // 2), (int(CARD_SPACE * (3/4)) - 5, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
+pygame.draw.polygon(scroll_button_l_dark, (95, 95, 95), [(int(CARD_SPACE * (3/4)) - 5, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)), (CARD_SPACE // 4 - 5, CARD_HEIGHT // 2), (int(CARD_SPACE * (3/4)) - 5, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
+pygame.draw.polygon(scroll_button_r, (127, 127, 127), [(CARD_SPACE // 4, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)), (int(CARD_SPACE * (3/4)), CARD_HEIGHT // 2), (CARD_SPACE // 4, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
+pygame.draw.polygon(scroll_button_r_dark, (95, 95, 95), [(CARD_SPACE // 4, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)), (int(CARD_SPACE * (3/4)), CARD_HEIGHT // 2), (CARD_SPACE // 4, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
 
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
@@ -383,21 +413,22 @@ hand_scroll = 0 # the player's hand can scroll to view more cards; that is done 
 super_villain_bought = False # if the supervillain was bought this turn, don't flip the next one until next turn
 enough_power_num = 0 # number of frames remaining to tick through to stop displaying "not enough power" if the player tries to buy a card that they can't afford
 discard_pile = False # show a blown-up view of the player's discard pile
+discard_scroll = 0 # how far the discard pile is scrolled if the player is looking at the discard pile screen
 done = False
 
-#initialize game variables (decks and players)
-human_player = dc_player.Player(StartingPlayerDeck, False) #makes the human player
-computer_player = dc_player.Player(StartingPlayerDeck, True) #makes computer player
-players = [human_player, computer_player] #list of players (there are only 2 for now)
+# initialize game variables (decks and players)
+human_player = dc_player.Player(StartingPlayerDeck, False) # makes the human player
+computer_player = dc_player.Player(StartingPlayerDeck, True) # makes computer player
+players = [human_player, computer_player] # list of players (there are only 2 for now)
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
 kick_deck = deck.Deck([Kick] * 16)
 # the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
 lineup = [None, None, None, None, None]
 
-#shuffle the deck
+# shuffle the deck
 super_villain_deck.shuffle()
-super_villain_deck.add_to_front(The_Flash) #put the flash on top
+super_villain_deck.add_to_front(The_Flash) # put the flash on top
 main_deck.shuffle()
 human_player.own_deck.shuffle()
 computer_player.own_deck.shuffle()
@@ -425,11 +456,32 @@ while not done:
     
     # if the player has clicked on the discard pile, everything looks and behaves differently
     if discard_pile:
-        # draw the background for the discard pile
+        # draw the background for the discard pile before anything else so you don't cover anything up
         screen.blit(discard_bkg, (0, 0))
+        # draw the discard pile all lined up nice and neat
+        for i in range(len(human_player.own_deck.discard)):
+            screen.blit(human_player.own_deck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
+        # draw the scroll buttons light or dark depending on whether the mouse is over them
+        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
+            screen.blit(scroll_button_u_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+            if click:
+                discard_scroll = max(discard_scroll - 1, 0)
+        elif SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE - 5 + pile_outline.get_height() < mouse_pos[1] < CARD_SPACE * 2 - 10 + pile_outline.get_height():
+            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+            screen.blit(scroll_button_d_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+            if click:
+                discard_scroll = min(discard_scroll + 1, len(human_player.own_deck.discard) - (pile_outline.get_height() // (CARD_HEIGHT // 6)))
+        else:
+            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+        
+        if CARD_SPACE < mouse_pos[0] < min(SCREEN_WIDTH - CARD_SPACE, CARD_SPACE + CARD_WIDTH * len(human_player.own_deck.discard)) and CARD_SPACE + GAME_FONT.get_height() + 5 < mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + 5 + CARD_HEIGHT:
+            i = (mouse_pos[0] - CARD_SPACE) // CARD_WIDTH
+            screen.blit(human_player.own_deck.discard[i].zoom(), (CARD_SPACE, CARD_SPACE * 2 - GAME_FONT.get_height() + 5 + CARD_HEIGHT))
         
     else:
-        # do this before you draw anything on the screen so you don't cover anything up
+        # draw the background before you draw anything on the screen so you don't cover anything up
         screen.blit(bkg, (0, 0))
         screen.blit(pygame.image.load("cardimgs/cardback.jpg") if super_villain_bought else super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
         screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
@@ -446,13 +498,12 @@ while not done:
         screen.blit(GAME_FONT.render("Your discard", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
         screen.blit(GAME_FONT.render("Click to expand", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT))
         screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - GAME_FONT.get_height() - 5))
-        #end turn button
+        # end turn button
         END_TURN_BUTTON_LEFT = 420
         END_TURN_BUTTON_TOP = 400
         END_TURN_BUTTON_WIDTH = 53
         END_TURN_BUTTON_HEIGHT = 18
-        #end_turn_button = pygame.draw.rect(screen, (0, 0, 240), (END_TURN_BUTTON_LEFT, END_TURN_BUTTON_TOP, END_TURN_BUTTON_WIDTH, END_TURN_BUTTON_HEIGHT))
-        GAME_FONT.set_underline(True) #underline the text
+        GAME_FONT.set_underline(True) # underline the text
         screen.blit(GAME_FONT.render("END TURN", True, (0, 0, 0), GAME_BKG_COLOR), (END_TURN_BUTTON_LEFT, END_TURN_BUTTON_TOP))
         GAME_FONT.set_underline(False)
         # all the cards the player has played this turn
@@ -460,7 +511,7 @@ while not done:
             screen.blit(human_player.own_deck.played[i].img, (CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5, CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2)))
         screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
         for i in range(hand_scroll, len(human_player.own_deck.hand)):
-            #TODO draw the hand and let the hand display scroll
+            # TODO draw the hand and let the hand display scroll
             screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
         for i in range(5): # draw the lineup
             if lineup[i] is not None:
@@ -477,13 +528,14 @@ while not done:
                 if click:
                     if not buy(human_player, super_villain_deck.peek()):
                         enough_power_num = 20
-                    super_villain_bought = True
-        #is the mouse over end turn
+                    else:
+                        super_villain_bought = True
+        # is the mouse over end turn
         elif mouse_pos[0] > END_TURN_BUTTON_LEFT and mouse_pos[0] < (END_TURN_BUTTON_LEFT + END_TURN_BUTTON_WIDTH) and mouse_pos[1] > END_TURN_BUTTON_TOP and mouse_pos[1] < END_TURN_BUTTON_TOP + END_TURN_BUTTON_HEIGHT:
             if click:
                 end_turn(human_player)
         # is the mouse on the main deck
-        #elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
+        # elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
         #    if click:
         #        # TODO the player buys the top card off the main deck (is this a thing? I don't know)
         #        pass
