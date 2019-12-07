@@ -227,4 +227,27 @@ def card_effect(player, card):
                 player.own_deck.destroy_from_deck(selection)  # remove the card from the deck
             else: #if they didn't destroy
                 player.own_deck.undrawn_top_to_discard() #put the card in discard
+
+    if card.destroy_hand_or_discard == 2: #lobo
+        selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, click none", player.own_deck.discard, True) #check if first destroyed from discard
+        selection1_hand = None
+        if not selection1_discard: #if not check if they want to destroy from hand
+            selection1_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click none", player.own_deck.hand, True)
+            if selection1_hand: #if they selected to destroy from hand
+                player.own_deck.destroy_from_hand(selection1_hand)
+        else: #selection 1 destroy from discard
+            player.own_deck.destroy_from_discard(selection1_discard)
+
+        if not ((selection1_discard is None) and (selection1_hand is None)): #if the player selected one to destroy, ask again
+            selection2_hand = None
+            selection2_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, click none", player.own_deck.discard, True)  # check if first destroyed from discard
+            if not selection2_discard:  # if not check if they want to destroy from hand
+                selection2_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click none", player.own_deck.hand, True)
+                if selection2_hand:  # if they selected to destroy from hand
+                    player.own_deck.destroy_from_hand(selection2_hand)
+            else:  # selection 2 destroy from discard
+                player.own_deck.destroy_from_discard(selection2_discard)
+
+
+        hand_size = len(player.own_deck.hand) #update hand size in case they selected one from hand
     #TODO any type of destruction (can't do this at all without prompting users
