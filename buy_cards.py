@@ -70,7 +70,7 @@ def vp(card):
 def vp_ratio(card):
     return ((card.get_vp()/card.get_cost()) + (0.01*card.cost)) #Returns vp to cost ratio, breaks ties towards cards with higher cost
 """
-Now for the fun stuff- getting the power a card generates. This looks at power for cards in your deck, so drawing not considered
+Now for the fun stuff- getting the power a card generates. This looks explicitly at power for cards in your deck, so drawing not considered
 """
 def get_power_deck(card, self_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size):
     power = 0 #The power the card generates, both directly and through other means
@@ -84,7 +84,7 @@ def get_power_deck(card, self_deck, kick_deck, main_deck_size, opponent_deck, pl
         if (card.custom == 4):
             return 0
             #TODO implement X-ray vision
-        if (card.custom == 5): #Supergirl is worth different things depending on how many kicks are left
+        if (card.custom == 5): #Supergirl is worth different amounts depending on how many kicks are left
             if (kick_deck.size >= 12):
                 return 4
             if (kick_deck.size >= 9):
@@ -395,6 +395,5 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup)
         max_vp = max_vp_lineup(power, vp_sorted, ratio_sorted) #set of cards that can be bought that maximize vp
         cards_to_buy.extend(max_vp) #adds the cards found above to the cards to buy
         return cards_to_buy
-    
     
     return None
