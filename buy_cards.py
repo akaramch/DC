@@ -28,7 +28,7 @@ def max_vp_lineup(power, lineup, lineup1):
     cards_to_buy_val = [] #cards bought by sorting by val
     cards_to_buy_ratio = [] #cards bought by sorting by ratio
     val_buy_total = 0 #value of cards bought by sorting by val
-    ratio_buy_total= 0 #value of cards bought by sorting by ratio
+    ratio_buy_total = 0 #value of cards bought by sorting by ratio
     leftovers = []
     #Buy in order as we can the highest values
     while len(lineup) > 0:
@@ -72,7 +72,7 @@ def vp_ratio(card):
 """
 Now for the fun stuff- getting the power a card generates. This looks at power for cards in your deck, so drawing not considered
 """
-def get_power_deck(card, self_deck, kick_deck, main_deck_size, opponent_deck, player):
+def get_power_deck(card, self_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size):
     power = 0 #The power the card generates, both directly and through other means
     if (card.custom != 0): #customs are various cards with precalculated power generation, mostly supervillains
         if (card.custom == 1):
@@ -95,10 +95,10 @@ def get_power_deck(card, self_deck, kick_deck, main_deck_size, opponent_deck, pl
                 return 0
         if (card.custom == 6):
             power_in_deck = 0 #going to look at the total power in the deck to calculate average
-            for tempcard in self_deck:
+            for tempcard in self_deck.contents:
                 if(tempcard.custom != 6): #don't want to look at Parallax itself when calculating average power
-                    power_in_deck += get_power_deck(tempcard, self_deck, kick_deck, main_deck_size, opponent_deck, player)
-            average_power = power_in_deck/(main_deck_size-1)
+                    power_in_deck += get_power_deck(tempcard, self_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size)
+            average_power = power_in_deck/(self_deck.size-1)
             average_power = 4*average_power
             return average_power
             
@@ -116,12 +116,184 @@ def get_power_deck(card, self_deck, kick_deck, main_deck_size, opponent_deck, pl
             return 6
         if (card.custom == 13):
             power += 2
-            for tempcard in self_deck:
+            for tempcard in self_deck.contents:
                 if (tempcard.type == "Equipment"):
                     power += 1
             return power
-        
-        return power
+    power += card.power[0]
+    """
+    If it's a power ring, checks percent of deck that has above zero cost, 
+    then adds that fraction to power.
+    """
+    if (card.power[1]==1):
+        non_zero_count = 0
+        for tempcard in self_deck.contents:
+            if (tempcard.cost >= 1):
+                non_zero_count += 1
+        power += (non_zero_count/self_deck.size)
+    """
+    If it's starbolt, does the thing mentioned in our alg doc
+    """
+    if (card.power[1]==2):
+        power_count = 0
+        for tempcard in self_deck.contents:
+            if(tempcard.type == "Power"):
+                power_count += 1
+        power += (0.5*power_count)
+        if (player_power == "Superman" or player_power == "Cyborg"):
+            power += (0.05*main_deck_size)
+        elif(player_power == "Wonderwoman" or player_power == "Black Canary" or player_power == "The Sphinx" or player_power == "Hawkman" or player_power == "Batman" ):
+            power += (0.01*main_deck_size)
+        else:
+            power += (0.02*main_deck_size)
+    """
+    Winged warrior does the thing the alg says it does
+    """
+    if (card.power[1]==3):
+        if (player_power == "The Sphinx" or player_power == "Hawkman"):
+            power += 3
+        elif(player_power == "Wonderwoman" or player_power == "Black Canary" or player_power == "Cyborg" or player_power == "Superman" or player_power == "Batman" ):
+            power += 0
+        else:
+            hero_count = 0
+            for tempcard in self_deck.contents:
+                if(tempcard.type == "Hero"):
+                    hero_count += 1
+            power += 3*(hero_count/self_deck.size)
+    """
+    Hawkgirl does the thing mentioned in our alg doc
+    """
+    if (card.power[1]==4):
+        hero_count = 0
+        for tempcard in self_deck.contents:
+            if(tempcard.type == "Hero"):
+                hero_count += 1
+        power += (0.5*hero_count)
+        if (player_power == "The Sphinx" or player_power == "Hawkman"):
+            power += (0.05*main_deck_size)
+        elif(player_power == "Wonderwoman" or player_power == "Black Canary" or player_power == "Cyborg" or player_power == "Superman" or player_power == "Batman" ):
+            power += (0.01*main_deck_size)
+        else:
+            power += (0.02*main_deck_size)
+    """
+    King of Atlantis heuristicified to always +2
+    """
+    if (card.power[1]==5):
+        power += 2
+    """
+    RLC heuristicized to +1.5
+    """
+    if (card.power[1]==6):
+        power += 1.5
+    """
+    Killer croc does the thing our alg says it does
+    """
+    if (card.power[1]==7):
+        if (player_power == "Wonderwoman" or player_power == "Black Canary"):
+            power += 1
+        elif(player_power == "The Sphinx" or player_power == "Hawkman" or player_power == "Cyborg" or player_power == "Superman" or player_power == "Batman" ):
+            power += 0
+        else:
+            vill_count = 0
+            for tempcard in self_deck.contents:
+                if(tempcard.type == "Villain"):
+                    vill_count += 1
+            power += (vill_count/self_deck.size)
+    power += (2*card.draw[0])
+    """
+    Two-face draws half a card on average, which is not quite true but a good heuristic
+    """
+    if (card.draw[1]==1):
+        power += 1
+    """
+    Destroying from top of deck value calculated as by alg
+    """
+    if (card.destroy_top[0]):
+        wk_count = 0
+        punch_count = 0
+        vul_count = 0
+        for tempcard in self_deck.contents:
+            if (tempcard.name == "Weakness"):
+                wk_count +=1
+            elif (tempcard.name == "Punch"):
+                punch_count += 1
+            elif (tempcard.name == "Vulnerability"):
+                vul_count += 1
+        power += (0.05*punch_count + 0.1*vul_count + 0.15*wk_count)
+    """
+    Destroying from hand value calculated as by alg, nothing in this set destroys more
+    than one card from hand
+    """
+    if (card.destroy_hand > 0):
+        wk_count = 0
+        punch_count = 0
+        vul_count = 0
+        for tempcard in self_deck.contents:
+            if (tempcard.name == "Weakness"):
+                wk_count +=1
+            elif (tempcard.name == "Punch"):
+                punch_count += 1
+            elif (tempcard.name == "Vulnerability"):
+                vul_count += 1
+        power += (0.01*punch_count + 0.15*vul_count + 0.2*wk_count)
+    """
+    Destroying from hand or discard value as calculated by alg
+    """
+    if (card.destroy_hand_or_discard > 0):
+        wk_count = 0
+        punch_count = 0
+        vul_count = 0
+        for tempcard in self_deck.contents:
+            if (tempcard.name == "Weakness"):
+                wk_count +=1
+            elif (tempcard.name == "Punch"):
+                punch_count += 1
+            elif (tempcard.name == "Vulnerability"):
+                vul_count += 1
+        power += card.destroy_hand_or_discard*(0.1*punch_count + 0.2*vul_count + 0.25*wk_count)
+    """
+    If the card puts a card you buy on top, it's worth 0.5 more, as per the alg
+    """
+    if (card.puts_on_top):
+        power += 0.5
+    """
+    If something makes you discard a card, it's -0.5 power
+    """
+    if (card.discard > 0):
+        power -= (card.discard*0.5)
+    """
+    Making your opponents discard is worth +0.5 power, as per the alg. 
+    They never have to discard more than 1 in this set.
+    """
+    if (card.op_discard):
+        power += 0.5
+    """
+    Weaknesses value calculated as per alg and probability of giving them a weakness
+    """
+    if (card.weakness[0]):
+        if (card.weakness[1] == 1):
+            num_odds = 0
+            for tempcard in opponent_deck.contents:
+                if(tempcard.cost%2 == 1):
+                    num_odds += 1
+            mult = (num_odds/opponent_deck.size)
+        elif (card.weakness[1] == 2):
+            mult =1
+        if (super_deck_size > 8 and main_deck_size > 51):
+            power += 2*mult
+        elif (super_deck_size > 4 and main_deck_size > 25):
+            power += mult
+        else:
+            power += 0.25*mult
+    """
+    Defenses are worth +0.75, regardless of defensive effect, as per the alg
+    """
+    if (card.defense[0]):
+        power += 0.75
+    """
+    We're finally done calculating the card's power when in your deck!
+    """
+    return power
 
 
 """
