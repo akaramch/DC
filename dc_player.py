@@ -15,6 +15,10 @@ class Player:
         self.own_deck = deck.PlayerDeck(card_list) #player's deck
         self.isComputer = isComputer #is this the human or computer player
         self.power = 0 #power tracker for turns
+        #flags for effects that trigger after the card is played
+        self.winged_warrior_effect = False
+        self.killer_croc_effect = False
+        self.aquamans_trident = False
 
     # takes card from lineup and adds to discard pile
     def gain_card_discard(self, card):

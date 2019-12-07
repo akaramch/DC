@@ -14,6 +14,18 @@ def card_effect(player, card):
 
     #check the conditional bonus power
     power_bonus = 0
+
+    #check previous card bonuses for cards that gain power after
+    if player.killer_croc_effect:
+        if card.type == "Villain":
+            power_bonus += 1 #add killer croc bonus when triggered
+            player.killer_croc_effect = False #reset the flag
+
+    if player.winged_warrior_effect:
+        if card.type == "Hero":
+            power_bonus += 3 #add winged warrior bonus when triggered
+            player.winged_warrior_effect = False #reset the flag
+
     power_bonus_type = card.power[1] #sig
     if power_bonus_type != 0: #has a bonus power chance
         if power_bonus_type == 1: #power ring
@@ -29,13 +41,22 @@ def card_effect(player, card):
 
         elif power_bonus_type == 3: #winged warrior
             #if hero played before or after in turn, +3
-            #TODO how to check if a hero is played after it
-            pass
+            #check if played already
+            found_hero = False  # did we find a hero in our played
+            for card in player.own_deck.played:
+                if card.get_type() == "Hero":
+                    power_bonus += 3
+                    found_hero = True
+                    break
+            if not found_hero:
+                player.winged_warrior_effect = True
+
         elif power_bonus_type == 4: #hawkgirl
             # for each hero in discard, +1
             for card in player.own_deck.discard:
-                if card.get_type() == "Hero":
+                if card.type == "Hero":
                     power_bonus += 1
+
 
         elif power_bonus_type == 5: #king of atlantis
             #+2 Power if you destroy a card in discard pile
@@ -47,7 +68,15 @@ def card_effect(player, card):
             pass
         elif power_bonus_type == 7: #killer croc
             #+1 if play/have played another Villain this turn
-            #TODO how to check if a villain is played after it
+            # check if played already
+            found_villain = False  # did we find a villain in our played
+            for card in player.own_deck.played:
+                if card.get_type() == "Villain":
+                    power_bonus += 1
+                    found_villain = True
+                    break
+            if not found_villain:
+                player.killer_croc_effect = True
             pass
     #add calculated bonus power to player power
     player.power += power_bonus
