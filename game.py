@@ -476,9 +476,17 @@ while not done:
             screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
             screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
         
+<<<<<<< Updated upstream
+        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + (len(human_player.own_deck.discard) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT:
+            i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.own_deck.discard) - 1)
+            screen.blit(human_player.own_deck.discard[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
+        if click:
+            discard_pile = False
+=======
         if CARD_SPACE < mouse_pos[0] < min(SCREEN_WIDTH - CARD_SPACE, CARD_SPACE + CARD_WIDTH * len(human_player.own_deck.discard)) and CARD_SPACE + GAME_FONT.get_height() + 5 < mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + 5 + CARD_HEIGHT:
             i = (mouse_pos[0] - CARD_SPACE) // CARD_WIDTH
             screen.blit(human_player.own_deck.discard[i].zoom(), (CARD_SPACE, CARD_SPACE * 2 - GAME_FONT.get_height() + 5 + CARD_HEIGHT))
+>>>>>>> Stashed changes
         
     else:
         # draw the background before you draw anything on the screen so you don't cover anything up
