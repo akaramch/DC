@@ -1,5 +1,6 @@
 #various individual functions for card effects
 import pygame
+import dc_player
 pygame.init()
 """
 
@@ -218,18 +219,18 @@ def card_effect(player, card):
     if top_destroy: #is this a top destroy card?
         top_destroy_option = card.destroy_top[1]
         if top_destroy_option == 1: #nth metal
-            selection = prompt_player("This is the top card of your deck. If you wish to destroy, click the card. Otherwise, click none.", [player.own_deck.peek()], True) #player.own_deck.peek is the top card of their deck
+            selection = prompt_player("This is the top card of your deck. If you wish to destroy, click the card. Otherwise, click None.", [player.own_deck.peek()], True) #player.own_deck.peek is the top card of their deck
             if selection: #if they decided to destroy
                 player.own_deck.destroy_from_deck(selection) #remove the card from the deck
         if top_destroy_option == 2: #jervis tetch
-            selection = prompt_player("This is the top card of your deck. If you wish to destroy, click the card. Otherwise, click and it will be discarded.", [player.own_deck.peek()], True)  # player.own_deck.peek is the top card of their deck
+            selection = prompt_player("This is the top card of your deck. If you wish to destroy, click the card. Otherwise, click None and it will be discarded.", [player.own_deck.peek()], True)  # player.own_deck.peek is the top card of their deck
             if selection:  # if they decided to destroy
                 player.own_deck.destroy_from_deck(selection)  # remove the card from the deck
             else: #if they didn't destroy
                 player.own_deck.undrawn_top_to_discard() #put the card in discard
 
     if card.destroy_hand_or_discard == 2: #lobo
-        selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, click none", player.own_deck.discard, True) #check if first destroyed from discard
+        selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from hand, click None", player.own_deck.discard, True) #check if first destroyed from discard
         selection1_hand = None
         if not selection1_discard: #if not check if they want to destroy from hand
             selection1_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click none", player.own_deck.hand, True)
@@ -247,7 +248,34 @@ def card_effect(player, card):
                     player.own_deck.destroy_from_hand(selection2_hand)
             else:  # selection 2 destroy from discard
                 player.own_deck.destroy_from_discard(selection2_discard)
-
+           
+    if card.custom == 1: #jonn jonzz
+        #TODO
+        print("J'onn J'onzz has not been implemented yet.")
+        
+    if card.custom == 2: #shazam superpower
+        #TODO
+        print("Shazam! has not been implemented yet.")
+        
+    if card.custom == 3: #white lantern power battery
+        #TODO
+        #selection=prompt_player("Choose any card from the Line-Up to gain and put on top of your deck:", player.current_lineup, False)
+        #player.gain_card_top(selection)
+        print("WLPB has not been implemented yet.")
+        
+    if card.custom == 4: #xray vision
+        #TODO
+        print("X-Ray Vision has not been implemented yet.")
+        
+    if card.custom == 5: #supergirl
+        #TODO
+        #selection=prompt_player("Choose any card from the Line-Up to gain and put on top of your deck:", game.kick_deck, True)
+        print("Supergirl has not been implemented yet.")
+        
+    if card.custom == 6: #Parallax
+        player.power *= 2
+    
+    
 
         hand_size = len(player.own_deck.hand) #update hand size in case they selected one from hand
     #TODO any type of destruction (can't do this at all without prompting users
