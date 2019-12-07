@@ -176,7 +176,7 @@ Super_Strength = Card("cardimgs/superstrength.jpg", cost=7, power=(5,0), name="S
 Starbolt  = Card("cardimgs/starbolt.jpg", cost=5, power=(2,2), name="Starbolt", vp=1, type="Power", text="+1 additional Power for each Super Power in your discard pile.") #3
 Bulletproof = Card("cardimgs/bulletproof.jpg", cost=4, power=(2,0), name="Bulletproof", vp=1, type="Power", defense=(True,2), text="+1 Power\nDefense: You may discard this card to avoid an Attack. If you do, draw a card and you may destroy a card in your discard pile.") #2
 Giant_Growth = Card("cardimgs/giantgrowth.jpg", cost=2, power=(2,0), name="Giant Growth", vp=1, type="Power", text="+2 Power.") #2
-X_Ray_Vision = Card("cardimgs/xrayvision.jpg", cost=4, name="X-Ray Vision", vp=1, type="Power", custom=4, text="Each foe reveals the top card of their deck. Choose a non-Location card revealed this way, play it, then return it to the top of its owner's deck.") #1
+X_Ray_Vision = Card("cardimgs/xrayvision.jpg", cost=3, name="X-Ray Vision", vp=1, type="Power", custom=4, text="Each foe reveals the top card of their deck. Choose a non-Location card revealed this way, play it, then return it to the top of its owner's deck.") #1
 Ultra_Strength = Card("cardimgs/ultrastrength.jpg", cost=9, power=(3,0), name="Ultra Strength", vp=3, draw=(2,0), type="Power", text="+3 Power and draw 2 cards.") #1
 Heat_Vision = Card("cardimgs/heatvision.jpg", cost=6, power=(3,0), name="Heat Vision", vp=2, type="Power", destroy_hand_or_discard=1, text="+3 Power and you may destroy a card in your hand or discard pile.") #3
 
