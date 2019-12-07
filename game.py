@@ -277,7 +277,7 @@ StartingMainDeck += [Johnny_Quick] * 2
 StartingMainDeck += [Killer_Croc] * 2
 StartingMainDeck += [Lobo] * 1
 StartingMainDeck += [Mr_Zsasz] * 2
-StartingMainDeck += [Red_Lantern_Corps] * 50
+StartingMainDeck += [Red_Lantern_Corps] * 2
 StartingMainDeck += [Scarecrow] * 2
 StartingMainDeck += [Two_Face] * 3
 
