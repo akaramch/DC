@@ -15,6 +15,7 @@ class Player:
         self.own_deck = deck.PlayerDeck(card_list) #player's deck
         self.isComputer = isComputer #is this the human or computer player
         self.power = 0 #power tracker for turns
+        self.prompt = (False, "", [], False) # (is the player being prompted to pick a card, text of prompt, cards to pick from, do they have to pick a card)
         #flags for effects that trigger after the card is played
         self.winged_warrior_effect = False
         self.killer_croc_effect = False

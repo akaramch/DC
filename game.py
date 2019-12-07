@@ -8,7 +8,7 @@ pygame.init()
 import dc_player
 import deck
 import card_effect
-from random import randint
+#from random import randint
 
 # card dimensions
 CARD_WIDTH = 123
@@ -21,7 +21,7 @@ SCREEN_WIDTH = CARD_WIDTH * 7 + CARD_SPACE * 3 + 100
 SCREEN_HEIGHT = CARD_HEIGHT * 3 + CARD_SPACE * 5
 SCREEN_NAME = "DC Game"
 # background color for the whole screen
-GAME_BKG_COLOR = (randint(0, 255), randint(0, 255), randint(0, 255)) # 112, 208, 127
+GAME_BKG_COLOR = (112, 208, 127)
 GAME_FONT = pygame.font.SysFont("ubuntucondensed", 14) # the font to be used to write all things card-related
 # clock in the game to time framerate
 GAME_CLOCK = pygame.time.Clock()
@@ -379,7 +379,6 @@ bkg.blit(hand_outline, (SCREEN_WIDTH - 5, CARD_HEIGHT * 2 + CARD_SPACE * 5))
 # draw an alternate background for showing the player's discard pile
 discard_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 discard_bkg.fill(GAME_BKG_COLOR)
-discard_bkg.blit(GAME_FONT.render("Your discard pile", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height()))
 pile_outline = pygame.Surface((CARD_WIDTH + 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) + 10))
 pile_interior = pygame.Surface((CARD_WIDTH - 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) - 10))
 pile_outline.fill((127, 127, 127))
@@ -415,7 +414,8 @@ super_villain_bought = False # if the supervillain was bought this turn, don't f
 enough_power_num = 0 # number of frames remaining to tick through to stop displaying "not enough power" if the player tries to buy a card that they can't afford
 discard_pile = False # show a blown-up view of the player's discard pile
 discard_scroll = 0 # how far the discard pile is scrolled if the player is looking at the discard pile screen
-done = False
+card_selection = None # user's choice of card when they're being prompted to pick a card
+done = False # game loop exit variable
 
 # initialize game variables (decks and players)
 human_player = dc_player.Player(StartingPlayerDeck, False) # makes the human player
@@ -460,6 +460,7 @@ while not done:
     if discard_pile:
         # draw the background for the discard pile before anything else so you don't cover anything up
         screen.blit(discard_bkg, (0, 0))
+        discard_bkg.blit(GAME_FONT.render("Your discard pile", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH // 2 - 30, CARD_SPACE - GAME_FONT.get_height()))
         # draw the discard pile all lined up nice and neat
         for i in range(len(human_player.own_deck.discard)):
             screen.blit(human_player.own_deck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
@@ -484,6 +485,38 @@ while not done:
         # close the discard pile screen on click
         if click:
             discard_pile = False
+    
+    # if the player is being prompted to pick a card
+    elif human_player.prompt[0]:
+        # draw the background first
+        screen.blit(discard_bkg, (0, 0))        
+        discard_bkg.blit(GAME_FONT.render(human_player.prompt[1], True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height()))
+        # draw the list of cards to choose from
+        for i in range(len(human_player.prompt[2])):
+            screen.blit(human_player.prompt[2][i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
+        # draw the scroll buttons light or dark depending on whether the mouse is over them
+        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
+            screen.blit(scroll_button_u_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+            if click:
+                discard_scroll = max(discard_scroll - 1, 0)
+        elif SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE - 5 + pile_outline.get_height() < mouse_pos[1] < CARD_SPACE * 2 - 10 + pile_outline.get_height():
+            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+            screen.blit(scroll_button_d_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+            if click:
+                discard_scroll = min(discard_scroll + 1, len(human_player.own_deck.discard) - (pile_outline.get_height() // (CARD_HEIGHT // 6)))
+        else:
+            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+        # is the mouse on a card in the discard pile
+        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + (len(human_player.prompt[2]) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT:
+            i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.prompt[2]) - 1)
+            screen.blit(human_player.prompt[2][i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
+            if click:
+                card_selection = human_player.prompt[2][i]
+        # draw the card selection if there is one
+            
+        
         
     else:
         # draw the background before you draw anything on the screen so you don't cover anything up
