@@ -13,6 +13,8 @@ import card_effect
 CARD_WIDTH = 123
 CARD_HEIGHT = 175
 CARD_SPACE = 35
+CARD_ZOOM_WIDTH = 316
+CARD_ZOOM_HEIGHT = 450
 # window dimensions
 SCREEN_WIDTH = CARD_WIDTH * 7 + CARD_SPACE * 3 + 100
 SCREEN_HEIGHT = CARD_HEIGHT * 3 + CARD_SPACE * 5
@@ -342,6 +344,8 @@ def end_turn(player):
 # make the game window
 screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption(SCREEN_NAME)
+
+# draw a background to put on the screen every frame
 bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 bkg.fill(GAME_BKG_COLOR)
 card_outline = pygame.Surface((CARD_WIDTH + 10, CARD_HEIGHT + 10))
@@ -367,12 +371,18 @@ bkg.blit(card_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE *
 hand_outline = pygame.Surface((SCREEN_WIDTH, 10))
 hand_outline.fill((127, 127, 127))
 bkg.blit(hand_outline, (0, CARD_HEIGHT * 2 + CARD_SPACE * 5 - 5))
+# draw an alternate background for showing the player's hand
+discard_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+discard_bkg.fill(GAME_BKG_COLOR)
+discard_bkg.blit(GAME_FONT.render("Select a card", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE))
+discard_bkg.blit(GAME_FONT.render("Selection (click to confirm):", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_ZOOM_WIDTH + CARD_SPACE * 2, CARD_SPACE))
 
 # initialize all the variables needed for the game loop
 click = False # is the mouse button down
 hand_scroll = 0 # the player's hand can scroll to view more cards; that is done by this many cards
 super_villain_bought = False # if the supervillain was bought this turn, don't flip the next one until next turn
 enough_power_num = 0 # number of frames remaining to tick through to stop displaying "not enough power" if the player tries to buy a card that they can't afford
+discard_pile = False # show a blown-up view of the player's discard pile
 done = False
 
 #initialize game variables (decks and players)
@@ -412,101 +422,110 @@ while not done:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q: # have a quit key
                 done = True
-
-    # do this before you draw anything on the screen so you don't cover anything up
-    screen.blit(bkg, (0, 0))
-    screen.blit(pygame.image.load("cardimgs/cardback.jpg") if super_villain_bought else super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
-    screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
-    screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
-    screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
-    # the player's deck, represented either by a card back or nothing (if the deck is empty)
-    if human_player.own_deck.undrawn != 0:
-        screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() * 2 + 1))
-    screen.blit(GAME_FONT.render("Your deck", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5))
-    screen.blit(GAME_FONT.render("Cards remaining: " + str(len(human_player.own_deck.undrawn)), True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() - 5))
-    # the player's discard pile, represented by the top card or nothing (if the discard is empty)
-    if len(human_player.own_deck.discard) != 0:
-        screen.blit(human_player.own_deck.discard[-1].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 6))
-    screen.blit(GAME_FONT.render("Your discard", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
-    screen.blit(GAME_FONT.render("Click to expand", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT))
-    screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - GAME_FONT.get_height() - 5))
-    #end turn button
-    END_TURN_BUTTON_LEFT = 420
-    END_TURN_BUTTON_TOP = 400
-    END_TURN_BUTTON_WIDTH = 53
-    END_TURN_BUTTON_HEIGHT = 18
-    #end_turn_button = pygame.draw.rect(screen, (0, 0, 240), (END_TURN_BUTTON_LEFT, END_TURN_BUTTON_TOP, END_TURN_BUTTON_WIDTH, END_TURN_BUTTON_HEIGHT))
-    GAME_FONT.set_underline(True) #underline the text
-    screen.blit(GAME_FONT.render("END TURN", True, (0, 0, 0), GAME_BKG_COLOR), (END_TURN_BUTTON_LEFT, END_TURN_BUTTON_TOP))
-    GAME_FONT.set_underline(False)
-    # all the cards the player has played this turn
-    for i in range(len(human_player.own_deck.played)):
-        screen.blit(human_player.own_deck.played[i].img, (CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5, CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2)))
-    screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
-    for i in range(hand_scroll, len(human_player.own_deck.hand)):
-        #TODO draw the hand and let the hand display scroll
-        screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
-    for i in range(5): # draw the lineup
-        if lineup[i] is not None:
-            screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 4, CARD_HEIGHT // 4 * i + CARD_SPACE))
-    if enough_power_num:
-        enough_power_num -= 1
-        screen.blit(GAME_FONT.render("Not enough power.", True, (0, 0, 0), GAME_BKG_COLOR), (5, 5))
     
-    # is the mouse on the supervillain deck
-    if mouse_pos[0] > CARD_SPACE and mouse_pos[0] < CARD_SPACE + CARD_WIDTH and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
-        screen.blit(super_villain_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
-        if click:
-            if not buy(human_player, super_villain_deck.peek()):
-                enough_power_num = 20
-            super_villain_bought = True
-    #is the mouse over end turn
-    elif mouse_pos[0] > END_TURN_BUTTON_LEFT and mouse_pos[0] < (END_TURN_BUTTON_LEFT + END_TURN_BUTTON_WIDTH) and mouse_pos[1] > END_TURN_BUTTON_TOP and mouse_pos[1] < END_TURN_BUTTON_TOP + END_TURN_BUTTON_HEIGHT:
-        if click:
-            end_turn(human_player)
-    # is the mouse on the main deck
-    #elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
-    #    if click:
-    #        # TODO the player buys the top card off the main deck (is this a thing? I don't know)
-    #        pass
-    #    pass
-    # is the mouse on a card in the hand
-    elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
-        screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
-        if click: # click on a card to play it
-            # TODO play the actual effect of the card rather than just move it to the played cards
-            card_effect.card_effect(human_player, human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll])
-            human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
-    # is the mouse on any of the played cards
-    for i in range(len(human_player.own_deck.played)):
-        if mouse_pos[0] > CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5 and mouse_pos[0] < CARD_WIDTH * (4 + i % 2) + CARD_SPACE * 5 and mouse_pos[1] > CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2):
-            # treat the last two played cards differently because they're shown in full and are thus much taller
-            if i + 2 >= len(human_player.own_deck.played):
-                if mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + CARD_HEIGHT + (CARD_HEIGHT // 6) * (i // 2):
-                    screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
-            else:
-                if mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2 + 1):
-                    screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
-    # is the mouse on any of the lineup cards
-    if CARD_SPACE * 4 + CARD_WIDTH * 2 < mouse_pos[0] < CARD_SPACE * 4 + CARD_WIDTH * 3 and CARD_SPACE < mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 4 * 4 + CARD_HEIGHT:
-        i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 4), 4)
-        # if you mouse over an empty spot in the lineup, show the next card down instead
-        while i >= 0:
-            if lineup[i] is None:
-                i -= 1
-            else:
-                break
-        if i >= 0:
-            screen.blit(lineup[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+    # if the player has clicked on the discard pile, everything looks and behaves differently
+    if discard_pile:
+        # draw the background for the discard pile
+        screen.blit(discard_bkg, (0, 0))
+        
+    else:
+        # do this before you draw anything on the screen so you don't cover anything up
+        screen.blit(bkg, (0, 0))
+        screen.blit(pygame.image.load("cardimgs/cardback.jpg") if super_villain_bought else super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
+        screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
+        screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
+        screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
+        # the player's deck, represented either by a card back or nothing (if the deck is empty)
+        if human_player.own_deck.undrawn != 0:
+            screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() * 2 + 1))
+        screen.blit(GAME_FONT.render("Your deck", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5))
+        screen.blit(GAME_FONT.render("Cards remaining: " + str(len(human_player.own_deck.undrawn)), True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() - 5))
+        # the player's discard pile, represented by the top card or nothing (if the discard is empty)
+        if len(human_player.own_deck.discard) != 0:
+            screen.blit(human_player.own_deck.discard[-1].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 6))
+        screen.blit(GAME_FONT.render("Your discard", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT - GAME_FONT.get_height()))
+        screen.blit(GAME_FONT.render("Click to expand", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE * 3 + CARD_HEIGHT))
+        screen.blit(GAME_FONT.render("Your hand", True, (0, 0, 0), GAME_BKG_COLOR), (5, CARD_SPACE * 5 + CARD_HEIGHT * 2 - GAME_FONT.get_height() - 5))
+        #end turn button
+        END_TURN_BUTTON_LEFT = 420
+        END_TURN_BUTTON_TOP = 400
+        END_TURN_BUTTON_WIDTH = 53
+        END_TURN_BUTTON_HEIGHT = 18
+        #end_turn_button = pygame.draw.rect(screen, (0, 0, 240), (END_TURN_BUTTON_LEFT, END_TURN_BUTTON_TOP, END_TURN_BUTTON_WIDTH, END_TURN_BUTTON_HEIGHT))
+        GAME_FONT.set_underline(True) #underline the text
+        screen.blit(GAME_FONT.render("END TURN", True, (0, 0, 0), GAME_BKG_COLOR), (END_TURN_BUTTON_LEFT, END_TURN_BUTTON_TOP))
+        GAME_FONT.set_underline(False)
+        # all the cards the player has played this turn
+        for i in range(len(human_player.own_deck.played)):
+            screen.blit(human_player.own_deck.played[i].img, (CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5, CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2)))
+        screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
+        for i in range(hand_scroll, len(human_player.own_deck.hand)):
+            #TODO draw the hand and let the hand display scroll
+            screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
+        for i in range(5): # draw the lineup
+            if lineup[i] is not None:
+                screen.blit(lineup[i].img, (CARD_WIDTH * 2 + CARD_SPACE * 4, CARD_HEIGHT // 4 * i + CARD_SPACE))
+        if enough_power_num:
+            enough_power_num -= 1
+            screen.blit(GAME_FONT.render("Not enough power.", True, (0, 0, 0), GAME_BKG_COLOR), (5, 5))
+        
+        # is the mouse on the supervillain deck
+        if mouse_pos[0] > CARD_SPACE and mouse_pos[0] < CARD_SPACE + CARD_WIDTH and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
+            # can only interact with the supervillain deck once per turn
+            if not super_villain_bought:
+                screen.blit(super_villain_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
+                if click:
+                    if not buy(human_player, super_villain_deck.peek()):
+                        enough_power_num = 20
+                    super_villain_bought = True
+        #is the mouse over end turn
+        elif mouse_pos[0] > END_TURN_BUTTON_LEFT and mouse_pos[0] < (END_TURN_BUTTON_LEFT + END_TURN_BUTTON_WIDTH) and mouse_pos[1] > END_TURN_BUTTON_TOP and mouse_pos[1] < END_TURN_BUTTON_TOP + END_TURN_BUTTON_HEIGHT:
             if click:
-                if not buy(human_player, lineup[i], i):
-                    enough_power_num = 20
-                    
-    
-
-    
-    
-    # TODO expand the discard pile when the player clicks on it
+                end_turn(human_player)
+        # is the mouse on the main deck
+        #elif mouse_pos[0] > CARD_SPACE * 2 + CARD_WIDTH and mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and mouse_pos[1] > CARD_SPACE and mouse_pos[1] < CARD_SPACE + CARD_HEIGHT:
+        #    if click:
+        #        # TODO the player buys the top card off the main deck (is this a thing? I don't know)
+        #        pass
+        #    pass
+        # is the mouse on a card in the hand
+        elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
+            screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+            if click: # click on a card to play it
+                # TODO play the actual effect of the card rather than just move it to the played cards
+                human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
+        # is the mouse on any of the played cards
+        for i in range(len(human_player.own_deck.played)):
+            if mouse_pos[0] > CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5 and mouse_pos[0] < CARD_WIDTH * (4 + i % 2) + CARD_SPACE * 5 and mouse_pos[1] > CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2):
+                # treat the last two played cards differently because they're shown in full and are thus much taller
+                if i + 2 >= len(human_player.own_deck.played):
+                    if mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + CARD_HEIGHT + (CARD_HEIGHT // 6) * (i // 2):
+                        screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+                else:
+                    if mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2 + 1):
+                        screen.blit(human_player.own_deck.played[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+        # is the mouse on any of the lineup cards
+        if CARD_SPACE * 4 + CARD_WIDTH * 2 < mouse_pos[0] < CARD_SPACE * 4 + CARD_WIDTH * 3 and CARD_SPACE < mouse_pos[1] < CARD_SPACE + CARD_HEIGHT // 4 * 4 + CARD_HEIGHT:
+            i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 4), 4)
+            # if you mouse over an empty spot in the lineup, show the next card down instead
+            while i >= 0:
+                if lineup[i] is None:
+                    i -= 1
+                else:
+                    break
+            if i >= 0:
+                screen.blit(lineup[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+                if click:
+                    if not buy(human_player, lineup[i], i):
+                        enough_power_num = 20
+        # TODO expand the discard pile when the player clicks on it
+        # is the mouse on the discard pile
+        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE * 3 + CARD_HEIGHT + GAME_FONT.get_height() + 6 < mouse_pos[1] < CARD_SPACE * 3 + CARD_HEIGHT * 2 + GAME_FONT.get_height() + 6:
+            if len(human_player.own_deck.discard) > 0:
+                screen.blit(human_player.own_deck.discard[-1].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+            # click on the discard pile to expand it
+            if click:
+                discard_pile = True
 
     # last thing done in the loop: update the display to reflect everything you just drew
     pygame.display.flip()

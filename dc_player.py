@@ -7,7 +7,7 @@ import pygame
 Class for each player entity
 Created by dc_player.player(own_deck, isComputer)
 card_list: list of cards in the player's deck to start
-isComptuer: boolean whether this is a computer or human player 
+isComputer: boolean whether this is a computer or human player 
 """
 class Player:
 
@@ -16,20 +16,21 @@ class Player:
         self.isComputer = isComputer #is this the human or computer player
         self.power = 0 #power tracker for turns
 
-    #takes card from lineup and adds to discard pile
+    # takes card from lineup and adds to discard pile
     def gain_card_discard(self, card):
         self.own_deck.add_card(card)  # adds to deck contents for stats
         self.own_deck.add_to_discard(card) #adds to discard pile
 
-    #takes card from lineup and adds to top of undrawn
+    # takes card from lineup and adds to top of undrawn
     def gain_card_top(self, card):
         self.own_deck.add_card(card) #adds to deck contents for stats
         self.own_deck.add_to_undrawn_top(card)  #adds to the top of the undrawn list
 
-    #takes card from lineup and adds to hand
+    # takes card from lineup and adds to hand
     def gain_card_hand(self, card):
         self.own_deck.add_card(card)  # adds to deck contents for stats
         self.own_deck.add_to_hand(card) #adds to hand
+    
 
     #ends the turn by discarding all cards from hand and played and draws new hand
     def end_turn(self):
