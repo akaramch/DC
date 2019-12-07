@@ -79,7 +79,7 @@ def computer_turn(player, super_villain_deck, main_deck, kick_deck, lineup):
     power = 0
     #list of cards to buy
     cards_to_buy = buy_cards.buy_cards(power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup)
-    for card in cards_to_buy
+    for card in cards_to_buy:
         pass
         #buy_card(player, card)
     pass
