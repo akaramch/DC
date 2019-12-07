@@ -82,6 +82,11 @@ def load_villain_deck(super_villains):
     villain_deck.shuffle()
     return villain_deck
 
+"""
+Returns current line-up, for use with WLPB
+"""
+def current_lineup():
+    return game.lineup
 
 
 #run the computer turn
