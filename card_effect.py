@@ -82,7 +82,7 @@ def prompt_player(message, choices, none_choice_possible):
         # draw the list of cards to choose from
         for i in range(len(choices)):
             screen.blit(choices[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
-        # draw the choose_none button
+        # draw the choose_none buttons
         screen.blit(choose_none[0], (SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - choose_none[0].get_width(), CARD_SPACE * 2 + CARD_ZOOM_HEIGHT - GAME_FONT.get_height()))
         # draw the scroll buttons light or dark depending on whether the mouse is over them
         if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
@@ -171,13 +171,16 @@ def card_effect(player, card):
                 if selection: #did the player select something?
                     power_bonus += 2 #give bonus
                     player.own_deck.destroy_from_discard(selection) #destroy the card
-            #
-            # #TODO how to prompt players about destroy
-            # pass
+
         elif power_bonus_type == 6: #red lantern corps
             #+2 additional power if you destroy a card in hand
-            #TODO how to prompt players about destroy
-            pass
+            if len(player.own_deck.hand) != 0: #if there's a card in hand
+                #prompt the player with the choice
+                selection = prompt_player("you may pick a card in your hand to destroy for +2 power. Click none to not destroy.", player.own_deck.hand, True)
+            if selection:
+                power_bonus += 2 #give bonus
+                player.own_deck.destroy_from_hand(selection) #destroy the card
+
         elif power_bonus_type == 7: #killer croc
             #+1 if play/have played another Villain this turn
             # check if played already

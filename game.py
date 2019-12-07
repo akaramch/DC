@@ -277,7 +277,7 @@ StartingMainDeck += [Johnny_Quick] * 2
 StartingMainDeck += [Killer_Croc] * 2
 StartingMainDeck += [Lobo] * 1
 StartingMainDeck += [Mr_Zsasz] * 2
-StartingMainDeck += [Red_Lantern_Corps] * 2
+StartingMainDeck += [Red_Lantern_Corps] * 50
 StartingMainDeck += [Scarecrow] * 2
 StartingMainDeck += [Two_Face] * 3
 
@@ -485,7 +485,8 @@ while not done:
         # close the discard pile screen on click
         if click:
             discard_pile = False
-    
+
+    #TODO can this be removed?
     # if the player is being prompted to pick a card
     elif human_player.prompt[0]:
         # draw the background first
@@ -600,8 +601,10 @@ while not done:
         elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
             screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click: # click on a card to play it
-                card_effect.card_effect(human_player, human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll])
+                card = human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll] #because if we destroy from hand, indices get messed up
                 human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
+                card_effect.card_effect(human_player, card)
+
                 
         # is the mouse on any of the played cards
         for i in range(len(human_player.own_deck.played)):

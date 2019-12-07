@@ -145,7 +145,7 @@ class PlayerDeck(Deck):
         self.undrawn.remove(card)
 
     #destroy card from hand
-    def destroy_from_hand(self, index):
+    def destroy_from_hand(self, card):
         if card.get_type() == "Power":
             self.num_super_powers -= 1
         elif card.get_type() == "Hero":
@@ -158,7 +158,7 @@ class PlayerDeck(Deck):
             self.num_villains -= 1
         elif card.get_type() == "Weakness":
             self.num_weaknesses -= 1
-        card = self.hand.pop(index)
+        self.hand.remove(card)
         self.contents.remove(card)
 
 
