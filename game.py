@@ -492,7 +492,7 @@ while not done:
         elif mouse_pos[0] < (CARD_WIDTH * len(human_player.own_deck.hand)) and mouse_pos[1] > (CARD_HEIGHT * 2 + CARD_SPACE * 5):
             screen.blit(human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click: # click on a card to play it
-                # TODO play the actual effect of the card rather than just move it to the played cards
+                card_effect.card_effect(human_player, human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll])
                 human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
         # is the mouse on any of the played cards
         for i in range(len(human_player.own_deck.played)):
