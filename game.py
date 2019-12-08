@@ -152,7 +152,7 @@ StartingMainDeck += [Legion_Flight_Ring] * 2
 StartingMainDeck += [Nth_Metal] * 3
 StartingMainDeck += [Power_Ring] * 3
 StartingMainDeck += [Soultaker_Sword] * 3
-StartingMainDeck += [White_Lantern_Power_Battery] * 50
+StartingMainDeck += [White_Lantern_Power_Battery] * 1
 
 # SUPER POWERS
 PowerList = []
@@ -448,6 +448,11 @@ def shazam(player,opponent): #2
 
 
 def white_lantern_power_battery(player): #3
+    for card in lineup:
+        if card.name == "Power Ring":
+            player.gain_card_hand(card)
+            lineup.remove(card)
+    #TODO make this not print the entire kick deck when the computer plays it
     #ask which to take
     print("activate battery")
     gained = card_effect.prompt_player("Select a card from the lineup to gain to the top of your deck.", lineup, False)
@@ -611,6 +616,7 @@ for i in range(5):
 # fill the computer's hand
 for i in range(5):
     computer_player.own_deck.draw()
+human_player.own_deck.hand.append(White_Lantern_Power_Battery)
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
@@ -640,7 +646,7 @@ while not done:
             discard_scroll = 0
         # draw the discard pile all lined up nice and neat
         for i in range(discard_scroll, len(human_player.own_deck.discard)):
-            screen.blit(human_player.own_playingdeck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * (i - discard_scroll)))
+            screen.blit(human_player.own_deck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * (i - discard_scroll)))
         # cover up the cards that overflow over the discard pile boundary
         screen.blit(cover, (SCREEN_WIDTH - CARD_SPACE - CARD_WIDTH, CARD_SPACE + pile_outline.get_height() - 10))
         # draw the scroll buttons light or dark depending on whether the mouse is over them and do their things if the user clicks on them
