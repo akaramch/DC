@@ -838,6 +838,7 @@ while not done:
 # a new loop because we want the user to be able to close the program gracefully
 GAME_OVER_FONT = pygame.font.SysFont("ubuntucondensed", 28)
 game_over_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+game_over_bkg.fill(GAME_BKG_COLOR)
 human_score = 0
 for card in human_player.own_deck.contents:
     human_score += card.vp
@@ -845,13 +846,13 @@ computer_score = 0
 for card in computer_player.own_deck.contents:
     computer_score += card.vp
 game_over_bkg.blit(GAME_OVER_FONT.render("Your score: " + str(human_score), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE))
-game_over_bkg.blit(GAME_OVER_FONT.render("My score: " + str(computer_score), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE + GAME_OVER_FONT.get_height(), CARD_SPACE))
+game_over_bkg.blit(GAME_OVER_FONT.render("My score: " + str(computer_score), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + GAME_OVER_FONT.get_height()))
 if human_score > computer_score:
-    game_over_bkg.blit(GAME_OVER_FONT.render("You win! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR, (CARD_SPACE + GAME_OVER_FONT.get_height() * 2, CARD_SPACE)))
+    game_over_bkg.blit(GAME_OVER_FONT.render("You win! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + GAME_OVER_FONT.get_height() * 3))
 elif human_score < computer_score:
-    game_over_bkg.blit(GAME_OVER_FONT.render("You lose! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR, (CARD_SPACE + GAME_OVER_FONT.get_height() * 3, CARD_SPACE)))
+    game_over_bkg.blit(GAME_OVER_FONT.render("You lose! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + GAME_OVER_FONT.get_height() * 3))
 elif human_score == computer_score:
-    game_over_bkg.blit(GAME_OVER_FONT.render("You tied! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR, (CARD_SPACE + GAME_OVER_FONT.get_height() * 4, CARD_SPACE)))
+    game_over_bkg.blit(GAME_OVER_FONT.render("We tied! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + GAME_OVER_FONT.get_height() * 3))
 
 done = False
 while not done:
