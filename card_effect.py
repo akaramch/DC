@@ -196,13 +196,13 @@ def card_effect(player, card):
         elif power_bonus_type == 3: #winged warrior
             #if hero played before or after in turn, +3
             #check if played already
-            found_hero = False  # did we find a hero in our played
+            num_heroes = 0  # how may heroes in our played
             for card in player.own_deck.played:
                 if card.get_type() == "Hero":
-                    power_bonus += 3
-                    found_hero = True
-                    break
-            if not found_hero:
+                    num_heroes += 1
+            if num_heroes > 1:
+                power_bonus += 3
+            else:
                 player.winged_warrior_effect = True
 
         elif power_bonus_type == 4: #hawkgirl
@@ -233,15 +233,16 @@ def card_effect(player, card):
         elif power_bonus_type == 7: #killer croc
             #+1 if play/have played another Villain this turn
             # check if played already
-            found_villain = False  # did we find a villain in our played
+            num_villains = 0  # how many villains did we find in our played
             for card in player.own_deck.played:
                 if card.get_type() == "Villain":
-                    power_bonus += 1
-                    found_villain = True
-                    break
-            if not found_villain:
+                    num_villains += 1
+
+            if num_villains > 1:
+                power_bonus += 1
+            else:
                 player.killer_croc_effect = True
-            pass
+
     #add calculated bonus power to player power
     player.power += power_bonus
 
