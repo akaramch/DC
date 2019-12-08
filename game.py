@@ -152,7 +152,7 @@ StartingMainDeck += [Legion_Flight_Ring] * 2
 StartingMainDeck += [Nth_Metal] * 3
 StartingMainDeck += [Power_Ring] * 3
 StartingMainDeck += [Soultaker_Sword] * 3
-StartingMainDeck += [White_Lantern_Power_Battery] * 1
+StartingMainDeck += [White_Lantern_Power_Battery] * 50
 
 # SUPER POWERS
 PowerList = []
@@ -386,6 +386,7 @@ def computer_turn(player, opponent):
             index = lineup.index(card)
         buy(player, card, index)
 
+    
     end_turn(player)
 
 #ends the turn for the player whose turn it was
@@ -399,8 +400,11 @@ def end_turn(player):
     for i in range(0,5):
         if not lineup[i]:
             lineup[i] = main_deck.draw()
+    if player == human_player:
+        computer_turn(computer_player, human_player)
     hand_scroll = 0
     super_villain_bought = False #flip the next villain
+
 def jonn_jonzz(player): #1
     villain = super_villain_deck.peek() #get the top super villain
     print("J'onn J'onzz played:", villain)
@@ -447,6 +451,7 @@ def shazam(player,opponent): #2
 
 def white_lantern_power_battery(player): #3
     #ask which to take
+    print("activate battery")
     gained = card_effect.prompt_player("Select a card from the lineup to gain to the top of your deck.", lineup, False)
     index = lineup.index(gained) #get the card index in lineup
     lineup[index] = None #remove the card from lineup
