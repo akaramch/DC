@@ -292,4 +292,4 @@ def card_effect(player, card):
     if card.custom == 6: #Parallax
         player.power *= 2
     
-    
+
