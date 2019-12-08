@@ -485,42 +485,7 @@ while not done:
         # close the discard pile screen on click
         if click:
             discard_pile = False
-##<<<<<<< Updated upstream
-#
-#    #TODO can this be removed?
-#    # if the player is being prompted to pick a card
-#    elif human_player.prompt[0]:
-#        # draw the background first
-#        screen.blit(discard_bkg, (0, 0))        
-#        discard_bkg.blit(GAME_FONT.render(human_player.prompt[1], True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height()))
-#        # draw the list of cards to choose from
-#        for i in range(len(human_player.prompt[2])):
-#            screen.blit(human_player.prompt[2][i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
-#        # draw the scroll buttons light or dark depending on whether the mouse is over them
-#        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
-#            screen.blit(scroll_button_u_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
-#            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
-#            if click:
-#                discard_scroll = max(discard_scroll - 1, 0)
-#        elif SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE - 5 + pile_outline.get_height() < mouse_pos[1] < CARD_SPACE * 2 - 10 + pile_outline.get_height():
-#            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
-#            screen.blit(scroll_button_d_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
-#            if click:
-#                discard_scroll = min(discard_scroll + 1, len(human_player.own_deck.discard) - (pile_outline.get_height() // (CARD_HEIGHT // 6)))
-#        else:
-#            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
-#            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
-#        # is the mouse on a card in the discard pile
-#        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + (len(human_player.prompt[2]) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT:
-#            i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.prompt[2]) - 1)
-#            screen.blit(human_player.prompt[2][i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
-#            if click:
-#                card_selection = human_player.prompt[2][i]
-#        # draw the card selection if there is one
-#        
-##=======
-##>>>>>>> Stashed changes
-        
+
     else:
         # draw the background before you draw anything on the screen so you don't cover anything up
         screen.blit(bkg, (0, 0))
