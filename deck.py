@@ -132,7 +132,7 @@ class PlayerDeck(Deck):
         self.destroy_from_discard(card)
         self.add_to_hand(card)
         self.add_card(card)
-        
+
     #moves card from discard to undrawn top
     def discard_to_undrawn_top(self, card):
         self.destroy_from_discard(card) #remove from discard
