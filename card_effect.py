@@ -334,7 +334,7 @@ def card_effect(player, card):
         
     if card.custom == 3: #white lantern power battery
         #TODO
-        #selection=prompt_player("Choose any card from the Line-Up to gain and put on top of your deck:", player.current_lineup, False)
+        #selection=prompt_player("Choose any card from the Line-Up to gain and put on top of your deck.", player.current_lineup, False)
         #player.gain_card_top(selection)
         print("WLPB has not been implemented yet.")
         
@@ -355,7 +355,7 @@ def card_effect(player, card):
         
     if card.custom == 8: #Graves
         #TODO
-        print("Trigon has not been implemented yet.")
+        print("Graves has not been implemented yet.")
         
     if card.custom == 9: #Nekron
         cards_to_draw = 0
@@ -441,10 +441,5 @@ def card_effect(player, card):
         for card in range(len(player.own_deck.discard)):
             if card.type == "Equipment":
                 card.discard_to_hand()
-                
-        
-        
-            
-        print("Arkillo has not been implemented yet.")
     
 
