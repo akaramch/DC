@@ -142,7 +142,7 @@ EquipmentList = []
 
 Aquamans_Trident = Card("cardimgs/aquamanstrident.jpg", cost=3, power=(2,0), puts_on_top=True, name="Aquaman's Trident", type="Equipment", vp=1, text="+2 Power. You may put any one card you buy or gain this turn on top of your deck.") # 3
 Batarang = Card("cardimgs/batarang.jpg", cost=2, power=(2,0), name="Batarang", vp=1, type="Equipment", text="+2 Power.") # 2
-Soultaker_Sword = Card("cardimgs/soultakersword.jpg", cost=4, power=(2,0), destroy_top= (True, 1), name="Soultaker Sword", vp=1, type="Equipment", text="+2 Power. You may destroy a card in your hand.", destroy_hand=1) # 3
+Soultaker_Sword = Card("cardimgs/soultakersword.jpg", cost=4, power=(2,0), name="Soultaker Sword", vp=1, type="Equipment", text="+2 Power. You may destroy a card in your hand.", destroy_hand=1) # 3
 Legion_Flight_Ring = Card("cardimgs/legionflightring.jpg", cost=2, name="Legion Flight Ring", vp=1, type="Equipment", text="Draw a card.", draw=(1,0)) # 2
 Lasso_of_Truth = Card("cardimgs/lassooftruth.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") # 2
 Power_Ring = Card("cardimgs/powerring.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="+2 Power. Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") # 3
