@@ -343,7 +343,7 @@ def end_turn(player):
     # TODO super villain flip and attacks
 
 # make the game window
-screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
+screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(SCREEN_NAME)
 
 # draw a background to put on the screen every frame
@@ -485,6 +485,7 @@ while not done:
         # close the discard pile screen on click
         if click:
             discard_pile = False
+#<<<<<<< Updated upstream
 
     #TODO can this be removed?
     # if the player is being prompted to pick a card
@@ -517,6 +518,8 @@ while not done:
                 card_selection = human_player.prompt[2][i]
         # draw the card selection if there is one
         
+#=======
+#>>>>>>> Stashed changes
         
     else:
         # draw the background before you draw anything on the screen so you don't cover anything up
@@ -559,7 +562,7 @@ while not done:
         # all the cards the player has played this turn
         for i in range(len(human_player.own_deck.played)):
             screen.blit(human_player.own_deck.played[i].img, (CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5, CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2)))
-        screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
+        screen.blit(GAME_FONT.render("Played cards (" + str(human_player.power) + " power)", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
         for i in range(hand_scroll, len(human_player.own_deck.hand)):
             # TODO draw the hand and let the hand display scroll
             screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
