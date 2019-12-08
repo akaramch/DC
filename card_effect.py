@@ -336,24 +336,45 @@ def card_effect(player, card):
         print("Trigon has not been implemented yet.")
         
     if card.custom == 9: #Nekron
-        selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from hand, click None", player.own_deck.discard, True) #check if first destroyed from discard
+        cards_to_draw = 0
+        selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from your hand, click None.", player.own_deck.discard, True) #check if first destroyed from discard
         selection1_hand = None
         if not selection1_discard: #if not check if they want to destroy from hand
-            selection1_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click none", player.own_deck.hand, True)
+            selection1_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click None.", player.own_deck.hand, True)
             if selection1_hand: #if they selected to destroy from hand
                 player.own_deck.destroy_from_hand(selection1_hand)
+            if (selection1_discard or selection1_hand):
+                cards_to_draw += 1
         else: #selection 1 destroy from discard
             player.own_deck.destroy_from_discard(selection1_discard)
 
         if not ((selection1_discard is None) and (selection1_hand is None)): #if the player selected one to destroy, ask again
             selection2_hand = None
-            selection2_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, click none", player.own_deck.discard, True)  # check if first destroyed from discard
+            selection2_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from your hand, click None.", player.own_deck.discard, True)  # check if first destroyed from discard
             if not selection2_discard:  # if not check if they want to destroy from hand
-                selection2_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click none", player.own_deck.hand, True)
+                selection2_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click None.", player.own_deck.hand, True)
                 if selection2_hand:  # if they selected to destroy from hand
                     player.own_deck.destroy_from_hand(selection2_hand)
+                if (selection2_discard or selection2_hand):
+                    cards_to_draw += 1
             else:  # selection 2 destroy from discard
                 player.own_deck.destroy_from_discard(selection2_discard)
+                
+            if not ((selection2_discard is None) and (selection2_hand is None)): #if the player selected one to destroy, ask again
+                selection3_hand = None
+                selection3_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from your hand, click None.", player.own_deck.discard, True)  # check if first destroyed from discard
+                if not selection3_discard:  # if not check if they want to destroy from hand
+                    selection3_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click None.", player.own_deck.hand, True)
+                    if selection3_hand:  # if they selected to destroy from hand
+                        player.own_deck.destroy_from_hand(selection3_hand)
+                    if (selection1_discard or selection1_hand):
+                       cards_to_draw += 1
+                else:  # selection 2 destroy from discard
+                    player.own_deck.destroy_from_discard(selection3_discard)
+        for i in range(cards_to_draw):
+            if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
+                player.own_deck.refill_deck()
+            player.own_deck.undrawn.draw()
         
     if card.custom == 10: #Bart Allen
         #TODO
@@ -364,9 +385,14 @@ def card_effect(player, card):
         print("Black Adam has not been implemented yet.")
         
     if card.custom == 12: #Hel
-        #TODO
-        print("Hel has not been implemented yet.")
-        
+        value_drawn = 0
+        cost_of_next_card = player.own_deck.undrawn.peek().cost
+        while value_drawn < 7:
+            if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
+                player.own_deck.refill_deck()
+            player.own_deck.draw()
+            value_drawn += cost_of_next_card
+            
     if card.custom == 13: #Arkillo
         #TODO
         print("Arkillo has not been implemented yet.")
