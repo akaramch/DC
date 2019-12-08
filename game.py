@@ -544,7 +544,7 @@ computer_player = dc_player.Player(StartingPlayerDeck, True) # makes computer pl
 players = [human_player, computer_player] # list of players (there are only 2 for now)
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
-kick_deck = deck.Deck([Kick] * 2) #Should be 16
+kick_deck = deck.Deck([Kick] * 16) #Should be 16
 weakness_deck = deck.Deck([Weakness] * 20)
 # the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
 lineup = [None, None, None, None, None]
@@ -561,9 +561,6 @@ for i in range(5):
 # fill the player's hand
 for i in range(5):
     human_player.own_deck.draw()
-
-for i in range(20):
-    human_player.own_deck.hand.append(random.choice(StartingMainDeck))
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
@@ -597,22 +594,25 @@ while not done:
         # cover up the cards that overflow over the discard pile boundary
         screen.blit(cover, (SCREEN_WIDTH - CARD_SPACE - CARD_WIDTH, CARD_SPACE + pile_outline.get_height() - 10))
         # draw the scroll buttons light or dark depending on whether the mouse is over them and do their things if the user clicks on them
-        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
+        # mouse is over the scroll up button (and there's more up to scroll)
+        if discard_scroll > 0 and SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
             screen.blit(scroll_button_u_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
             screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
             if click:
-                discard_scroll = max(discard_scroll - 1, 0)
-        elif SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE - 5 + pile_outline.get_height() < mouse_pos[1] < CARD_SPACE * 2 - 10 + pile_outline.get_height():
+                discard_scroll -= 1
+        # mouse is over the scroll down button (and there's more down to scroll)
+        elif discard_scroll < len(human_player.own_deck.discard) - (pile_outline.get_height() // (CARD_HEIGHT // 6)) + 5 and SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE - 5 + pile_outline.get_height() < mouse_pos[1] < CARD_SPACE * 2 - 10 + pile_outline.get_height():
             screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
             screen.blit(scroll_button_d_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
             if click:
-                discard_scroll = min(discard_scroll + 1, len(human_player.own_deck.discard) - (pile_outline.get_height() // (CARD_HEIGHT // 6)) + 5)
+                discard_scroll += 1
+        # mouse is elsewhere
         else:
             screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
             screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
         # is the mouse on a card in the discard pile
-        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + min((len(human_player.own_deck.discard) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT, pile_outline.get_height()):
-            i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.own_deck.discard) - 1)
+        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + min((len(human_player.own_deck.discard) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT, pile_outline.get_height() - 10):
+            i = min(discard_scroll + (mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.own_deck.discard) - 1)
             screen.blit(human_player.own_deck.discard[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
 
     # the normal version of the GUI
@@ -662,18 +662,18 @@ while not done:
         for i in range(hand_scroll, min(len(human_player.own_deck.hand), hand_scroll + (hand_outline.get_width() + 10) // CARD_WIDTH)):
             screen.blit(human_player.own_deck.hand[i].img, (CARD_SPACE + CARD_WIDTH * (i - hand_scroll), SCREEN_HEIGHT - CARD_HEIGHT - 5))
         # draw the hand scroll buttons light or dark depending on whether the mouse is over them and do their things if the user clicks on them
-        # mouse over left button
-        if 0 < mouse_pos[0] < CARD_SPACE - 5 and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5 and hand_scroll > 0:
+        # mouse over left button (and there's more left to scroll)
+        if hand_scroll > 0 and 0 < mouse_pos[0] < CARD_SPACE - 5 and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5 and hand_scroll > 0:
             screen.blit(scroll_button_l_dark, (0, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             screen.blit(scroll_button_r, (CARD_SPACE + hand_outline.get_width() - 5, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             if click:
-                hand_scroll = max(hand_scroll - 1, 0)
-        # mouse over right button
-        elif CARD_SPACE + hand_outline.get_width() - 5 < mouse_pos[0] < CARD_SPACE * 2 + hand_outline.get_width() and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5 and hand_scroll < len(human_player.own_deck.hand):
+                hand_scroll -= 1
+        # mouse over right button (and there's more right to scroll)
+        elif hand_scroll < len(human_player.own_deck.hand) - hand_outline.get_width() // CARD_WIDTH and CARD_SPACE + hand_outline.get_width() - 5 < mouse_pos[0] < CARD_SPACE * 2 + hand_outline.get_width() and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5 and hand_scroll < len(human_player.own_deck.hand):
             screen.blit(scroll_button_l, (0, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             screen.blit(scroll_button_r_dark, (CARD_SPACE + hand_outline.get_width() - 5, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             if click:
-                hand_scroll = min(hand_scroll + 1, len(human_player.own_deck.hand) - hand_outline.get_width() // CARD_WIDTH)
+                hand_scroll += 1
         # mouse elsewhere
         else:
             screen.blit(scroll_button_l, (0, SCREEN_HEIGHT - CARD_HEIGHT - 5))
@@ -698,11 +698,11 @@ while not done:
                         super_villain_bought = True
                         
         # is the mouse over the weakness deck
-        elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + CARD_WIDTH and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
+        elif (not weakness_deck.isEmpty()) and CARD_SPACE < mouse_pos[0] < CARD_SPACE + CARD_WIDTH and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
             screen.blit(weakness_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
             
         # is the mouse over the kick deck
-        elif CARD_SPACE * 2 + CARD_WIDTH < mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
+        elif (not kick_deck.isEmpty()) and CARD_SPACE * 2 + CARD_WIDTH < mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
             screen.blit(kick_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
             # click to buy a kick
             if click:
@@ -717,11 +717,14 @@ while not done:
         # is the mouse on a card in the hand
         elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + min(hand_outline.get_width() - 10, CARD_WIDTH * (len(human_player.own_deck.hand) - hand_scroll)) and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
             i = hand_scroll + (mouse_pos[0] - CARD_SPACE) // CARD_WIDTH
-            #print(i)
             screen.blit(human_player.own_deck.hand[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click: # click on a card to play it
                 card = human_player.own_deck.hand[i] #because if we destroy from hand, indices get messed up
                 human_player.own_deck.hand_to_played(i)
+                # if the hand is scrolled all the way to the right and the player plays a card, scroll the hand left to fill the space
+                if hand_scroll > 0 and len(human_player.own_deck.hand) - hand_scroll < (hand_outline.get_width() - 10) // CARD_WIDTH:
+                    hand_scroll -= 1
+                handlen = len(human_player.own_deck.hand)
                 #all of the cards that needed to be implemented in game.py
                 if card.custom == 1:
                     jonn_jonzz(human_player)
@@ -739,6 +742,9 @@ while not done:
                     bart_allen(human_player)
                 else: #if not here, then handled by card_effect
                     card_effect.card_effect(human_player, card)
+                if handlen > len(human_player.own_deck.hand): # if the card effect discarded a card from the hand
+                    if hand_scroll > 0 and len(human_player.own_deck.hand) - hand_scroll < (hand_outline.get_width() - 10) // CARD_WIDTH:
+                        hand_scroll -= 1
                 
         # is the mouse on any of the played cards
         for i in range(len(human_player.own_deck.played)):
