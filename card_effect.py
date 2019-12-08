@@ -223,6 +223,8 @@ def card_effect(player, card):
     if top_destroy: #is this a top destroy card?
         top_destroy_option = card.destroy_top[1]
         if top_destroy_option == 1: #nth metal
+            if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
+                player.own_deck.refill_deck()
             selection = prompt_player("This is the top card of your deck. If you wish to destroy, click the card. Otherwise, click None.", [player.own_deck.peek()], True) #player.own_deck.peek is the top card of their deck
             if selection: #if they decided to destroy
                 player.own_deck.destroy_from_deck(selection) #remove the card from the deck
