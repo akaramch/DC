@@ -529,9 +529,6 @@ for i in range(5):
 for i in range(5):
     human_player.own_deck.draw()
 
-for i in range(20):
-    human_player.own_deck.hand.append(random.choice(StartingMainDeck))
-
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
 
