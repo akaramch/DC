@@ -1,16 +1,5 @@
 Supervillain needs to flip, eventually attack 
 
-Crashes when last Kick is bought -- apply same fix to Weakness deck!
-
-Can't scroll in discard pile --> as discard pile fills, the number of them you can see decreases. Example: 
-Start game with 20 cards. 
- Pass turn
-  5 cards in discard
- Pass turn
-  10 cards in discard
- Pass turn
-  6 cards in discard
-
 Drawing when there are no cards to be drawn - everything in play or in hand - crashes the program. I've handled this with the SVs that draw multiple cards, not sure how to handle with just regular LFRs, JQs, KFs, TFMA, etc. Should print an error message.
 
 Cards defined in game. py do nothing--jonzz, WLPB, BartAllen, supergirl, trigon, xray vis, shazam
