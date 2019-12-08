@@ -376,7 +376,7 @@ def computer_turn(player, opponent):
             bart_allen(player)
         else:  # if not here, then handled by card_effect
             card_effect.card_effect(player, card)
-
+    power_generated = player.power
     #get which cards the computer wants to buy
     cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
     for card in cards_to_buy: #buy cards in card to buy
@@ -384,7 +384,10 @@ def computer_turn(player, opponent):
         if card.name != "Kick" and not (card in SuperVillainDeckList or card == The_Flash): #if card is in lineup
             index = lineup.index(card)
         buy(player, card, index)
-
+    #tell the player what cards the computer played
+    card_effect.prompt_player("Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click None", player.own_deck.played, True)
+    #prompt the player what cards the computer bought
+    card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
     end_turn(player)
 
 #ends the turn for the player whose turn it was
@@ -602,6 +605,9 @@ for i in range(5):
 # fill the player's hand
 for i in range(5):
     human_player.own_deck.draw()
+# fill the computer's hand
+for i in range(5):
+    computer_player.own_deck.draw()
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
