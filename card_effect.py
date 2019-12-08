@@ -53,6 +53,7 @@ def prompt_player(message, choices, none_choice_possible):
     pygame.draw.polygon(scroll_button_u_dark, (95, 95, 95), [(CARD_WIDTH // 2 - CARD_SPACE // 4, int(CARD_SPACE * (3 / 4))),(CARD_WIDTH // 2, CARD_SPACE // 4), (CARD_WIDTH // 2 + CARD_SPACE // 4, int(CARD_SPACE * (3 / 4)))])
     pygame.draw.polygon(scroll_button_d, (127, 127, 127), [(CARD_WIDTH // 2 - CARD_SPACE // 4, CARD_SPACE // 4), (CARD_WIDTH // 2, int(CARD_SPACE * (3 / 4))), (CARD_WIDTH // 2 + CARD_SPACE // 4, CARD_SPACE // 4)])
     pygame.draw.polygon(scroll_button_d_dark, (95, 95, 95), [(CARD_WIDTH // 2 - CARD_SPACE // 4, CARD_SPACE // 4), (CARD_WIDTH // 2, int(CARD_SPACE * (3 / 4))), (CARD_WIDTH // 2 + CARD_SPACE // 4, CARD_SPACE // 4)])
+    # a choose none button
     GAME_FONT.set_underline(True)
     choose_none = GAME_FONT.render("None", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height())
     GAME_FONT.set_underline(False)
@@ -72,7 +73,7 @@ def prompt_player(message, choices, none_choice_possible):
         # click should only be true on the frame when the button is pressed
         if click:
             click = False
-        for event in pygame.event.get():  # evaluate all the current events
+        for event in pygame.event.get():  # evaluate a mouse button event
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
         # draw the background first
@@ -107,10 +108,11 @@ def prompt_player(message, choices, none_choice_possible):
             screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
         # is the mouse on a card in the list of choices
         if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + min((len(choices) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT, pile_outline.get_height() - 10):
-            card = choices[min(scroll + (mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(choices) - 1)]
-            screen.blit(card.zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
+            i = min(scroll + (mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(choices) - 1)
+            screen.blit(choices[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
             if click:
-                return card
+                return choices[i]
+        #GAME_CLOCK.tick(1)
         pygame.display.flip()
 
 
@@ -305,19 +307,24 @@ def card_effect(player, card):
                 player.own_deck.destroy_from_hand(selection) #destroy it
 
     if card.destroy_hand_or_discard == 1: #heat vision
-        selection_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True)
-        if not selection_discard: #if not check if destroy from hand
-            selection_hand = prompt_player("You may pick a card in your hand to destroy. Click \"none\" to destroy nothing.", player.own_deck.hand, True)
-            if selection_hand: #if destroy from hand
-                player.own_deck.destroy_from_hand(selection_hand)
-        else: #select destroy from discard
-            player.own_deck.destroy_from_discard(selection_discard)
+        if len(player.own_deck.discard) != 0:
+            selection_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True)
+            if not selection_discard: #if not check if destroy from hand
+                if len(player.own_deck.hand) != 0:
+                    selection_hand = prompt_player("You may pick a card in your hand to destroy. Click \"none\" to destroy nothing.", player.own_deck.hand, True)
+                    if selection_hand: #if destroy from hand
+                        player.own_deck.destroy_from_hand(selection_hand)
+            else: #select destroy from discard
+                player.own_deck.destroy_from_discard(selection_discard)
 
     if card.destroy_hand_or_discard == 2: #lobo
-        selection1_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True) #check if first destroyed from discard
+        selection1_discard = None
         selection1_hand = None
+        if len(player.own_deck.discard) != 0:
+            selection1_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True) #check if first destroyed from discard
         if not selection1_discard: #if not check if they want to destroy from hand
-            selection1_hand = prompt_player("Select a card to destroy from your hand. If you wish to destroy nothing, click \"None.\"", player.own_deck.hand, True)
+            if len(player.own_deck.hand) != 0:
+                selection1_hand = prompt_player("Select a card to destroy from your hand. If you wish to destroy nothing, click \"None.\"", player.own_deck.hand, True)
             if selection1_hand: #if they selected to destroy from hand
                 player.own_deck.destroy_from_hand(selection1_hand)
         else: #selection 1 destroy from discard
@@ -363,10 +370,13 @@ def card_effect(player, card):
             
     if card.custom == 9: #Nekron
         cards_to_draw = 0
-        selection1_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True) #check if first destroyed from discard
+        selection1_discard = None
         selection1_hand = None
+        if len(player.own_deck.discard) != 0:
+            selection1_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True) #check if first destroyed from discard
         if not selection1_discard: #if not check if they want to destroy from hand
-            selection1_hand = prompt_player("Select a card to destroy from your hand. If you wish to destroy nothing, click \"None.\"", player.own_deck.hand, True)
+            if len(player.own_deck.hand) != 0:
+                selection1_hand = prompt_player("Select a card to destroy from your hand. If you wish to destroy nothing, click \"None.\"", player.own_deck.hand, True)
             if selection1_hand: #if they selected to destroy from hand
                 player.own_deck.destroy_from_hand(selection1_hand)
             if (selection1_discard or selection1_hand):
@@ -377,9 +387,12 @@ def card_effect(player, card):
 
         if not ((selection1_discard is None) and (selection1_hand is None)): #if the player selected one to destroy, ask again
             selection2_hand = None
-            selection2_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True)  # check if first destroyed from discard
+            selection2_discard = None
+            if len(player.own_deck.discard) != 0:
+                selection2_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True)  # check if first destroyed from discard
             if not selection2_discard:  # if not check if they want to destroy from hand
-                selection2_hand = prompt_player("Select a card to destroy from your hand. If you wish to destroy nothing, click \"None.\"", player.own_deck.hand, True)
+                if len(player.own_deck.hand) != 0:
+                    selection2_hand = prompt_player("Select a card to destroy from your hand. If you wish to destroy nothing, click \"None.\"", player.own_deck.hand, True)
                 if selection2_hand:  # if they selected to destroy from hand
                     player.own_deck.destroy_from_hand(selection2_hand)
                 if (selection2_discard or selection2_hand):
@@ -390,9 +403,12 @@ def card_effect(player, card):
                 
             if not ((selection2_discard is None) and (selection2_hand is None)): #if the player selected one to destroy, ask again
                 selection3_hand = None
-                selection3_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True)  # check if first destroyed from discard
+                selection3_discard = None
+                if len(player.own_deck.discard) != 0:
+                    selection3_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True)  # check if first destroyed from discard
                 if not selection3_discard:  # if not check if they want to destroy from hand
-                    selection3_hand = prompt_player("Select a card to destroy from your hand. If you wish to destroy nothing, click \"None.\"", player.own_deck.hand, True)
+                    if len(player.own_deck.hand) != 0:
+                        selection3_hand = prompt_player("Select a card to destroy from your hand. If you wish to destroy nothing, click \"None.\"", player.own_deck.hand, True)
                     if selection3_hand:  # if they selected to destroy from hand
                         player.own_deck.destroy_from_hand(selection3_hand)
                     if (selection1_discard or selection1_hand):
