@@ -363,7 +363,7 @@ def computer_turn(player, opponent):
         if card.custom == 1:
             jonn_jonzz(player, opponent)
         elif card.custom == 2:
-            shazam(player)
+            shazam(player, opponent)
         elif card.custom == 3:
             white_lantern_power_battery(player)
         elif card.custom == 4:
