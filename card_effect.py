@@ -327,5 +327,29 @@ def card_effect(player, card):
         
     if card.custom == 6: #Parallax
         player.power *= 2
+        
+    if card.custom == 7: #Trigon
+        #TODO
+        print("Trigon has not been implemented yet.")
+        
+    if card.custom == 8: #Graves
+        #TODO
+        print("Trigon has not been implemented yet.")
+        
+    if card.custom == 9: #Bart Allen
+        #TODO
+        print("Bart Allen has not been implemented yet.")
+        
+    if card.custom == 10: #Black Adam
+        #TODO
+        print("Black Adam has not been implemented yet.")
+        
+    if card.custom == 11: #Hel
+        #TODO
+        print("Hel has not been implemented yet.")
+        
+    if card.custom == 12: #Arkillo
+        #TODO
+        print("Arkillo has not been implemented yet.")
     
 
