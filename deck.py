@@ -127,6 +127,12 @@ class PlayerDeck(Deck):
     def shuffle(self):
         random.shuffle(self.undrawn)
 
+    #moves card from discard to hand
+    def discard_to_hand(self, card):
+        self.destroy_from_discard(card)
+        self.add_to_hand(card)
+        self.add_card(card)
+        
     #moves card from discard to undrawn top
     def discard_to_undrawn_top(self, card):
         self.destroy_from_discard(card) #remove from discard
