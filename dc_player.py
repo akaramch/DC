@@ -50,6 +50,10 @@ class Player:
             self.own_deck.draw()
         #reset power to 0
         self.power = 0
+        #reset effect flags
+        self.black_adam_effect = (True, True, True, True, True)
+        self.winged_warrior_effect = False
+        self.killer_croc_effect = False
 """
 Sets up main deck.
 Parameter list: 
