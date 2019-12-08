@@ -307,13 +307,15 @@ def card_effect(player, card):
                 player.own_deck.destroy_from_hand(selection) #destroy it
 
     if card.destroy_hand_or_discard == 1: #heat vision
-        selection_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True)
-        if not selection_discard: #if not check if destroy from hand
-            selection_hand = prompt_player("You may pick a card in your hand to destroy. Click \"none\" to destroy nothing.", player.own_deck.hand, True)
-            if selection_hand: #if destroy from hand
-                player.own_deck.destroy_from_hand(selection_hand)
-        else: #select destroy from discard
-            player.own_deck.destroy_from_discard(selection_discard)
+        if len(player.own_deck.discard) != 0:
+            selection_discard = prompt_player("Select a card to destroy from your discard pile. If you wish to destroy nothing, or to instead destroy a card from your hand, click \"None.\"", player.own_deck.discard, True)
+            if not selection_discard: #if not check if destroy from hand
+                if len(player.own_deck.hand) != 0:
+                    selection_hand = prompt_player("You may pick a card in your hand to destroy. Click \"none\" to destroy nothing.", player.own_deck.hand, True)
+                    if selection_hand: #if destroy from hand
+                        player.own_deck.destroy_from_hand(selection_hand)
+            else: #select destroy from discard
+                player.own_deck.destroy_from_discard(selection_discard)
 
     if card.destroy_hand_or_discard == 2: #lobo
         selection1_discard = None
