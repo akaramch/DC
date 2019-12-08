@@ -243,6 +243,15 @@ def card_effect(player, card):
             if selection: #if the player chose one
                 player.own_deck.destroy_from_hand(selection) #destroy it
 
+    if card.destroy_hand_or_discard == 1: #heat vision
+        selection_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from hand, click None", player.own_deck.discard, True)
+        if not selection_discard: #if not check if destroy from hand
+            selection_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click none", player.own_deck.hand, True)
+            if selection_hand: #if destroy from hand
+                player.own_deck.destroy_from_hand(selection_hand)
+        else: #select destroy from discard
+            player.own_deck.destroy_from_discard(selection_discard)
+
     if card.destroy_hand_or_discard == 2: #lobo
         selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from hand, click None", player.own_deck.discard, True) #check if first destroyed from discard
         selection1_hand = None
