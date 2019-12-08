@@ -51,6 +51,8 @@ class Deck:
 
     #draws card from deck and returns it
     def draw(self):
+        if self.isEmpty():
+            return None
         card = self.contents.pop(0)
         self.num_cards -= 1
         if card.get_type() == "Power":
@@ -69,6 +71,8 @@ class Deck:
 
     #look at the top card of the deck without drawing
     def peek(self):
+        if self.isEmpty():
+            return None
         return self.contents[0]
 
     #check if deck is empty

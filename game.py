@@ -511,7 +511,7 @@ computer_player = dc_player.Player(StartingPlayerDeck, True) # makes computer pl
 players = [human_player, computer_player] # list of players (there are only 2 for now)
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
-kick_deck = deck.Deck([Kick] * 2) #Should be 16
+kick_deck = deck.Deck([Kick] * 16) #Should be 16
 weakness_deck = deck.Deck([Weakness] * 20)
 # the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
 lineup = [None, None, None, None, None]
@@ -665,11 +665,11 @@ while not done:
                         super_villain_bought = True
                         
         # is the mouse over the weakness deck
-        elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + CARD_WIDTH and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
+        elif (not weakness_deck.isEmpty()) and CARD_SPACE < mouse_pos[0] < CARD_SPACE + CARD_WIDTH and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
             screen.blit(weakness_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
             
         # is the mouse over the kick deck
-        elif CARD_SPACE * 2 + CARD_WIDTH < mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
+        elif (not kick_deck.isEmpty()) and CARD_SPACE * 2 + CARD_WIDTH < mouse_pos[0] < CARD_SPACE * 2 + CARD_WIDTH * 2 and CARD_SPACE * 2 + CARD_HEIGHT < mouse_pos[1] < CARD_SPACE * 2 + CARD_HEIGHT * 2:
             screen.blit(kick_deck.peek().zoom(), (CARD_WIDTH * 3 + CARD_SPACE * 5 - 5, CARD_SPACE - 5))
             # click to buy a kick
             if click:
