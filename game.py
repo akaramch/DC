@@ -404,7 +404,7 @@ def shazam(player, opponent): #2
 
 def white_lantern_power_battery(player): #3
     #ask which to take
-    gained = card_effect.prompt_player("Pick a card from the lineup to gain to the top of your deck.", lineup, False)
+    gained = card_effect.prompt_player("Select a card from the lineup to gain to the top of your deck.", lineup, False)
     index = lineup.index(gained) #get the card index in lineup
     lineup[index] = None #remove the card from lineup
     player.gain_card_top(gained) #add card to top of undrawn
@@ -436,18 +436,18 @@ def super_girl(player): #5
 
 def trigon(player): #7
     top_two = [main_deck.draw(), main_deck.draw()] #get top two cards
-    selection = card_effect.prompt_player("Pick which card to add to your hand. The other will go to the bottom of the main deck.", top_two, False)
+    selection = card_effect.prompt_player("Select a card to add to your hand. The other will go to the bottom of the main deck.", top_two, False)
     player.gain_card_hand(selection) #add selected card to hand
     top_two.remove(selection) #only card left here is the not selected one
     main_deck.add_to_bottom(top_two[0])
 
 def bart_allen(player):
     #get first choice
-    selection1 = card_effect.prompt_player("Pick the first card to gain from the lineup.", lineup, False)
+    selection1 = card_effect.prompt_player("Select a card to gain from the lineup.", lineup, False)
     index1 = lineup.index(selection1) #find an index of the first card
     lineup[index1] = None #remove from lineup
     player.gain_card_hand(selection1) #player gets the card to hand
-    selection2 = card_effect.prompt_player("Pick the second card to gain from the lineup.", lineup, False)
+    selection2 = card_effect.prompt_player("Select a second card to gain from the lineup.", lineup, False)
     index2 = lineup.index(selection2) #find index of the second card
     lineup[index2] = None
     player.gain_card_hand(selection2) #gain other card
