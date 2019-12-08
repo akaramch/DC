@@ -29,18 +29,19 @@ GAME_CLOCK = pygame.time.Clock()
 
 #draw the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption(SCREEN_NAME)
 
-# draw background for showing the player prompts
 
 def prompt_player(message, choices, none_choice_possible):
-    discard_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-    discard_bkg.fill(GAME_BKG_COLOR)
+    # draw background for showing the player prompts
+    prompt_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    prompt_bkg.fill(GAME_BKG_COLOR)
     pile_outline = pygame.Surface((CARD_WIDTH + 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) + 10))
     pile_interior = pygame.Surface((CARD_WIDTH - 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) - 10))
     pile_outline.fill((127, 127, 127))
     pile_interior.fill(GAME_BKG_COLOR)
     pile_outline.blit(pile_interior, (10, 10))
-    discard_bkg.blit(pile_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE - 5))
+    prompt_bkg.blit(pile_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE - 5))
     # scroll buttons for scrolling through the list of choices
     scroll_button_u = pygame.Surface((CARD_WIDTH, CARD_SPACE - 5))
     scroll_button_u_dark = scroll_button_u.copy()
@@ -75,8 +76,8 @@ def prompt_player(message, choices, none_choice_possible):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
         # draw the background first
-        screen.blit(discard_bkg, (0, 0))
-        discard_bkg.blit(GAME_FONT.render(message, True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH // 2 - len(message) * 3, CARD_SPACE - GAME_FONT.get_height() - 6))
+        prompt_bkg.blit(GAME_FONT.render(message, True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH // 2 - len(message) * 3, CARD_SPACE - GAME_FONT.get_height() - 6))
+        screen.blit(prompt_bkg, (0, 0))
         # draw the choose_none button and make it usable
         if none_choice_possible:
             screen.blit(choose_none[0], (SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - choose_none[0].get_width(), CARD_SPACE * 2 + CARD_ZOOM_HEIGHT - GAME_FONT.get_height()))# is the mouse on the None button
@@ -111,6 +112,42 @@ def prompt_player(message, choices, none_choice_possible):
             if click:
                 return choices[i]
         pygame.display.flip()
+
+
+# the prompt for Two-Face
+def prompt_player_even_odd(message):
+    prompt_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    prompt_bkg.fill(GAME_BKG_COLOR)
+    pygame.draw.circle(prompt_bkg, (127, 127, 127), (CARD_WIDTH * 3, CARD_HEIGHT + CARD_SPACE * 2), CARD_WIDTH // 2, 5)
+    pygame.draw.circle(prompt_bkg, (127, 127, 127), (SCREEN_WIDTH - CARD_WIDTH * 3, CARD_HEIGHT + CARD_SPACE * 2), CARD_WIDTH // 2, 5)
+    GAME_FONT.set_underline(True)
+    prompt_bkg.blit(GAME_FONT.render("EVEN", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_WIDTH * 3 - 13, CARD_HEIGHT + CARD_SPACE * 2 - GAME_FONT.get_height() // 2))
+    prompt_bkg.blit(GAME_FONT.render("ODD", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH * 3 - 11, CARD_HEIGHT + CARD_SPACE * 2 - GAME_FONT.get_height() // 2))
+    prompt_bkg.blit(GAME_FONT.render(message, True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE))
+    GAME_FONT.set_underline(False)
+    click = False
+    # function returns when the user clicks on one of them
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        # click should only be true on the frame when the button is pressed
+        if click:
+            click = False
+        for event in pygame.event.get():  # evaluate all the current events
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click = True
+        
+        screen.blit(prompt_bkg, (0, 0))
+        # is the mouse on the EVEN button
+        if (mouse_pos[0] - (CARD_WIDTH * 3)) ** 2 + (mouse_pos[1] - (CARD_HEIGHT + CARD_SPACE * 2)) ** 2 < (CARD_WIDTH // 2) ** 2:
+            if click:
+                return 0
+        # is the mouse on the ODD button
+        elif (mouse_pos[0] - (SCREEN_WIDTH - CARD_WIDTH * 3)) ** 2 + (mouse_pos[1] - (CARD_HEIGHT + CARD_SPACE * 2)) ** 2 < (CARD_WIDTH // 2) ** 2:
+            if click:
+                return 1
+        
+        pygame.display.flip()
+        
 
 
 def card_effect(player, card):
@@ -152,7 +189,7 @@ def card_effect(player, card):
         if card.type == "Power":
             power_bonus += 2
 
-    power_bonus_type = card.power[1] #sig
+    power_bonus_type = card.power[1] # sig
     if power_bonus_type != 0: #has a bonus power chance
         if power_bonus_type == 1: #power ring
             #check if deck is empty
@@ -229,9 +266,11 @@ def card_effect(player, card):
     draw_bonus_type = card.draw[1]
     if draw_bonus_type != 0:
         if draw_bonus_type == 1: #two face
-            #guess top cost even/odd, if right, draw it, else discard
-            #TODO how to prompt player for their guess
-            pass
+            evenodd = prompt_player_even_odd("Choose even or odd")
+            if player.own_deck.peek().cost % 2 == evenodd:
+                player.own_deck.draw()
+            else:
+                player.own_deck.undrawn_top_to_discard()
 
     #add draw bonus
     draw += draw_bonus

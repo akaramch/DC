@@ -674,7 +674,7 @@ while not done:
         screen.blit(GAME_FONT.render("Weaknesses remaining: " + str(weakness_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
         
         # the player's deck, represented either by a card back or nothing (if the deck is empty)
-        if human_player.own_deck.undrawn != 0:
+        if human_player.own_deck.undrawn != []:
             screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() * 2 + 1))
         screen.blit(GAME_FONT.render("Your deck", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5))
         screen.blit(GAME_FONT.render("Cards remaining: " + str(len(human_player.own_deck.undrawn)), True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() - 5))
