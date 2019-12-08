@@ -152,7 +152,7 @@ StartingMainDeck += [Legion_Flight_Ring] * 2
 StartingMainDeck += [Nth_Metal] * 3
 StartingMainDeck += [Power_Ring] * 3
 StartingMainDeck += [Soultaker_Sword] * 3
-StartingMainDeck += [White_Lantern_Power_Battery] * 50
+StartingMainDeck += [White_Lantern_Power_Battery] * 1
 
 # SUPER POWERS
 PowerList = []
