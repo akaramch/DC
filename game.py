@@ -394,13 +394,15 @@ def computer_turn(player, opponent):
 def end_turn(player):
     # move cards to discard
     player.end_turn()
+    #check if the game is over
+    if super_villain_deck.isEmpty() or (main_deck.isEmpty() and None in lineup): #supervillain deck is empty or we cannot refill lineup
+        done = True
     # refill lineup
     for i in range(0,5):
         if not lineup[i]:
             lineup[i] = main_deck.draw()
     hand_scroll = 0
-    # TODO super villain flip and attacks
-
+    super_villain_bought = false #flip the next villain
 def jonn_jonzz(player): #1
     villain = super_villain_deck.peek() #get the top super villain
     print("J'onn J'onzz played:", villain)
