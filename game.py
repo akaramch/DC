@@ -1,5 +1,3 @@
-
-
 """
 Holds the working version of the GUI including the game loop
 and also the Card class and all the instantiantions and lists of cards
@@ -325,6 +323,7 @@ def end_turn(player):
     for i in range(0,5):
         if not lineup[i]:
             lineup[i] = main_deck.draw()
+    hand_scroll = 0
     # TODO super villain flip and attacks
 
 def jonn_jonzz(player, opponent): #1
@@ -530,6 +529,9 @@ for i in range(5):
 for i in range(5):
     human_player.own_deck.draw()
 
+for i in range(20):
+    human_player.own_deck.hand.append(random.choice(StartingMainDeck))
+
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
 
@@ -555,6 +557,7 @@ while not done:
         GAME_FONT.set_underline(False)
         if click and SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - 30 < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH and CARD_SPACE + CARD_ZOOM_HEIGHT < mouse_pos[1] < CARD_SPACE + CARD_ZOOM_HEIGHT + GAME_FONT.get_height():
             discard_pile = False
+            discard_scroll = 0
         # draw the discard pile all lined up nice and neat
         for i in range(discard_scroll, len(human_player.own_deck.discard)):
             screen.blit(human_player.own_deck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * (i - discard_scroll)))
@@ -627,13 +630,13 @@ while not done:
             screen.blit(human_player.own_deck.hand[i].img, (CARD_SPACE + CARD_WIDTH * (i - hand_scroll), SCREEN_HEIGHT - CARD_HEIGHT - 5))
         # draw the hand scroll buttons light or dark depending on whether the mouse is over them and do their things if the user clicks on them
         # mouse over left button
-        if 0 < mouse_pos[0] < CARD_SPACE - 5 and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
+        if 0 < mouse_pos[0] < CARD_SPACE - 5 and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5 and hand_scroll > 0:
             screen.blit(scroll_button_l_dark, (0, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             screen.blit(scroll_button_r, (CARD_SPACE + hand_outline.get_width() - 5, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             if click:
                 hand_scroll = max(hand_scroll - 1, 0)
         # mouse over right button
-        elif CARD_SPACE + hand_outline.get_width() - 5 < mouse_pos[0] < CARD_SPACE * 2 + hand_outline.get_width() and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
+        elif CARD_SPACE + hand_outline.get_width() - 5 < mouse_pos[0] < CARD_SPACE * 2 + hand_outline.get_width() and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5 and hand_scroll < len(human_player.own_deck.hand):
             screen.blit(scroll_button_l, (0, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             screen.blit(scroll_button_r_dark, (CARD_SPACE + hand_outline.get_width() - 5, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             if click:
@@ -679,11 +682,13 @@ while not done:
                 end_turn(human_player)
                 
         # is the mouse on a card in the hand
-        elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + hand_outline.get_width() - 10 and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
-            screen.blit(human_player.own_deck.hand[(mouse_pos[0] - CARD_SPACE) // CARD_WIDTH + hand_scroll].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+        elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + min(hand_outline.get_width() - 10, CARD_WIDTH * (len(human_player.own_deck.hand) - hand_scroll)) and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
+            i = hand_scroll + (mouse_pos[0] - CARD_SPACE) // CARD_WIDTH
+            #print(i)
+            screen.blit(human_player.own_deck.hand[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click: # click on a card to play it
-                card = human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll] #because if we destroy from hand, indices get messed up
-                human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
+                card = human_player.own_deck.hand[i] #because if we destroy from hand, indices get messed up
+                human_player.own_deck.hand_to_played(i)
                 #all of the cards that needed to be implemented in game.py
                 if card.custom == 1:
                     jonn_jonzz(human_player)
@@ -701,7 +706,6 @@ while not done:
                     bart_allen(human_player)
                 else: #if not here, then handled by card_effect
                     card_effect.card_effect(human_player, card)
-
                 
         # is the mouse on any of the played cards
         for i in range(len(human_player.own_deck.played)):

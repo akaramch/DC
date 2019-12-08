@@ -88,7 +88,7 @@ def prompt_player(message, choices, none_choice_possible):
     choose_none = GAME_FONT.render("None", True, (0, 0, 0), GAME_BKG_COLOR), (
     CARD_SPACE, CARD_SPACE - GAME_FONT.get_height())
     GAME_FONT.set_underline(False)
-    print(message)
+    #print(message)
     click = False
     scroll = 0  # how far the pile is scrolled
     
