@@ -126,7 +126,29 @@ class PlayerDeck(Deck):
     # Shuffles the undrawn portion of the deck since that's what we care about
     def shuffle(self):
         random.shuffle(self.undrawn)
-    
+
+    #moves card from discard to top of undrawn
+    def discard_to_top(self, card):
+        self.destroy_from_discard(card)
+        self.add_to_undrawn_top(card)
+        self.add_card()
+    #moves card from discard to hand
+    def discard_to_hand(self, card):
+        self.destroy_from_discard(card)
+        self.add_to_hand(card)
+        self.add_card(card)
+
+    #moves card from discard to undrawn top
+    def discard_to_undrawn_top(self, card):
+        self.destroy_from_discard(card) #remove from discard
+        self.add_to_undrawn_top(card)
+        self.add_card(card)
+
+    #moves card from the top of deck to discard
+    def undrawn_top_to_discard(self):
+        card = self.undrawn.pop(0)
+        self.add_to_discard(card)
+
     #destroy a card from the player deck
     def destroy_from_deck(self, card):
         if card.get_type() == "Power":
@@ -145,7 +167,7 @@ class PlayerDeck(Deck):
         self.undrawn.remove(card)
 
     #destroy card from hand
-    def destroy_from_hand(self, index):
+    def destroy_from_hand(self, card):
         if card.get_type() == "Power":
             self.num_super_powers -= 1
         elif card.get_type() == "Hero":
@@ -158,7 +180,7 @@ class PlayerDeck(Deck):
             self.num_villains -= 1
         elif card.get_type() == "Weakness":
             self.num_weaknesses -= 1
-        card = self.hand.pop(index)
+        self.hand.remove(card)
         self.contents.remove(card)
 
 

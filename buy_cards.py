@@ -76,7 +76,7 @@ def deck_power(card): #Returns the difference between the card's power and the a
 def dp_ratio(card): #like above, but a ratio
     return (card.indeck_power/card.get_cost)
 """
-Now for the fun stuff- getting the power a card generates. This looks at power for cards in your deck, so drawing not considered
+Now for the fun stuff- getting the power a card generates. This looks explicitly at power for cards in your deck, so drawing not considered
 """
 def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size, from_deck):
     power = 0 #The power the card generates, both directly and through other means
@@ -87,16 +87,18 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
             return 5
         if (card.custom == 3):
             return 6
-            """
-            X-ray vision
-            """
+        """
+        X-ray vision
+        """
         if (card.custom == 4):
+
             power_in_deck = 0 #going to look at the total power in the opponent's deck to calculate average
             for tempcard in opponent_deck.contents:
                 power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size, False)
             average_power = power_in_deck/(opponent_deck.size)
             return average_power
         if (card.custom == 5): #Supergirl is worth different things depending on how many kicks are left
+
             if (kick_deck.size >= 12):
                 return 4
             if (kick_deck.size >= 9):
@@ -467,6 +469,7 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
         max_vp = max_vp_lineup(power, vp_sorted, ratio_sorted) #set of cards that can be bought that maximize vp
         cards_to_buy.extend(max_vp) #adds the cards found above to the cards to buy
         return cards_to_buy
+
     power_in_deck = 0 #next few lines calculate average power in deck
     for tempcard in own_deck.contents:
         power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck.size, opponent_deck, player_power, super_deck.size, True)
@@ -480,3 +483,4 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
     max_pow = max_power_lineup(power, power_sorted, dp_ratio_sorted)
     cards_to_buy.extend(max_pow)
     return cards_to_buy
+
