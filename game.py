@@ -115,7 +115,7 @@ Punch = Card("cardimgs/punch.jpg", type="Starter", cost=0, power=(1,0), name="Pu
 Vulnerability = Card("cardimgs/vulnerability.jpg", type="Starter", cost=0, name="Vulnerability")
 Weakness = Card("cardimgs/weakness.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") # HOWEVER MANY
 
-StartingPlayerDeck = [Punch] * 7 + [Vulnerability] * 3
+StartingPlayerDeck = [Vulnerability] * 3 + [Punch] * 7
 
 StartingMainDeck = [] # will be used to build the card list for the main deck
 
@@ -297,7 +297,6 @@ SuperVillainDeckList.append(Black_Adam)
 SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
-
 # player buys card
 # if the card is in the lineup, need an index in case there's more than one of the same card in the lineup
 # checks how much power the player has and whether that's enough to buy the card
@@ -377,7 +376,7 @@ def computer_turn(player, opponent):
             bart_allen(player)
         else:  # if not here, then handled by card_effect
             card_effect.card_effect(player, card)
-
+    power_generated = player.power
     #get which cards the computer wants to buy
     cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
     for card in cards_to_buy: #buy cards in card to buy
@@ -386,16 +385,17 @@ def computer_turn(player, opponent):
             index = lineup.index(card)
         buy(player, card, index)
 
-    
+    #tell the player what cards the computer played
+    card_effect.prompt_player("Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click None", player.own_deck.played, True)
+    #prompt the player what cards the computer bought
+    card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
+
     end_turn(player)
 
 #ends the turn for the player whose turn it was
 def end_turn(player):
     # move cards to discard
     player.end_turn()
-    #check if the game is over
-    if super_villain_deck.isEmpty() or (main_deck.isEmpty() and None in lineup): #supervillain deck is empty or we cannot refill lineup
-        done = True
     # refill lineup
     for i in range(0,5):
         if not lineup[i]:
@@ -458,14 +458,12 @@ def white_lantern_power_battery(player): #3
     player.gain_card_top(gained) #add card to top of undrawn
 
 def xray_vision(player, opponent): #4
-    if opponent.own_deck.isEmpty():
-        opponent.own_deck.shuffle()
-    top = opponent.own_deck.peek() #get the top card of opponent
-    opponent.own_deck.draw() #remove card so loops don't happen
+    #get the top card of opponent
+    top = opponent.own_deck.peek()
     print("X-Ray Vision played:",top,"from the top of your opponent's deck.")
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
-        jonn_jonzz(player)
+        jonn_jonzz(player, opponent)
     elif top.custom == 2:
         shazam(player, opponent)
     elif top.custom == 3:
@@ -480,7 +478,6 @@ def xray_vision(player, opponent): #4
         bart_allen(player)
     else:  # if not here, then handled by card_effect
         card_effect.card_effect(player, top)
-    opponent.own_deck.add_card(top) #add card back once X-Ray Vision has been resolved
 
 def super_girl(player): #5
     kick_deck.draw()#remove the kick from the kick deck
@@ -613,6 +610,9 @@ for i in range(5):
 # fill the player's hand
 for i in range(5):
     human_player.own_deck.draw()
+# fill the computer's hand
+for i in range(5):
+    computer_player.own_deck.draw()
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
@@ -783,7 +783,7 @@ while not done:
                 if card.custom == 1:
                     jonn_jonzz(human_player)
                 elif card.custom == 2:
-                    shazam(human_player,computer_player)
+                    shazam(human_player)
                 elif card.custom == 3:
                     white_lantern_power_battery(human_player)
                 elif card.custom == 4:
@@ -838,6 +838,33 @@ while not done:
     pygame.display.flip()
     # makes the game run no faster than 20 fps (for timing)
     GAME_CLOCK.tick(20)
+
+# game is over! Figure out who won
+# a new loop because we want the user to be able to close the program gracefully
+GAME_OVER_FONT = pygame.font.SysFont("ubuntucondensed", 28)
+game_over_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+human_score = 0
+for card in human_player.own_deck.contents:
+    human_score += card.vp
+computer_score = 0
+for card in computer_player.own_deck.contents:
+    computer_score += card.vp
+game_over_bkg.blit(GAME_OVER_FONT.render("Your score: " + str(human_score), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE))
+game_over_bkg.blit(GAME_OVER_FONT.render("My score: " + str(computer_score), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE + GAME_OVER_FONT.get_height(), CARD_SPACE))
+if human_score > computer_score:
+    game_over_bkg.blit(GAME_OVER_FONT.render("You win! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR, (CARD_SPACE + GAME_OVER_FONT.get_height() * 2, CARD_SPACE)))
+elif human_score < computer_score:
+    game_over_bkg.blit(GAME_OVER_FONT.render("You lose! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR, (CARD_SPACE + GAME_OVER_FONT.get_height() * 3, CARD_SPACE)))
+elif human_score == computer_score:
+    game_over_bkg.blit(GAME_OVER_FONT.render("You tied! Congratulations!", True, (0, 0, 0), GAME_BKG_COLOR, (CARD_SPACE + GAME_OVER_FONT.get_height() * 4, CARD_SPACE)))
+
+done = False
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
+            done = True
+    screen.blit(game_over_bkg, (0, 0))
+    pygame.display.flip()
 
 pygame.quit()
 
