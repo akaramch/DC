@@ -133,7 +133,7 @@ Legion_Flight_Ring = Card("cardimgs/legionflightring.jpg", cost=2, name="Legion 
 Lasso_of_Truth = Card("cardimgs/lassooftruth.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") # 2
 Power_Ring = Card("cardimgs/powerring.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="+2 Power. Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") # 3
 Nth_Metal = Card("cardimgs/nthmetal.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="+1 Power. Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) # 3
-White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") # 1
+White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, custom= 3, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") # 1
 
 EquipmentList.append(Aquamans_Trident)
 EquipmentList.append(Batarang)
@@ -400,8 +400,6 @@ def end_turn(player):
     for i in range(0,5):
         if not lineup[i]:
             lineup[i] = main_deck.draw()
-    if player == human_player:
-        computer_turn(computer_player, human_player)
     hand_scroll = 0
     super_villain_bought = False #flip the next villain
 
@@ -784,7 +782,7 @@ while not done:
                     jonn_jonzz(human_player)
                 elif card.custom == 2:
                     shazam(human_player)
-                elif card.custom == 3:
+                elif card.custom == 3: #asdf
                     white_lantern_power_battery(human_player)
                 elif card.custom == 4:
                     xray_vision(human_player, computer_player)
