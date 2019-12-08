@@ -103,7 +103,7 @@ def prompt_player(message, choices, none_choice_possible):
                 click = True
         # draw the background first
         screen.blit(discard_bkg, (0, 0))
-        discard_bkg.blit(GAME_FONT.render(message, True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height()))
+        discard_bkg.blit(GAME_FONT.render(message, True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH // 2 - len(message) * 3, CARD_SPACE - GAME_FONT.get_height() - 6))
         # draw the list of cards to choose from
         for i in range(scroll, len(choices)):
             screen.blit(choices[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
