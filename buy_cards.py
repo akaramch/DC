@@ -296,6 +296,7 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
     Weaknesses value calculated as per alg and probability of giving them a weakness
     """
     if (card.weakness[0]):
+        mult = 0
         if (card.weakness[1] == 1):
             num_odds = 0
             for tempcard in opponent_deck.contents:
