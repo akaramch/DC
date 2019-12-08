@@ -325,7 +325,7 @@ def buy(player, card, i=0):
     player.power -= card.cost
     if card.name == "Kick":
         kick_deck.draw() # don't need to catch it because it's already card
-    elif card.type == "SuperVillain":
+    elif card in SuperVillainDeckList or card == The_Flash:
         super_villain_deck.draw() # same
     else: # everything else comes from the lineup
         lineup[i] = None # remove it and keep its spot
@@ -462,7 +462,7 @@ while not done:
         screen.blit(discard_bkg, (0, 0))
         discard_bkg.blit(GAME_FONT.render("Your discard pile", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH // 2 - 30, CARD_SPACE - GAME_FONT.get_height()))
         # draw the discard pile all lined up nice and neat
-        for i in range(len(human_player.own_deck.discard)):
+        for i in range(discard_scroll, min(len(human_player.own_deck.discard), (pile_outline.get_height() // (CARD_HEIGHT // 6)) - len(human_player.own_deck.discard))):
             screen.blit(human_player.own_deck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
         # draw the scroll buttons light or dark depending on whether the mouse is over them
         if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
@@ -485,41 +485,41 @@ while not done:
         # close the discard pile screen on click
         if click:
             discard_pile = False
-#<<<<<<< Updated upstream
-
-    #TODO can this be removed?
-    # if the player is being prompted to pick a card
-    elif human_player.prompt[0]:
-        # draw the background first
-        screen.blit(discard_bkg, (0, 0))        
-        discard_bkg.blit(GAME_FONT.render(human_player.prompt[1], True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height()))
-        # draw the list of cards to choose from
-        for i in range(len(human_player.prompt[2])):
-            screen.blit(human_player.prompt[2][i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
-        # draw the scroll buttons light or dark depending on whether the mouse is over them
-        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
-            screen.blit(scroll_button_u_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
-            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
-            if click:
-                discard_scroll = max(discard_scroll - 1, 0)
-        elif SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE - 5 + pile_outline.get_height() < mouse_pos[1] < CARD_SPACE * 2 - 10 + pile_outline.get_height():
-            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
-            screen.blit(scroll_button_d_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
-            if click:
-                discard_scroll = min(discard_scroll + 1, len(human_player.own_deck.discard) - (pile_outline.get_height() // (CARD_HEIGHT // 6)))
-        else:
-            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
-            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
-        # is the mouse on a card in the discard pile
-        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + (len(human_player.prompt[2]) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT:
-            i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.prompt[2]) - 1)
-            screen.blit(human_player.prompt[2][i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
-            if click:
-                card_selection = human_player.prompt[2][i]
-        # draw the card selection if there is one
-        
-#=======
-#>>>>>>> Stashed changes
+##<<<<<<< Updated upstream
+#
+#    #TODO can this be removed?
+#    # if the player is being prompted to pick a card
+#    elif human_player.prompt[0]:
+#        # draw the background first
+#        screen.blit(discard_bkg, (0, 0))        
+#        discard_bkg.blit(GAME_FONT.render(human_player.prompt[1], True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height()))
+#        # draw the list of cards to choose from
+#        for i in range(len(human_player.prompt[2])):
+#            screen.blit(human_player.prompt[2][i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * i))
+#        # draw the scroll buttons light or dark depending on whether the mouse is over them
+#        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and 0 < mouse_pos[1] < CARD_SPACE - 5:
+#            screen.blit(scroll_button_u_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+#            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+#            if click:
+#                discard_scroll = max(discard_scroll - 1, 0)
+#        elif SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE - 5 + pile_outline.get_height() < mouse_pos[1] < CARD_SPACE * 2 - 10 + pile_outline.get_height():
+#            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+#            screen.blit(scroll_button_d_dark, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+#            if click:
+#                discard_scroll = min(discard_scroll + 1, len(human_player.own_deck.discard) - (pile_outline.get_height() // (CARD_HEIGHT // 6)))
+#        else:
+#            screen.blit(scroll_button_u, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, 0))
+#            screen.blit(scroll_button_d, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5 + pile_outline.get_height()))
+#        # is the mouse on a card in the discard pile
+#        if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + (len(human_player.prompt[2]) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT:
+#            i = min((mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.prompt[2]) - 1)
+#            screen.blit(human_player.prompt[2][i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
+#            if click:
+#                card_selection = human_player.prompt[2][i]
+#        # draw the card selection if there is one
+#        
+##=======
+##>>>>>>> Stashed changes
         
     else:
         # draw the background before you draw anything on the screen so you don't cover anything up
@@ -528,18 +528,18 @@ while not done:
         screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
         screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
         screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
-        #screen.blit(pygame.Surface() if kick_deck.isEmpty() else kick_deck.peek().img, (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT))
 
         if kick_deck.isEmpty():
-            #screen.blit(pygame.Surface(),(CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT))
-            screen.blit(pygame.Surface(),(0,0))
+            screen.blit(pygame.Surface((0, 0)), (0,0))
         else:
             screen.blit(kick_deck.peek().img,(CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT))
-
-
+        if weakness_deck.isEmpty():
+            screen.blit(pygame.Surface((0, 0)), (0, 0))
+        else:
+            screen.blit(weakness_deck.peek().img, (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT))
         screen.blit(GAME_FONT.render("Kicks remaining: " + str(kick_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
-        screen.blit(pygame.Surface() if weakness_deck.isEmpty() else weakness_deck.peek().img, (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT))
         screen.blit(GAME_FONT.render("Weaknesses remaining: " + str(weakness_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
+        
         # the player's deck, represented either by a card back or nothing (if the deck is empty)
         if human_player.own_deck.undrawn != 0:
             screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() * 2 + 1))
