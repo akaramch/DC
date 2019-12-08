@@ -439,14 +439,12 @@ def card_effect(player, card):
             
     if card.custom == 13: #Arkillo
         
-        for card in range(len(player.own_deck.discard)):
-            if card.get_type() == "Equipment":
-                player.own_deck.discard_to_hand(card)
-        
-        """
-        discard_copy = player.own_deck.discard
-        for card in discard_copy:
-            if card.get_type() == "Equipment":
-                player.own_deck.discard_to_hand(card)
-                """
+        arraySize = len(player.own_deck.discard)
+        i = 0
+        while i < arraySize:
+            if player.own_deck.discard[i].get_type() == "Equipment":
+                player.own_deck.discard_to_hand(player.own_deck.discard[i])
+                arraySize -= 1
+            else:
+                i += 1
 
