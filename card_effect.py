@@ -155,6 +155,27 @@ def card_effect(player, card):
             power_bonus += 3 #add winged warrior bonus when triggered
             player.winged_warrior_effect = False #reset the flag
 
+    #check black adam effects
+    if not player.black_adam_effect[0]:
+        if card.type == "Hero":
+            power_bonus += 2
+
+    if not player.black_adam_effect[1]:
+        if card.type == "Villain":
+            power_bonus += 2
+
+    if not player.black_adam_effect[2]:
+        if card.type == "Equipment":
+            power_bonus += 2
+
+    if not player.black_adam_effect[3]:
+        if card.type == "Starter":
+            power_bonus += 2
+
+    if not player.black_adam_effect[4]:
+        if card.type == "Power":
+            power_bonus += 2
+
     power_bonus_type = card.power[1] #sig
     if power_bonus_type != 0: #has a bonus power chance
         if power_bonus_type == 1: #power ring
@@ -360,7 +381,29 @@ def card_effect(player, card):
         print("Bart Allen has not been implemented yet.")
         
     if card.custom == 11: #Black Adam
-        #TODO
+        found_hero = False
+        found_villain = False
+        found_equipment = False
+        found_starter = False
+        found_power = False
+        for card in player.own_deck.played:
+            card_type = card.get_type()
+            if card_type == "Hero" and not found_hero:
+                player.power += 2
+                found_hero = True
+            elif card_type == "Villain" and not found_villain:
+                player.power += 2
+                found_villain = True
+            elif card_type == "Equipment" and not found_equipment:
+                player.power += 2
+                found_equipment = True
+            elif card_type == "Starter" and not found_starter:
+                player.power += 2
+                found_starter = True
+            elif card_type == "Power" and not found_power:
+                player.power += 2
+                found_power = True
+        player.black_adam_effect = (found_hero, found_villain, found_equipment, found_starter, found_power) #set the effect if we didn't find everything
         print("Black Adam has not been implemented yet.")
         
     if card.custom == 12: #Hel
