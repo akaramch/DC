@@ -324,40 +324,28 @@ def card_effect(player, card):
         player.own_deck.destroy_from_hand(selection)
         player.gain_card_discard(selection)
            
-    if card.custom == 1: #jonn jonzz
-        #TODO
-        print("J'onn J'onzz has not been implemented yet.")
+    # custom == 1: jonn jonzz handled in game.py
         
-    if card.custom == 2: #shazam superpower
-        #TODO
-        print("Shazam! has not been implemented yet.")
+    # custom == 2: shazam! superpower handled in game.py
         
-    if card.custom == 3: #white lantern power battery
-        #TODO
-        #selection=prompt_player("Choose any card from the Line-Up to gain and put on top of your deck.", player.current_lineup, False)
-        #player.gain_card_top(selection)
-        print("WLPB has not been implemented yet.")
+    # custom == 3: white lantern power battery handled in game.py
         
-    if card.custom == 4: #xray vision
-        #TODO
-        print("X-Ray Vision has not been implemented yet.")
+    # custom == 4: xray vision handled in game.py
         
-    if card.custom == 5: #supergirl
-        #TODO
-        print("Supergirl has not been implemented yet.")
+    # custom == 5:  Supergirl handled in game.py
         
     if card.custom == 6: #Parallax
         player.power *= 2
         
-    if card.custom == 7: #Trigon
-        #TODO
-        print("Trigon has not been implemented yet.")
+    #custom == 7:  Trigon handled in game.py
         
     if card.custom == 8: #Graves
         player.power += 4
-        selection = prompt_player("Pick a card from your discard to put on top of your deck. If you don't want to move a card to the top of your deck, click None", player.own_deck.discard, True)
-        if selection: #if the player selected one
-            player.own_deck.discard_to_top(selection) #move it to top
+        if len(player.own_deck.discard) != 0:
+            selection = prompt_player("Pick a card from your discard to put on top of your deck. If you don't want to move a card to the top of your deck, click None", player.own_deck.discard, True)
+            if selection: #if the player selected one
+                player.own_deck.discard_to_top(selection) #move it to top
+            
     if card.custom == 9: #Nekron
         cards_to_draw = 0
         selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from your hand, click None.", player.own_deck.discard, True) #check if first destroyed from discard
@@ -370,6 +358,7 @@ def card_effect(player, card):
                 cards_to_draw += 1
         else: #selection 1 destroy from discard
             player.own_deck.destroy_from_discard(selection1_discard)
+            cards_to_draw += 1
 
         if not ((selection1_discard is None) and (selection1_hand is None)): #if the player selected one to destroy, ask again
             selection2_hand = None
@@ -382,6 +371,7 @@ def card_effect(player, card):
                     cards_to_draw += 1
             else:  # selection 2 destroy from discard
                 player.own_deck.destroy_from_discard(selection2_discard)
+                cards_to_draw += 1
                 
             if not ((selection2_discard is None) and (selection2_hand is None)): #if the player selected one to destroy, ask again
                 selection3_hand = None
@@ -394,14 +384,16 @@ def card_effect(player, card):
                        cards_to_draw += 1
                 else:  # selection 2 destroy from discard
                     player.own_deck.destroy_from_discard(selection3_discard)
+                    cards_to_draw += 1
         for i in range(cards_to_draw):
             if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
                 player.own_deck.refill_deck()
-            player.own_deck.undrawn.draw()
+                if len(player.own_deck.undrawn) == 0:
+                    break
+            player.own_deck.draw()
         
-    if card.custom == 10: #Bart Allen
-        #TODO
-        print("Bart Allen has not been implemented yet.")
+    # custom = 10:  Bart Allen handled in game.py
+    
         
     if card.custom == 11: #Black Adam
         found_hero = False
@@ -427,19 +419,21 @@ def card_effect(player, card):
                 player.power += 2
                 found_power = True
         player.black_adam_effect = (found_hero, found_villain, found_equipment, found_starter, found_power) #set the effect if we didn't find everything
-        print("Black Adam has not been implemented yet.")
         
     if card.custom == 12: #Hel
         value_drawn = 0
-        cost_of_next_card = player.own_deck.undrawn.peek().cost
         while value_drawn < 7:
+            
             if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
                 player.own_deck.refill_deck()
-            player.own_deck.draw()
-            value_drawn += cost_of_next_card
+                if len(player.own_deck.undrawn) == 0:
+                    break
+            next_card = player.own_deck.peek()
+            next_card_cost = next_card.get_cost()
+            player.own_deck.draw()           
+            value_drawn += next_card_cost
             
     if card.custom == 13: #Arkillo
-        
         arraySize = len(player.own_deck.discard)
         i = 0
         while i < arraySize:
