@@ -287,7 +287,6 @@ def card_effect(player, card):
             player.own_deck.destroy_from_discard(selection1_discard)
 
         if not ((selection1_discard is None) and (selection1_hand is None)): #if the player selected one to destroy, ask again
-            selection2_hand = None
             selection2_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, click none", player.own_deck.discard, True)  # check if first destroyed from discard
             if not selection2_discard:  # if not check if they want to destroy from hand
                 selection2_hand = prompt_player("Select a card to destroy from hand. If you wish to not destroy, click none", player.own_deck.hand, True)
