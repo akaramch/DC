@@ -297,7 +297,7 @@ SuperVillainDeckList.append(Black_Adam)
 SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
-StartingPlayerDeck = [Jonn_Jonzz] + [Shazam] + [Punch] * 5 + [Johnny_Quick]
+StartingPlayerDeck = [Jonn_Jonzz] + [Shazam] + [Punch] * 10 + [Johnny_Quick]
 
 
 # player buys card
@@ -422,7 +422,7 @@ def jonn_jonzz(player): #1
     else:  # if not here, then handled by card_effect
         card_effect.card_effect(human_player, villain)
 
-def shazam(player): #2
+def shazam(player,opponent): #2
     player.power += 2
     top = main_deck.peek() #get top card of main deck
     print("Shazam! played:", top)
@@ -455,6 +455,7 @@ def white_lantern_power_battery(player): #3
 def xray_vision(player, opponent): #4
     #get the top card of opponent
     top = opponent.own_deck.peek()
+    print("X-Ray Vision played:",top,"from the top of your opponent's deck.")
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
         jonn_jonzz(player, opponent)
@@ -774,7 +775,7 @@ while not done:
                 if card.custom == 1:
                     jonn_jonzz(human_player)
                 elif card.custom == 2:
-                    shazam(human_player)
+                    shazam(human_player,computer_player)
                 elif card.custom == 3:
                     white_lantern_power_battery(human_player)
                 elif card.custom == 4:

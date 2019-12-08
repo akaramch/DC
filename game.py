@@ -402,9 +402,8 @@ def end_turn(player):
     # TODO super villain flip and attacks
 
 def jonn_jonzz(player): #1
-    villain = super_villain_deck.peek()
-    print("J'onn J'onnz played:", villain)
-    #get the top super villain
+    villain = super_villain_deck.peek() #get the top super villain
+    print("J'onn J'onzz played:", villain)
     # all of the cards that needed to be implemented in game.py
     if villain.custom == 1:
         jonn_jonzz(player)
@@ -423,7 +422,7 @@ def jonn_jonzz(player): #1
     else:  # if not here, then handled by card_effect
         card_effect.card_effect(human_player, villain)
 
-def shazam(player): #2
+def shazam(player,opponent): #2
     player.power += 2
     top = main_deck.peek() #get top card of main deck
     print("Shazam! played:", top)
@@ -456,6 +455,7 @@ def white_lantern_power_battery(player): #3
 def xray_vision(player, opponent): #4
     #get the top card of opponent
     top = opponent.own_deck.peek()
+    print("X-Ray Vision played:",top,"from the top of your opponent's deck.")
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
         jonn_jonzz(player, opponent)
