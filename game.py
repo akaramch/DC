@@ -354,6 +354,7 @@ def buy(player, card, i=0):
 
 #executes a computer turn based on our algorithms
 def computer_turn(player, opponent):
+<<<<<<< HEAD
     #asdf
     while len(player.own_deck.hand) != 0: #while there are cards to play, play them
         #TODO integrate the algorithm for playing cards
@@ -393,6 +394,47 @@ def computer_turn(player, opponent):
     card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
 
     end_turn(player)
+=======
+    pass
+    ##asdf
+    #while len(player.own_deck.hand) != 0: #while there are cards to play, play them
+    #    #TODO integrate the algorithm for playing cards
+    #    card = player.own_deck.hand[0]
+    #    player.own_deck.hand_to_played(0)
+    #
+    #    #coded in game.py
+    #    if card.custom == 1:
+    #        jonn_jonzz(player, opponent)
+    #    elif card.custom == 2:
+    #        shazam(player, opponent)
+    #    elif card.custom == 3:
+    #        white_lantern_power_battery(player)
+    #    elif card.custom == 4:
+    #        xray_vision(player, opponent)
+    #    elif card.custom == 5:
+    #        super_girl(player)
+    #    elif card.custom == 7:
+    #        trigon(player)
+    #    elif card.custom == 10:
+    #        bart_allen(player)
+    #    else:  # if not here, then handled by card_effect
+    #        card_effect.card_effect(player, card)
+    #power_generated = player.power
+    ##get which cards the computer wants to buy
+    #cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
+    #for card in cards_to_buy: #buy cards in card to buy
+    #    index = 0
+    #    if card.name != "Kick" and not (card in SuperVillainDeckList or card == The_Flash): #if card is in lineup
+    #        index = lineup.index(card)
+    #    buy(player, card, index)
+    #
+    ##tell the player what cards the computer played
+    #card_effect.prompt_player("Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click None", player.own_deck.played, True)
+    ##prompt the player what cards the computer bought
+    #card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
+    #
+    #end_turn(player)
+>>>>>>> ae4afd33b2ba775d13682e38befe8ddf4224c415
 
 #ends the turn for the player whose turn it was
 def end_turn(player):
@@ -640,9 +682,9 @@ while not done:
         screen.blit(discard_bkg, (0, 0))
         # make an exit button and allow the user to use it
         GAME_FONT.set_underline(True)
-        screen.blit(GAME_FONT.render("DONE", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - 30, CARD_SPACE + CARD_ZOOM_HEIGHT))
+        screen.blit(GAME_FONT.render("DONE", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - 30, CARD_SPACE))
         GAME_FONT.set_underline(False)
-        if click and SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - 30 < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH and CARD_SPACE + CARD_ZOOM_HEIGHT < mouse_pos[1] < CARD_SPACE + CARD_ZOOM_HEIGHT + GAME_FONT.get_height():
+        if click and SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - 30 < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH and CARD_SPACE < mouse_pos[1] < CARD_SPACE + GAME_FONT.get_height():
             discard_pile = False
             discard_scroll = 0
         # draw the discard pile all lined up nice and neat
@@ -670,15 +712,20 @@ while not done:
         # is the mouse on a card in the discard pile
         if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + min((len(human_player.own_deck.discard) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT, pile_outline.get_height() - 10):
             i = min(discard_scroll + (mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(human_player.own_deck.discard) - 1)
-            screen.blit(human_player.own_deck.discard[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE - 5))
+            screen.blit(human_player.own_deck.discard[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE * 2))
 
     # the normal version of the GUI
     else:
         # draw the background before you draw anything on the screen so you don't cover anything up
         screen.blit(bkg, (0, 0))
-        screen.blit(pygame.image.load("cardimgs/cardback.jpg") if super_villain_bought else super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE)) # the supervillain deck (represented by the small image of the top card of the deck)
+        # the supervillain deck (represented by the small image of the top card of the deck)
+        if super_villain_bought:
+            screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_SPACE, CARD_SPACE))
+        else:
+            screen.blit(super_villain_deck.peek().img, (CARD_SPACE, CARD_SPACE))
         screen.blit(GAME_FONT.render("Cards remaining: " + str(super_villain_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE + CARD_HEIGHT + 5))
-        screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE)) # the main deck (represented by a small card back)
+        # the main deck (represented by a small card back)
+        screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (CARD_WIDTH + CARD_SPACE * 2, CARD_SPACE))
         screen.blit(GAME_FONT.render("Cards remaining: " + str(main_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 2 + CARD_WIDTH, CARD_SPACE + CARD_HEIGHT + 5))
 
         if kick_deck.isEmpty():
