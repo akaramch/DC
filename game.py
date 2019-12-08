@@ -133,7 +133,7 @@ Legion_Flight_Ring = Card("cardimgs/legionflightring.jpg", cost=2, name="Legion 
 Lasso_of_Truth = Card("cardimgs/lassooftruth.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") # 2
 Power_Ring = Card("cardimgs/powerring.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="+2 Power. Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") # 3
 Nth_Metal = Card("cardimgs/nthmetal.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="+1 Power. Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) # 3
-White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") # 1
+White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, custom= 3, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") # 1
 
 EquipmentList.append(Aquamans_Trident)
 EquipmentList.append(Batarang)
@@ -152,7 +152,7 @@ StartingMainDeck += [Legion_Flight_Ring] * 2
 StartingMainDeck += [Nth_Metal] * 3
 StartingMainDeck += [Power_Ring] * 3
 StartingMainDeck += [Soultaker_Sword] * 3
-StartingMainDeck += [White_Lantern_Power_Battery] * 1
+StartingMainDeck += [White_Lantern_Power_Battery] * 50
 
 # SUPER POWERS
 PowerList = []
@@ -384,10 +384,12 @@ def computer_turn(player, opponent):
         if card.name != "Kick" and not (card in SuperVillainDeckList or card == The_Flash): #if card is in lineup
             index = lineup.index(card)
         buy(player, card, index)
+
     #tell the player what cards the computer played
     card_effect.prompt_player("Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click None", player.own_deck.played, True)
     #prompt the player what cards the computer bought
     card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
+
     end_turn(player)
 
 #ends the turn for the player whose turn it was
@@ -447,6 +449,7 @@ def shazam(player,opponent): #2
 
 def white_lantern_power_battery(player): #3
     #ask which to take
+    print("activate battery")
     gained = card_effect.prompt_player("Select a card from the lineup to gain to the top of your deck.", lineup, False)
     index = lineup.index(gained) #get the card index in lineup
     lineup[index] = None #remove the card from lineup
@@ -779,7 +782,7 @@ while not done:
                     jonn_jonzz(human_player)
                 elif card.custom == 2:
                     shazam(human_player)
-                elif card.custom == 3:
+                elif card.custom == 3: #asdf
                     white_lantern_power_battery(human_player)
                 elif card.custom == 4:
                     xray_vision(human_player, computer_player)
