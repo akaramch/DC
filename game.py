@@ -1,5 +1,3 @@
-
-
 """
 Holds the working version of the GUI including the game loop
 and also the Card class and all the instantiantions and lists of cards
@@ -325,7 +323,106 @@ def end_turn(player):
     for i in range(0,5):
         if not lineup[i]:
             lineup[i] = main_deck.draw()
+    hand_scroll = 0
     # TODO super villain flip and attacks
+
+def jonn_jonzz(player, opponent): #1
+    villain = super_villain_deck[0] #get the top super villain
+    # all of the cards that needed to be implemented in game.py
+    if villain.custom == 1:
+        jonn_jonzz(player, opponent)
+    elif villain.custom == 2:
+        shazam(player, opponent)
+    elif villain.custom == 3:
+        white_lantern_power_battery(player)
+    elif villain.custom == 4:
+        xray_vision(player, opponent)
+    elif villain.custom == 5:
+        super_girl(player)
+    elif villain.custom == 7:
+        trigon(player)
+    elif villain.custom == 10:
+        bart_allen(player)
+    else:  # if not here, then handled by card_effect
+        card_effect.card_effect(human_player, villain)
+
+def shazam(player, opponent): #2
+    player.power += 2
+    top = main_deck.peek() #get top card of main deck
+    # all of the cards that needed to be implemented in game.py
+    if top.custom == 1:
+        jonn_jonzz(player, opponent)
+    elif top.custom == 2:
+        shazam(player, opponent)
+    elif top.custom == 3:
+        white_lantern_power_battery(player)
+    elif top.custom == 4:
+        xray_vision(player, opponent)
+    elif top.custom == 5:
+        super_girl(player)
+    elif top.custom == 7:
+        trigon(player)
+    elif top.custom == 10:
+        bart_allen(player)
+    else:  # if not here, then handled by card_effect
+        card_effect.card_effect(human_player, top)
+
+    #TODO needs to be able to tell if card is implemented in card_effect or game
+
+def white_lantern_power_battery(player): #3
+    #ask which to take
+    gained = card_effect.prompt_player("Pick a card from the lineup to gain to the top of your deck.", lineup, False)
+    index = lineup.index(gained) #get the card index in lineup
+    lineup[index] = None #remove the card from lineup
+    player.gain_card_top(gained) #add card to top of undrawn
+
+def xray_vision(player, opponent): #4
+    #get the top card of opponent
+    top = opponent.own_deck.peek()
+    # all of the cards that needed to be implemented in game.py
+    if top.custom == 1:
+        jonn_jonzz(player, opponent)
+    elif top.custom == 2:
+        shazam(player, opponent)
+    elif top.custom == 3:
+        white_lantern_power_battery(player)
+    elif top.custom == 4:
+        xray_vision(player, opponent)
+    elif top.custom == 5:
+        super_girl(player)
+    elif top.custom == 7:
+        trigon(player)
+    elif top.custom == 10:
+        bart_allen(player)
+    else:  # if not here, then handled by card_effect
+        card_effect.card_effect(player, top)
+
+def super_girl(player): #5
+    kick_deck.remove(Kick) #remove the kick from the kick deck
+    player.gain_card_hand(Kick) #add kick to hand
+
+def trigon(player): #7
+    top_two = [main_deck.draw(), main_deck.draw()] #get top two cards
+    selection = card_effect.prompt_player("Pick which card to add to your hand. The other will go to the bottom of the main deck.", top_two, False)
+    player.gain_card_hand(selection) #add selected card to hand
+    top_two.remove(selection) #only card left here is the not selected one
+    main_deck.add_to_bottom(top_two[0])
+
+def bart_allen(player):
+    #get first choice
+    selection1 = card_effect.prompt_player("Pick the first card to gain from the lineup.", lineup, False)
+    index1 = lineup.index(selection1) #find an index of the first card
+    lineup[index1] = None #remove from lineup
+    player.gain_card_hand(selection1) #player gets the card to hand
+    selection2 = card_effect.prompt_player("Pick the second card to gain from the lineup.", lineup, False)
+    index2 = lineup.index(selection2) #find index of the second card
+    lineup[index2] = None
+    player.gain_card_hand(selection2) #gain other card
+    #refill the lineup
+    lineup[index1] = main_deck.draw()
+    lineup[index2] = main_deck.draw()
+
+
 
 # make the game window
 screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -432,6 +529,9 @@ for i in range(5):
 for i in range(5):
     human_player.own_deck.draw()
 
+for i in range(20):
+    human_player.own_deck.hand.append(random.choice(StartingMainDeck))
+
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
 
@@ -457,6 +557,7 @@ while not done:
         GAME_FONT.set_underline(False)
         if click and SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH - 30 < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE * 2 - CARD_WIDTH and CARD_SPACE + CARD_ZOOM_HEIGHT < mouse_pos[1] < CARD_SPACE + CARD_ZOOM_HEIGHT + GAME_FONT.get_height():
             discard_pile = False
+            discard_scroll = 0
         # draw the discard pile all lined up nice and neat
         for i in range(discard_scroll, len(human_player.own_deck.discard)):
             screen.blit(human_player.own_deck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * (i - discard_scroll)))
@@ -529,13 +630,13 @@ while not done:
             screen.blit(human_player.own_deck.hand[i].img, (CARD_SPACE + CARD_WIDTH * (i - hand_scroll), SCREEN_HEIGHT - CARD_HEIGHT - 5))
         # draw the hand scroll buttons light or dark depending on whether the mouse is over them and do their things if the user clicks on them
         # mouse over left button
-        if 0 < mouse_pos[0] < CARD_SPACE - 5 and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
+        if 0 < mouse_pos[0] < CARD_SPACE - 5 and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5 and hand_scroll > 0:
             screen.blit(scroll_button_l_dark, (0, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             screen.blit(scroll_button_r, (CARD_SPACE + hand_outline.get_width() - 5, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             if click:
                 hand_scroll = max(hand_scroll - 1, 0)
         # mouse over right button
-        elif CARD_SPACE + hand_outline.get_width() - 5 < mouse_pos[0] < CARD_SPACE * 2 + hand_outline.get_width() and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
+        elif CARD_SPACE + hand_outline.get_width() - 5 < mouse_pos[0] < CARD_SPACE * 2 + hand_outline.get_width() and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5 and hand_scroll < len(human_player.own_deck.hand):
             screen.blit(scroll_button_l, (0, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             screen.blit(scroll_button_r_dark, (CARD_SPACE + hand_outline.get_width() - 5, SCREEN_HEIGHT - CARD_HEIGHT - 5))
             if click:
@@ -581,12 +682,30 @@ while not done:
                 end_turn(human_player)
                 
         # is the mouse on a card in the hand
-        elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + hand_outline.get_width() - 10 and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
-            screen.blit(human_player.own_deck.hand[(mouse_pos[0] - CARD_SPACE) // CARD_WIDTH + hand_scroll].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
+        elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + min(hand_outline.get_width() - 10, CARD_WIDTH * (len(human_player.own_deck.hand) - hand_scroll)) and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
+            i = hand_scroll + (mouse_pos[0] - CARD_SPACE) // CARD_WIDTH
+            #print(i)
+            screen.blit(human_player.own_deck.hand[i].zoom(), (CARD_SPACE - 5, CARD_SPACE - 5))
             if click: # click on a card to play it
-                card = human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll] #because if we destroy from hand, indices get messed up
-                human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
-                card_effect.card_effect(human_player, card)
+                card = human_player.own_deck.hand[i] #because if we destroy from hand, indices get messed up
+                human_player.own_deck.hand_to_played(i)
+                #all of the cards that needed to be implemented in game.py
+                if card.custom == 1:
+                    jonn_jonzz(human_player)
+                elif card.custom == 2:
+                    shazam(human_player)
+                elif card.custom == 3:
+                    white_lantern_power_battery(human_player)
+                elif card.custom == 4:
+                    xray_vision(human_player, computer_player)
+                elif card.custom == 5:
+                    super_girl(human_player)
+                elif card.custom == 7:
+                    trigon(human_player)
+                elif card.custom == 10:
+                    bart_allen(human_player)
+                else: #if not here, then handled by card_effect
+                    card_effect.card_effect(human_player, card)
                 
         # is the mouse on any of the played cards
         for i in range(len(human_player.own_deck.played)):
