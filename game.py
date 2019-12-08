@@ -284,18 +284,18 @@ StartingMainDeck += [Two_Face] * 3
 # SUPER VILLAINS
 SuperVillainList = []
 
-Lex_Luthor = Card("cardimgs/lexluthor.jpg", cost=10, draw=(3,0), first_appearance=1, name="Lex Luthor", vp=5, type="SuperVillain", text="Draw three cards.\nFirst Appearance--Attack: Each player gains a Weakness for each villain in the Line-Up.")
-Black_Manta = Card("cardimgs/blackmanta.jpg", cost=8, power=(3,0), draw=(1,0), first_appearance=2, name="Black Manta", vp=4, type="SuperVillain", text="+3 Power and draw a card.\nFirst Appearance--Attack: Each player discards the top card of their deck. If you discarded a card with cost 1 or more, choose one: Destroy it; or discard your hand.")
-The_Flash = Card("cardimgs/theflash.jpg", cost=8, draw=(3,0), discard=1, name="The Flash", vp=4, type="SuperVillain", text="Draw three cards, and then discard a card.")
-Mongul = Card("cardimgs/mongul.jpg", cost=11, power=(2,0), draw=(2,0), destroy_hand=1, first_appearance=3, name="Mongul", vp=6, type="SuperVillain", text="+2 Power and draw two cards. Then destroy a card in your hand.\nFirst Appearance--Attack: Each player discards two random cards from their hand.")
-Parallax = Card("cardimgs/parallax.jpg", cost=12, first_appearance=6, name="Parallax", vp=6, custom=6, type="SuperVillain", text="Double your current Power this turn.\nFirst Appearance--Attack: Each player reveals their hand and discards all cards with cost 2 or less.")
-Trigon = Card("cardimgs/trigon.jpg", cost=12, first_appearance=7, name="Trigon", vp=6, custom=7, type="SuperVillain", text="Look at the top two cards of the main deck. Put one into your hand and the other on the bottom of the main deck.\nFirst Appearance--Attack: Each player destroys a card with cost 1 or greater in their hand.")
-Graves = Card("cardimgs/graves.jpg", cost=9, first_appearance=8, name="Graves", vp=5, custom=8, type="SuperVillain", text="+4 Power and you may put a card from your discard pile on top of your deck.\nFirst Appearance--Attack: Each player puts a card from their hand face down. Destroy those cards. If one player destroyed a card with cost higher than each other player, they draw two cards.")
-Nekron = Card("cardimgs/nekron.jpg", cost=12, first_appearance=9, name="Nekron", vp=6, custom=9, type="SuperVillain", text="Destroy up to three cards in your hand and/or discard pile. For each you destroy, draw a card.\nFirst Appearance--Attack: Each player totals the cost of the cards in their hand. The player(s) with the highest total destroys a random card in their hand. Each other player chooses and destroys a card in their hand.")
-Bart_Allen = Card("cardimgs/bartallen.jpg", cost=14, first_appearance=10, name="Bart Allen", vp=7, custom=10, type="SuperVillain", text="Gain two cards from the Line-Up and put them into your hand. Then refill the Line-Up.\nFirst Appearance--Attack: Each player reveals their hand and gains a Weakness for each different card with VP value 1 or greater revealed this way.")
-Black_Adam = Card("cardimgs/blackadam.jpg", cost=11, first_appearance=11, name="Black Adam", vp=6, custom=11, type="SuperVillain", text="+2 Power for each different card type you play or have played this turn.\nFirst Appearance--Attack: Each player destroys a Hero in their hand or discard pile.")
-Hel = Card("cardimgs/hel.jpg", cost=9, first_appearance=12, name="H'el", vp=5, custom=12, type="SuperVillain", text="Reveal and draw cards from the top of your deck until you have drawn 7 or greater cost worth of cards.\nFirst Appearance--Attack: Each player reveals the top three cards of their deck. Choose one of them with cost 1 or greater, then destroy it. Discard the rest.")
-Arkillo = Card("cardimgs/arkillo.jpg", cost=10, first_appearance=13, name="Arkillo", vp=5, custom=13, type="SuperVillain", text="+2 Power and put all Equipment from your discard pile into your hand.\nFirst Appearance--Attack: Each player totals the cost of cards in their hand. The player(s) with the highest total gains three Weakness cards.")
+Lex_Luthor = Card("cardimgs/lexluthor.jpg", cost=10, draw=(3,0), first_appearance=1, name="Lex Luthor", vp=5, type="Villain", text="Draw three cards.\nFirst Appearance--Attack: Each player gains a Weakness for each villain in the Line-Up.")
+Black_Manta = Card("cardimgs/blackmanta.jpg", cost=8, power=(3,0), draw=(1,0), first_appearance=2, name="Black Manta", vp=4, type="Villain", text="+3 Power and draw a card.\nFirst Appearance--Attack: Each player discards the top card of their deck. If you discarded a card with cost 1 or more, choose one: Destroy it; or discard your hand.")
+The_Flash = Card("cardimgs/theflash.jpg", cost=8, draw=(3,0), discard=1, name="The Flash", vp=4, type="Hero", text="Draw three cards, and then discard a card.")
+Mongul = Card("cardimgs/mongul.jpg", cost=11, power=(2,0), draw=(2,0), destroy_hand=1, first_appearance=3, name="Mongul", vp=6, type="Villain", text="+2 Power and draw two cards. Then destroy a card in your hand.\nFirst Appearance--Attack: Each player discards two random cards from their hand.")
+Parallax = Card("cardimgs/parallax.jpg", cost=12, first_appearance=6, name="Parallax", vp=6, custom=6, type="Villain", text="Double your current Power this turn.\nFirst Appearance--Attack: Each player reveals their hand and discards all cards with cost 2 or less.")
+Trigon = Card("cardimgs/trigon.jpg", cost=12, first_appearance=7, name="Trigon", vp=6, custom=7, type="Villain", text="Look at the top two cards of the main deck. Put one into your hand and the other on the bottom of the main deck.\nFirst Appearance--Attack: Each player destroys a card with cost 1 or greater in their hand.")
+Graves = Card("cardimgs/graves.jpg", cost=9, first_appearance=8, name="Graves", vp=5, custom=8, type="Villain", text="+4 Power and you may put a card from your discard pile on top of your deck.\nFirst Appearance--Attack: Each player puts a card from their hand face down. Destroy those cards. If one player destroyed a card with cost higher than each other player, they draw two cards.")
+Nekron = Card("cardimgs/nekron.jpg", cost=12, first_appearance=9, name="Nekron", vp=6, custom=9, type="Villain", text="Destroy up to three cards in your hand and/or discard pile. For each you destroy, draw a card.\nFirst Appearance--Attack: Each player totals the cost of the cards in their hand. The player(s) with the highest total destroys a random card in their hand. Each other player chooses and destroys a card in their hand.")
+Bart_Allen = Card("cardimgs/bartallen.jpg", cost=14, first_appearance=10, name="Bart Allen", vp=7, custom=10, type="Hero", text="Gain two cards from the Line-Up and put them into your hand. Then refill the Line-Up.\nFirst Appearance--Attack: Each player reveals their hand and gains a Weakness for each different card with VP value 1 or greater revealed this way.")
+Black_Adam = Card("cardimgs/blackadam.jpg", cost=11, first_appearance=11, name="Black Adam", vp=6, custom=11, type="Villain", text="+2 Power for each different card type you play or have played this turn.\nFirst Appearance--Attack: Each player destroys a Hero in their hand or discard pile.")
+Hel = Card("cardimgs/hel.jpg", cost=9, first_appearance=12, name="H'el", vp=5, custom=12, type="Villain", text="Reveal and draw cards from the top of your deck until you have drawn 7 or greater cost worth of cards.\nFirst Appearance--Attack: Each player reveals the top three cards of their deck. Choose one of them with cost 1 or greater, then destroy it. Discard the rest.")
+Arkillo = Card("cardimgs/arkillo.jpg", cost=10, first_appearance=13, name="Arkillo", vp=5, custom=13, type="Villain", text="+2 Power and put all Equipment from your discard pile into your hand.\nFirst Appearance--Attack: Each player totals the cost of cards in their hand. The player(s) with the highest total gains three Weakness cards.")
 
 # list of villains not including the Flash who goes on top
 SuperVillainDeckList = []
@@ -343,7 +343,7 @@ def end_turn(player):
     # TODO super villain flip and attacks
 
 # make the game window
-screen = pygame.display.set_mode(size=[SCREEN_WIDTH, SCREEN_HEIGHT])
+screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(SCREEN_NAME)
 
 # draw a background to put on the screen every frame
@@ -485,6 +485,7 @@ while not done:
         # close the discard pile screen on click
         if click:
             discard_pile = False
+#<<<<<<< Updated upstream
 
     #TODO can this be removed?
     # if the player is being prompted to pick a card
@@ -517,6 +518,8 @@ while not done:
                 card_selection = human_player.prompt[2][i]
         # draw the card selection if there is one
         
+#=======
+#>>>>>>> Stashed changes
         
     else:
         # draw the background before you draw anything on the screen so you don't cover anything up
@@ -559,7 +562,7 @@ while not done:
         # all the cards the player has played this turn
         for i in range(len(human_player.own_deck.played)):
             screen.blit(human_player.own_deck.played[i].img, (CARD_WIDTH * (3 + i % 2) + CARD_SPACE * 5, CARD_SPACE + GAME_FONT.get_height() + (CARD_HEIGHT // 6) * (i // 2)))
-        screen.blit(GAME_FONT.render("Played cards", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
+        screen.blit(GAME_FONT.render("Played cards (" + str(human_player.power) + " power)", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE * 5 + CARD_WIDTH * 3, CARD_SPACE - 5))
         for i in range(hand_scroll, len(human_player.own_deck.hand)):
             # TODO draw the hand and let the hand display scroll
             screen.blit(human_player.own_deck.hand[i].img, (CARD_WIDTH * (i - hand_scroll), CARD_HEIGHT * 2 + CARD_SPACE * 5))
