@@ -423,7 +423,7 @@ computer_player = dc_player.Player(StartingPlayerDeck, True) # makes computer pl
 players = [human_player, computer_player] # list of players (there are only 2 for now)
 main_deck = deck.Deck(StartingMainDeck)
 super_villain_deck = deck.Deck(SuperVillainDeckList)
-kick_deck = deck.Deck([Kick] * 16) #Should be 16
+kick_deck = deck.Deck([Kick] * 2) #Should be 16
 weakness_deck = deck.Deck([Weakness] * 20)
 # the lineup, which will 5 cards drawn sequentially from the main deck after it is shuffled
 lineup = [None, None, None, None, None]

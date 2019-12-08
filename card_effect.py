@@ -394,7 +394,8 @@ def card_effect(player, card):
             value_drawn += cost_of_next_card
             
     if card.custom == 13: #Arkillo
-        #TODO
+        
+            
         print("Arkillo has not been implemented yet.")
     
 
