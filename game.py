@@ -400,7 +400,7 @@ def end_turn(player):
         if not lineup[i]:
             lineup[i] = main_deck.draw()
     hand_scroll = 0
-    super_villain_bought = false #flip the next villain
+    super_villain_bought = False #flip the next villain
 def jonn_jonzz(player): #1
     villain = super_villain_deck.peek() #get the top super villain
     print("J'onn J'onzz played:", villain)
@@ -447,6 +447,7 @@ def shazam(player,opponent): #2
 
 def white_lantern_power_battery(player): #3
     #ask which to take
+    print("activate the battery")
     gained = card_effect.prompt_player("Pick a card from the lineup to gain to the top of your deck.", lineup, False)
     index = lineup.index(gained) #get the card index in lineup
     lineup[index] = None #remove the card from lineup
