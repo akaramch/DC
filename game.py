@@ -342,6 +342,104 @@ def end_turn(player):
             lineup[i] = main_deck.draw()
     # TODO super villain flip and attacks
 
+def jonn_jonzz(player, opponent): #1
+    villain = super_villain_deck[0] #get the top super villain
+    # all of the cards that needed to be implemented in game.py
+    if villain.custom == 1:
+        jonn_jonzz(player, opponent)
+    elif villain.custom == 2:
+        shazam(player, opponent)
+    elif villain.custom == 3:
+        white_lantern_power_battery(player)
+    elif villain.custom == 4:
+        xray_vision(player, opponent)
+    elif villain.custom == 5:
+        super_girl(player)
+    elif villain.custom == 7:
+        trigon(player)
+    elif villain.custom == 10:
+        bart_allen(player)
+    else:  # if not here, then handled by card_effect
+        card_effect.card_effect(human_player, villain)
+
+def shazam(player, opponent): #2
+    player.power += 2
+    top = main_deck.peek() #get top card of main deck
+    # all of the cards that needed to be implemented in game.py
+    if top.custom == 1:
+        jonn_jonzz(player, opponent)
+    elif top.custom == 2:
+        shazam(player, opponent)
+    elif top.custom == 3:
+        white_lantern_power_battery(player)
+    elif top.custom == 4:
+        xray_vision(player, opponent)
+    elif top.custom == 5:
+        super_girl(player)
+    elif top.custom == 7:
+        trigon(player)
+    elif top.custom == 10:
+        bart_allen(player)
+    else:  # if not here, then handled by card_effect
+        card_effect.card_effect(human_player, top)
+
+    #TODO needs to be able to tell if card is implemented in card_effect or game
+
+def white_lantern_power_battery(player): #3
+    #ask which to take
+    gained = card_effect.prompt_player("Pick a card from the lineup to gain to the top of your deck.", lineup, False)
+    index = lineup.index(gained) #get the card index in lineup
+    lineup[index] = None #remove the card from lineup
+    player.gain_card_top(gained) #add card to top of undrawn
+
+def xray_vision(player, opponent): #4
+    #get the top card of opponent
+    top = opponent.own_deck.peek()
+    # all of the cards that needed to be implemented in game.py
+    if top.custom == 1:
+        jonn_jonzz(player, opponent)
+    elif top.custom == 2:
+        shazam(player, opponent)
+    elif top.custom == 3:
+        white_lantern_power_battery(player)
+    elif top.custom == 4:
+        xray_vision(player, opponent)
+    elif top.custom == 5:
+        super_girl(player)
+    elif top.custom == 7:
+        trigon(player)
+    elif top.custom == 10:
+        bart_allen(player)
+    else:  # if not here, then handled by card_effect
+        card_effect.card_effect(player, top)
+
+def super_girl(player): #5
+    kick_deck.remove(Kick) #remove the kick from the kick deck
+    player.gain_card_hand(Kick) #add kick to hand
+
+def trigon(player): #7
+    top_two = [main_deck.draw(), main_deck.draw()] #get top two cards
+    selection = card_effect.prompt_player("Pick which card to add to your hand. The other will go to the bottom of the main deck.", top_two, False)
+    player.gain_card_hand(selection) #add selected card to hand
+    top_two.remove(selection) #only card left here is the not selected one
+    main_deck.add_to_bottom(top_two[0])
+
+def bart_allen(player):
+    #get first choice
+    selection1 = card_effect.prompt_player("Pick the first card to gain from the lineup.", lineup, False)
+    index1 = lineup.index(selection1) #find an index of the first card
+    lineup[index1] = None #remove from lineup
+    player.gain_card_hand(selection1) #player gets the card to hand
+    selection2 = card_effect.prompt_player("Pick the second card to gain from the lineup.", lineup, False)
+    index2 = lineup.index(selection2) #find index of the second card
+    lineup[index2] = None
+    player.gain_card_hand(selection2) #gain other card
+    #refill the lineup
+    lineup[index1] = main_deck.draw()
+    lineup[index2] = main_deck.draw()
+
+
+
 # make the game window
 screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(SCREEN_NAME)
@@ -579,7 +677,23 @@ while not done:
             if click: # click on a card to play it
                 card = human_player.own_deck.hand[mouse_pos[0] // CARD_WIDTH + hand_scroll] #because if we destroy from hand, indices get messed up
                 human_player.own_deck.hand_to_played(mouse_pos[0] // CARD_WIDTH + hand_scroll)
-                card_effect.card_effect(human_player, card)
+                #all of the cards that needed to be implemented in game.py
+                if card.custom == 1:
+                    jonn_jonzz(human_player)
+                elif card.custom == 2:
+                    shazam(human_player)
+                elif card.custom == 3:
+                    white_lantern_power_battery(human_player)
+                elif card.custom == 4:
+                    xray_vision(human_player, computer_player)
+                elif card.custom == 5:
+                    super_girl(human_player)
+                elif card.custom == 7:
+                    trigon(human_player)
+                elif card.custom == 10:
+                    bart_allen(human_player)
+                else: #if not here, then handled by card_effect
+                    card_effect.card_effect(human_player, card)
 
                 
         # is the mouse on any of the played cards

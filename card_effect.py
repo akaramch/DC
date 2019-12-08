@@ -354,9 +354,11 @@ def card_effect(player, card):
         print("Trigon has not been implemented yet.")
         
     if card.custom == 8: #Graves
-        #TODO
-        print("Trigon has not been implemented yet.")
-        
+        player.power += 4
+        selection = prompt_player("Pick a card from your discard to put on top of your deck. If you don't want to move a card to the top of your deck, click None", player.own_deck.discard, True)
+        if selection: #if the player selected one
+            player.own_deck.discard_to_top(selection) #move it to top
+
     if card.custom == 9: #Nekron
         cards_to_draw = 0
         selection1_discard = prompt_player("Select a card to destroy from discard. If you wish to not destroy, or instead destroy a card from your hand, click None.", player.own_deck.discard, True) #check if first destroyed from discard
