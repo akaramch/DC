@@ -9,6 +9,7 @@ import dc_player
 import deck
 import card_effect
 import buy_cards
+import play_card
 import random
 
 # card dimensions
@@ -356,9 +357,10 @@ def computer_turn(player, opponent):
     #asdf
     while len(player.own_deck.hand) != 0: #while there are cards to play, play them
         #TODO integrate the algorithm for playing cards
-        card = player.own_deck.hand[0]
-        player.own_deck.hand_to_played(0)
-
+        card = play_card.to_play(player.own_deck.hand, player.own_deck) #figure out the card to play
+        index = player.own_deck.hand.index(card) #get the index
+        player.own_deck.hand_to_played(index) #move to played
+        #play the card effect
         #coded in game.py
         if card.custom == 1:
             jonn_jonzz(player, opponent)
@@ -376,7 +378,7 @@ def computer_turn(player, opponent):
             bart_allen(player)
         else:  # if not here, then handled by card_effect
             card_effect.card_effect(player, card)
-    power_generated = player.power
+    power_generated = player.power #used for the report on computer's turn
     #get which cards the computer wants to buy
     cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
     for card in cards_to_buy: #buy cards in card to buy
@@ -616,7 +618,6 @@ for i in range(5):
 # fill the computer's hand
 for i in range(5):
     computer_player.own_deck.draw()
-human_player.own_deck.hand.append(White_Lantern_Power_Battery)
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
