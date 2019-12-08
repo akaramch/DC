@@ -431,7 +431,7 @@ def xray_vision(player, opponent): #4
         card_effect.card_effect(player, top)
 
 def super_girl(player): #5
-    kick_deck.remove(Kick) #remove the kick from the kick deck
+    kick_deck.draw()#remove the kick from the kick deck
     player.gain_card_hand(Kick) #add kick to hand
 
 def trigon(player): #7

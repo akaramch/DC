@@ -115,7 +115,8 @@ Vulnerability = Card("cardimgs/vulnerability.jpg", type="Starter", cost=0, name=
 Weakness = Card("cardimgs/weakness.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") # HOWEVER MANY
 
 StartingPlayerDeck = []
-StartingMainDeck = []
+
+StartingMainDeck = [] # will be used to build the card list for the main deck
 
 """  DEFAULT CARD
  = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="SuperVillain", text="") # 
@@ -296,8 +297,7 @@ SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
 
-
-StartingPlayerDeck = [Punch] + [Giant_Growth] + [Killer_Croc] + [Catwoman] + [Katana] + [Starbolt] + [Kick] + [Scarecrow] + [Power_Girl] + [Power_Ring] + [Gorilla_Grodd] + [Bane] + [White_Lantern_Power_Battery]
+StartingPlayerDeck = [Punch] + [Catwoman] + [Johnny_Quick] + [Gorilla_Grodd] + [Shazam] + [Punch]*5 + [Jonn_Jonzz]
 
 
 
@@ -365,13 +365,14 @@ def end_turn(player):
     hand_scroll = 0
     # TODO super villain flip and attacks
 
-def jonn_jonzz(player, opponent): #1
-    villain = super_villain_deck[0] #get the top super villain
+def jonn_jonzz(player): #1
+    villain = super_villain_deck.peek() #get the top super villain
+    print("J'onn J'onzz played:", villain)
     # all of the cards that needed to be implemented in game.py
     if villain.custom == 1:
-        jonn_jonzz(player, opponent)
+        jonn_jonzz(player)
     elif villain.custom == 2:
-        shazam(player, opponent)
+        shazam(player)
     elif villain.custom == 3:
         white_lantern_power_battery(player)
     elif villain.custom == 4:
@@ -385,18 +386,19 @@ def jonn_jonzz(player, opponent): #1
     else:  # if not here, then handled by card_effect
         card_effect.card_effect(human_player, villain)
 
-def shazam(player, opponent): #2
+def shazam(player): #2
     player.power += 2
     top = main_deck.peek() #get top card of main deck
+    print("Shazam! played:",top)
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
-        jonn_jonzz(player, opponent)
+        jonn_jonzz(player)
     elif top.custom == 2:
-        shazam(player, opponent)
+        shazam(player)
     elif top.custom == 3:
         white_lantern_power_battery(player)
     elif top.custom == 4:
-        xray_vision(player, opponent)
+        xray_vision(player)
     elif top.custom == 5:
         super_girl(player)
     elif top.custom == 7:
@@ -436,7 +438,7 @@ def xray_vision(player, opponent): #4
         card_effect.card_effect(player, top)
 
 def super_girl(player): #5
-    kick_deck.remove(Kick) #remove the kick from the kick deck
+    kick_deck.draw()#remove the kick from the kick deck
     player.gain_card_hand(Kick) #add kick to hand
 
 def trigon(player): #7
@@ -641,7 +643,7 @@ while not done:
         screen.blit(GAME_FONT.render("Weaknesses remaining: " + str(weakness_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
         
         # the player's deck, represented either by a card back or nothing (if the deck is empty)
-        if human_player.own_deck.undrawn != 0:
+        if human_player.own_deck.undrawn != []:
             screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() * 2 + 1))
         screen.blit(GAME_FONT.render("Your deck", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5))
         screen.blit(GAME_FONT.render("Cards remaining: " + str(len(human_player.own_deck.undrawn)), True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() - 5))
