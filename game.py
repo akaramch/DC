@@ -361,7 +361,7 @@ def computer_turn(player, opponent):
 
         #coded in game.py
         if card.custom == 1:
-            jonn_jonzz(player)
+            jonn_jonzz(player, opponent)
         elif card.custom == 2:
             shazam(player)
         elif card.custom == 3:
