@@ -384,7 +384,10 @@ def computer_turn(player, opponent):
         if card.name != "Kick" and not (card in SuperVillainDeckList or card == The_Flash): #if card is in lineup
             index = lineup.index(card)
         buy(player, card, index)
-
+    #tell the player what cards the computer played
+    card_effect.prompt_player("Cards played during computer's turn. To continue, click one of the cards, or click None", computer_player.own_deck.played, True)
+    #prompt the player what cards the computer bought
+    card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
     end_turn(player)
 
 #ends the turn for the player whose turn it was
