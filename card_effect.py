@@ -31,40 +31,64 @@ GAME_CLOCK = pygame.time.Clock()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # draw background for showing the player prompts
-discard_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-discard_bkg.fill(GAME_BKG_COLOR)
-pile_outline = pygame.Surface((CARD_WIDTH + 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) + 10))
-pile_interior = pygame.Surface((CARD_WIDTH - 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) - 10))
-pile_outline.fill((127, 127, 127))
-pile_interior.fill(GAME_BKG_COLOR)
-pile_outline.blit(pile_interior, (10, 10))
-discard_bkg.blit(pile_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE - 5))
-# scroll buttons for scrolling through the discard pile or a too-large hand
-scroll_button_u = pygame.Surface((CARD_WIDTH, CARD_SPACE - 5))
-scroll_button_u_dark = scroll_button_u.copy()
-scroll_button_u.fill(GAME_BKG_COLOR)
-scroll_button_u_dark.fill((GAME_BKG_COLOR[0] // 1.5, GAME_BKG_COLOR[1] // 1.5, GAME_BKG_COLOR[2] // 1.5))
-scroll_button_d = scroll_button_u.copy()
-scroll_button_d_dark = scroll_button_u_dark.copy()
-pygame.draw.polygon(scroll_button_u, (127, 127, 127), [(CARD_WIDTH // 2 - CARD_SPACE // 4, int(CARD_SPACE * (3/4))), (CARD_WIDTH // 2, CARD_SPACE // 4), (CARD_WIDTH // 2 + CARD_SPACE // 4, int(CARD_SPACE * (3/4)))])
-pygame.draw.polygon(scroll_button_u_dark, (95, 95, 95), [(CARD_WIDTH // 2 - CARD_SPACE // 4, int(CARD_SPACE * (3/4))), (CARD_WIDTH // 2, CARD_SPACE // 4), (CARD_WIDTH // 2 + CARD_SPACE // 4, int(CARD_SPACE * (3/4)))])
-pygame.draw.polygon(scroll_button_d, (127, 127, 127), [(CARD_WIDTH // 2 - CARD_SPACE // 4, CARD_SPACE // 4), (CARD_WIDTH // 2, int(CARD_SPACE * (3/4))), (CARD_WIDTH // 2 + CARD_SPACE // 4, CARD_SPACE // 4)])
-pygame.draw.polygon(scroll_button_d_dark, (95, 95, 95), [(CARD_WIDTH // 2 - CARD_SPACE // 4, CARD_SPACE // 4), (CARD_WIDTH // 2, int(CARD_SPACE * (3/4))), (CARD_WIDTH // 2 + CARD_SPACE // 4, CARD_SPACE // 4)])
-scroll_button_l = pygame.Surface((CARD_SPACE - 5, CARD_HEIGHT))
-scroll_button_l_dark = scroll_button_l.copy()
-scroll_button_l.fill(GAME_BKG_COLOR)
-scroll_button_l_dark.fill((GAME_BKG_COLOR[0] // 1.5, GAME_BKG_COLOR[1] // 1.5, GAME_BKG_COLOR[2] // 1.5))
-scroll_button_r = scroll_button_l.copy()
-scroll_button_r_dark = scroll_button_l_dark.copy()
-pygame.draw.polygon(scroll_button_l, (127, 127, 127), [(int(CARD_SPACE * (3/4)) - 5, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)), (CARD_SPACE // 4 - 5, CARD_HEIGHT // 2), (int(CARD_SPACE * (3/4)) - 5, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
-pygame.draw.polygon(scroll_button_l_dark, (95, 95, 95), [(int(CARD_SPACE * (3/4)) - 5, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)), (CARD_SPACE // 4 - 5, CARD_HEIGHT // 2), (int(CARD_SPACE * (3/4)) - 5, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
-pygame.draw.polygon(scroll_button_r, (127, 127, 127), [(CARD_SPACE // 4, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)), (int(CARD_SPACE * (3/4)), CARD_HEIGHT // 2), (CARD_SPACE // 4, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
-pygame.draw.polygon(scroll_button_r_dark, (95, 95, 95), [(CARD_SPACE // 4, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)), (int(CARD_SPACE * (3/4)), CARD_HEIGHT // 2), (CARD_SPACE // 4, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
-GAME_FONT.set_underline(True)
-choose_none = GAME_FONT.render("None", True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE - GAME_FONT.get_height())
 
-GAME_FONT.set_underline(False)
 def prompt_player(message, choices, none_choice_possible):
+    discard_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    discard_bkg.fill(GAME_BKG_COLOR)
+    pile_outline = pygame.Surface(
+        (CARD_WIDTH + 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) + 10))
+    pile_interior = pygame.Surface(
+        (CARD_WIDTH - 10, CARD_HEIGHT // 6 * ((SCREEN_HEIGHT - CARD_SPACE * 2) // (CARD_HEIGHT // 6)) - 10))
+    pile_outline.fill((127, 127, 127))
+    pile_interior.fill(GAME_BKG_COLOR)
+    pile_outline.blit(pile_interior, (10, 10))
+    discard_bkg.blit(pile_outline, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE - 5, CARD_SPACE - 5))
+    # scroll buttons for scrolling through the discard pile or a too-large hand
+    scroll_button_u = pygame.Surface((CARD_WIDTH, CARD_SPACE - 5))
+    scroll_button_u_dark = scroll_button_u.copy()
+    scroll_button_u.fill(GAME_BKG_COLOR)
+    scroll_button_u_dark.fill((GAME_BKG_COLOR[0] // 1.5, GAME_BKG_COLOR[1] // 1.5, GAME_BKG_COLOR[2] // 1.5))
+    scroll_button_d = scroll_button_u.copy()
+    scroll_button_d_dark = scroll_button_u_dark.copy()
+    pygame.draw.polygon(scroll_button_u, (127, 127, 127),
+                        [(CARD_WIDTH // 2 - CARD_SPACE // 4, int(CARD_SPACE * (3 / 4))),
+                         (CARD_WIDTH // 2, CARD_SPACE // 4),
+                         (CARD_WIDTH // 2 + CARD_SPACE // 4, int(CARD_SPACE * (3 / 4)))])
+    pygame.draw.polygon(scroll_button_u_dark, (95, 95, 95),
+                        [(CARD_WIDTH // 2 - CARD_SPACE // 4, int(CARD_SPACE * (3 / 4))),
+                         (CARD_WIDTH // 2, CARD_SPACE // 4),
+                         (CARD_WIDTH // 2 + CARD_SPACE // 4, int(CARD_SPACE * (3 / 4)))])
+    pygame.draw.polygon(scroll_button_d, (127, 127, 127), [(CARD_WIDTH // 2 - CARD_SPACE // 4, CARD_SPACE // 4),
+                                                           (CARD_WIDTH // 2, int(CARD_SPACE * (3 / 4))),
+                                                           (CARD_WIDTH // 2 + CARD_SPACE // 4, CARD_SPACE // 4)])
+    pygame.draw.polygon(scroll_button_d_dark, (95, 95, 95), [(CARD_WIDTH // 2 - CARD_SPACE // 4, CARD_SPACE // 4),
+                                                             (CARD_WIDTH // 2, int(CARD_SPACE * (3 / 4))),
+                                                             (CARD_WIDTH // 2 + CARD_SPACE // 4, CARD_SPACE // 4)])
+    scroll_button_l = pygame.Surface((CARD_SPACE - 5, CARD_HEIGHT))
+    scroll_button_l_dark = scroll_button_l.copy()
+    scroll_button_l.fill(GAME_BKG_COLOR)
+    scroll_button_l_dark.fill((GAME_BKG_COLOR[0] // 1.5, GAME_BKG_COLOR[1] // 1.5, GAME_BKG_COLOR[2] // 1.5))
+    scroll_button_r = scroll_button_l.copy()
+    scroll_button_r_dark = scroll_button_l_dark.copy()
+    pygame.draw.polygon(scroll_button_l, (127, 127, 127),
+                        [(int(CARD_SPACE * (3 / 4)) - 5, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)),
+                         (CARD_SPACE // 4 - 5, CARD_HEIGHT // 2),
+                         (int(CARD_SPACE * (3 / 4)) - 5, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
+    pygame.draw.polygon(scroll_button_l_dark, (95, 95, 95),
+                        [(int(CARD_SPACE * (3 / 4)) - 5, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)),
+                         (CARD_SPACE // 4 - 5, CARD_HEIGHT // 2),
+                         (int(CARD_SPACE * (3 / 4)) - 5, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
+    pygame.draw.polygon(scroll_button_r, (127, 127, 127), [(CARD_SPACE // 4, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)),
+                                                           (int(CARD_SPACE * (3 / 4)), CARD_HEIGHT // 2),
+                                                           (CARD_SPACE // 4, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
+    pygame.draw.polygon(scroll_button_r_dark, (95, 95, 95), [(CARD_SPACE // 4, int(CARD_HEIGHT / 2 - CARD_SPACE / 4)),
+                                                             (int(CARD_SPACE * (3 / 4)), CARD_HEIGHT // 2),
+                                                             (CARD_SPACE // 4, int(CARD_HEIGHT / 2 + CARD_SPACE / 4))])
+    GAME_FONT.set_underline(True)
+    choose_none = GAME_FONT.render("None", True, (0, 0, 0), GAME_BKG_COLOR), (
+    CARD_SPACE, CARD_SPACE - GAME_FONT.get_height())
+
+    GAME_FONT.set_underline(False)
     print(message)
     click = False
     scroll = 0  # how far the pile is scrolled
