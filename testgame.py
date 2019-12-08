@@ -297,6 +297,8 @@ SuperVillainDeckList.append(Black_Adam)
 SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
+StartingMainDeck = [X_Ray_Vision] * 50
+
 StartingPlayerDeck = [Jonn_Jonzz] + [Shazam] + [Punch] * 10 + [Johnny_Quick]
 
 
@@ -366,7 +368,7 @@ def computer_turn(player, opponent):
         if card.custom == 1:
             jonn_jonzz(player)
         elif card.custom == 2:
-            shazam(player)
+            shazam(player,opponent)
         elif card.custom == 3:
             white_lantern_power_battery(player)
         elif card.custom == 4:
@@ -453,12 +455,14 @@ def white_lantern_power_battery(player): #3
     player.gain_card_top(gained) #add card to top of undrawn
 
 def xray_vision(player, opponent): #4
-    #get the top card of opponent
-    top = opponent.own_deck.peek()
+    if opponent.own_deck.isEmpty():
+        opponent.own_deck.shuffle()
+    top = opponent.own_deck.peek() #get the top card of opponent
+    opponent.own_deck.draw() #remove card so loops don't happen
     print("X-Ray Vision played:",top,"from the top of your opponent's deck.")
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
-        jonn_jonzz(player, opponent)
+        jonn_jonzz(player)
     elif top.custom == 2:
         shazam(player, opponent)
     elif top.custom == 3:
@@ -473,6 +477,7 @@ def xray_vision(player, opponent): #4
         bart_allen(player)
     else:  # if not here, then handled by card_effect
         card_effect.card_effect(player, top)
+    opponent.own_deck.add_card(top) #add card back once X-Ray Vision has been resolved
 
 def super_girl(player): #5
     kick_deck.draw()#remove the kick from the kick deck
