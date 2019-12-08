@@ -437,6 +437,11 @@ def card_effect(player, card):
             value_drawn += cost_of_next_card
             
     if card.custom == 13: #Arkillo
+        for card in range(len(player.own_deck.discard)):
+            if card.type == "Equipment":
+                card.discard_to_hand()
+                
+        
         
             
         print("Arkillo has not been implemented yet.")
