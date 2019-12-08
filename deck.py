@@ -244,6 +244,7 @@ class PlayerDeck(Deck):
         if len(self.undrawn) == 0:
             self.refill_deck()
             if len(self.undrawn) == 0:
+                return
                 print("\n\nVVVVVVVVVVVVVVVVVVVV\n\nOh noes! You tried to draw when everything is already played or already in your hand.\nThis message brought to you by def draw in deck.py.\n\n^^^^^^^^^^^^^^^^^^^^\n\n")
         card = self.undrawn.pop(0)
         self.add_to_hand(card)
@@ -254,6 +255,8 @@ class PlayerDeck(Deck):
 
     #look at top of undrawn
     def peek(self):
+        if len(self.undrawn) == 0:
+            self.refill_deck()
         return self.undrawn[0]
 
     #add card to discard (must be paired with self.add when new card to deck)
