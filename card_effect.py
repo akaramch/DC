@@ -227,6 +227,8 @@ def card_effect(player, card):
             if selection: #if they decided to destroy
                 player.own_deck.destroy_from_deck(selection) #remove the card from the deck
         if top_destroy_option == 2: #jervis tetch
+            if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
+                player.own_deck.refill_deck()
             selection = prompt_player("This is the top card of your deck. If you wish to destroy, click the card. Otherwise, click None and it will be discarded.", [player.own_deck.peek()], True)  # player.own_deck.peek is the top card of their deck
             if selection:  # if they decided to destroy
                 player.own_deck.destroy_from_deck(selection)  # remove the card from the deck
@@ -286,7 +288,6 @@ def card_effect(player, card):
         
     if card.custom == 5: #supergirl
         #TODO
-        #selection=prompt_player("Choose any card from the Line-Up to gain and put on top of your deck:", game.kick_deck, True)
         print("Supergirl has not been implemented yet.")
         
     if card.custom == 6: #Parallax
