@@ -19,6 +19,7 @@ class Player:
         #flags for effects that trigger after the card is played
         self.winged_warrior_effect = False
         self.killer_croc_effect = False
+        self.black_adam_effect = (True, True, True, True, True) #(found_hero, found_villain, found_equipment, found_starter, found_power) all true if not in effect
         self.aquamans_trident = False
 
     # takes card from lineup and adds to discard pile
@@ -86,8 +87,8 @@ def load_villain_deck(super_villains):
 Returns current line-up, for use with WLPB
 """
 def current_lineup():
-    return game.lineup
-
+    #return game.lineup
+    pass
 
 #run the computer turn
 def computer_turn(player, super_villain_deck, main_deck, kick_deck, lineup):
