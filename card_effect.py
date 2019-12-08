@@ -234,8 +234,8 @@ def card_effect(player, card):
                 player.own_deck.undrawn_top_to_discard() #put the card in discard
 
     if card.name == "Soultaker Sword":
-        if not (len(player.own_deck.hand == 0)): #make sure there is a card in the hand
-            selection = prompt_player("Chose a card to destroy from hand. If you don't wish to destroy, click none.", player.own_deck.hand, True)
+        if not (len(player.own_deck.hand) == 0): #make sure there is a card in the hand
+            selection = prompt_player("Chose a card to destroy from hand. If you don't wish to destroy, click None.", player.own_deck.hand, True)
             if selection: #if the player chose one
                 player.own_deck.destroy_from_hand(selection) #destroy it
 
