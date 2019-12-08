@@ -472,10 +472,10 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
 
     power_in_deck = 0 #next few lines calculate average power in deck
     for tempcard in own_deck.contents:
-        power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck.size, opponent_deck, player_power, supervillain_deck.size, True)
+        power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck.size, opponent_deck, player_power, super_villain_deck.size, True)
     average_power = power_in_deck/(own_deck.size)
     for lineup_card in lineup: #assigns indeck_power for sorting
-        lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.size, opponent_deck, player_power, supervillain_deck.size, False) - average_power
+        lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.size, opponent_deck, player_power, super_villain_deck.size, False) - average_power
     power_sorted = lineup.copy()
     power_sorted = sort_by_deck_power(power_sorted)
     dp_ratio_sorted = lineup.copy()
