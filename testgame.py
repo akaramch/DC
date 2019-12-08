@@ -8,6 +8,7 @@ pygame.init()
 import dc_player
 import deck
 import card_effect
+import buy_cards
 import random
 
 # card dimensions
@@ -115,7 +116,8 @@ Vulnerability = Card("cardimgs/vulnerability.jpg", type="Starter", cost=0, name=
 Weakness = Card("cardimgs/weakness.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") # HOWEVER MANY
 
 StartingPlayerDeck = []
-StartingMainDeck = []
+
+StartingMainDeck = [] # will be used to build the card list for the main deck
 
 """  DEFAULT CARD
  = Card("cardimgs/imagename.jpg", cost=, power=(,), name="", vp=, type="SuperVillain", text="") # 
@@ -295,10 +297,7 @@ SuperVillainDeckList.append(Black_Adam)
 SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
-
-
-StartingPlayerDeck = [Punch] + [Giant_Growth] + [Killer_Croc] + [Catwoman] + [Katana] + [Starbolt] + [Kick] + [Scarecrow] + [Power_Girl] + [Power_Ring] + [Gorilla_Grodd] + [Bane] + [White_Lantern_Power_Battery]
-
+StartingPlayerDeck = [Jonn_Jonzz] + [Shazam] + [Punch] * 10 + [Johnny_Quick]
 
 
 # player buys card
@@ -355,6 +354,43 @@ def buy(player, card, i=0):
 #
 #
 
+#executes a computer turn based on our algorithms
+def computer_turn(player, opponent):
+    #asdf
+    while len(player.own_deck.hand) != 0: #while there are cards to play, play them
+        #TODO integrate the algorithm for playing cards
+        card = player.own_deck.hand[0]
+        player.own_deck.hand_to_played(0)
+
+        #coded in game.py
+        if card.custom == 1:
+            jonn_jonzz(player)
+        elif card.custom == 2:
+            shazam(player)
+        elif card.custom == 3:
+            white_lantern_power_battery(player)
+        elif card.custom == 4:
+            xray_vision(player, opponent)
+        elif card.custom == 5:
+            super_girl(player)
+        elif card.custom == 7:
+            trigon(player)
+        elif card.custom == 10:
+            bart_allen(player)
+        else:  # if not here, then handled by card_effect
+            card_effect.card_effect(player, card)
+
+    #get which cards the computer wants to buy
+    cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
+    for card in cards_to_buy: #buy cards in card to buy
+        index = 0
+        if card.name != "Kick" and not (card in SuperVillainDeckList or card == The_Flash): #if card is in lineup
+            index = lineup.index(card)
+        buy(player, card, index)
+
+    end_turn(player)
+
+#ends the turn for the player whose turn it was
 def end_turn(player):
     # move cards to discard
     player.end_turn()
@@ -365,13 +401,14 @@ def end_turn(player):
     hand_scroll = 0
     # TODO super villain flip and attacks
 
-def jonn_jonzz(player, opponent): #1
-    villain = super_villain_deck[0] #get the top super villain
+def jonn_jonzz(player): #1
+    villain = super_villain_deck.peek() #get the top super villain
+    print("J'onn J'onzz played:", villain)
     # all of the cards that needed to be implemented in game.py
     if villain.custom == 1:
-        jonn_jonzz(player, opponent)
+        jonn_jonzz(player)
     elif villain.custom == 2:
-        shazam(player, opponent)
+        shazam(player)
     elif villain.custom == 3:
         white_lantern_power_battery(player)
     elif villain.custom == 4:
@@ -385,14 +422,15 @@ def jonn_jonzz(player, opponent): #1
     else:  # if not here, then handled by card_effect
         card_effect.card_effect(human_player, villain)
 
-def shazam(player, opponent): #2
+def shazam(player,opponent): #2
     player.power += 2
     top = main_deck.peek() #get top card of main deck
+    print("Shazam! played:", top)
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
-        jonn_jonzz(player, opponent)
+        jonn_jonzz(player)
     elif top.custom == 2:
-        shazam(player, opponent)
+        shazam(player)
     elif top.custom == 3:
         white_lantern_power_battery(player)
     elif top.custom == 4:
@@ -417,6 +455,7 @@ def white_lantern_power_battery(player): #3
 def xray_vision(player, opponent): #4
     #get the top card of opponent
     top = opponent.own_deck.peek()
+    print("X-Ray Vision played:",top,"from the top of your opponent's deck.")
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
         jonn_jonzz(player, opponent)
@@ -436,7 +475,7 @@ def xray_vision(player, opponent): #4
         card_effect.card_effect(player, top)
 
 def super_girl(player): #5
-    kick_deck.remove(Kick) #remove the kick from the kick deck
+    kick_deck.draw()#remove the kick from the kick deck
     player.gain_card_hand(Kick) #add kick to hand
 
 def trigon(player): #7
@@ -595,7 +634,7 @@ while not done:
             discard_scroll = 0
         # draw the discard pile all lined up nice and neat
         for i in range(discard_scroll, len(human_player.own_deck.discard)):
-            screen.blit(human_player.own_deck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * (i - discard_scroll)))
+            screen.blit(human_player.own_playingdeck.discard[i].img, (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + CARD_HEIGHT // 6 * (i - discard_scroll)))
         # cover up the cards that overflow over the discard pile boundary
         screen.blit(cover, (SCREEN_WIDTH - CARD_SPACE - CARD_WIDTH, CARD_SPACE + pile_outline.get_height() - 10))
         # draw the scroll buttons light or dark depending on whether the mouse is over them and do their things if the user clicks on them
@@ -641,7 +680,7 @@ while not done:
         screen.blit(GAME_FONT.render("Weaknesses remaining: " + str(weakness_deck.num_cards), True, (0, 0, 0), GAME_BKG_COLOR), (CARD_SPACE, CARD_SPACE * 2 + CARD_HEIGHT * 2 + 5))
         
         # the player's deck, represented either by a card back or nothing (if the deck is empty)
-        if human_player.own_deck.undrawn != 0:
+        if human_player.own_deck.undrawn != []:
             screen.blit(pygame.image.load("cardimgs/cardback.jpg"), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() * 2 + 1))
         screen.blit(GAME_FONT.render("Your deck", True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE - 5))
         screen.blit(GAME_FONT.render("Cards remaining: " + str(len(human_player.own_deck.undrawn)), True, (0, 0, 0), GAME_BKG_COLOR), (SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE, CARD_SPACE + GAME_FONT.get_height() - 5))
@@ -718,6 +757,7 @@ while not done:
         elif mouse_pos[0] > END_TURN_BUTTON_LEFT and mouse_pos[0] < (END_TURN_BUTTON_LEFT + END_TURN_BUTTON_WIDTH) and mouse_pos[1] > END_TURN_BUTTON_TOP and mouse_pos[1] < END_TURN_BUTTON_TOP + END_TURN_BUTTON_HEIGHT:
             if click:
                 end_turn(human_player)
+                computer_turn(computer_player, human_player)
                 
         # is the mouse on a card in the hand
         elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + min(hand_outline.get_width() - 10, CARD_WIDTH * (len(human_player.own_deck.hand) - hand_scroll)) and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
@@ -731,10 +771,11 @@ while not done:
                     hand_scroll -= 1
                 handlen = len(human_player.own_deck.hand)
                 #all of the cards that needed to be implemented in game.py
+                #asdf
                 if card.custom == 1:
                     jonn_jonzz(human_player)
                 elif card.custom == 2:
-                    shazam(human_player)
+                    shazam(human_player,computer_player)
                 elif card.custom == 3:
                     white_lantern_power_battery(human_player)
                 elif card.custom == 4:

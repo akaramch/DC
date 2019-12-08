@@ -74,7 +74,7 @@ def deck_power(card): #Returns the difference between the card's power and the a
     return card.indeck_power #"But Kabir, this doesn't exist!" you say. Don't even worry about it...
 
 def dp_ratio(card): #like above, but a ratio
-    return (card.indeck_power/card.get_cost)
+    return (card.indeck_power/card.get_cost())
 """
 Now for the fun stuff- getting the power a card generates. This looks explicitly at power for cards in your deck, so drawing not considered
 """
@@ -95,15 +95,15 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
             power_in_deck = 0 #going to look at the total power in the opponent's deck to calculate average
             for tempcard in opponent_deck.contents:
                 power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size, False)
-            average_power = power_in_deck/(opponent_deck.size)
+            average_power = power_in_deck/(opponent_deck.num_cards)
             return average_power
         if (card.custom == 5): #Supergirl is worth different things depending on how many kicks are left
 
-            if (kick_deck.size >= 12):
+            if (kick_deck.num_cards >= 12):
                 return 4
-            if (kick_deck.size >= 9):
+            if (kick_deck.num_cards >= 9):
                 return 3
-            if (kick_deck.size >= 5):
+            if (kick_deck.num_cards >= 5):
                 return 2
             else:
                 return 0
@@ -112,7 +112,7 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
             for tempcard in own_deck.contents:
                 if(tempcard.custom != 6): #don't want to look at Parallax itself when calculating average power
                     power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size, True)
-            average_power = power_in_deck/(own_deck.size-1)
+            average_power = power_in_deck/(own_deck.num_cards-1)
             average_power = 4*average_power
             return average_power
         if (card.custom == 7):
@@ -143,7 +143,7 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
         for tempcard in own_deck.contents:
             if (tempcard.cost >= 1):
                 non_zero_count += 1
-        power += (non_zero_count/own_deck.size)
+        power += (non_zero_count/own_deck.num_cards)
     """
     If it's starbolt, does the thing mentioned in our alg doc
     """
@@ -172,7 +172,7 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
             for tempcard in own_deck.contents:
                 if(tempcard.type == "Hero"):
                     hero_count += 1
-            power += 3*(hero_count/own_deck.size)
+            power += 3*(hero_count/own_deck.num_cards)
     """
     Hawkgirl does the thing mentioned in our alg doc
     """
@@ -211,7 +211,7 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
             for tempcard in own_deck.contents:
                 if(tempcard.type == "Villain"):
                     vill_count += 1
-            power += (vill_count/own_deck.size)
+            power += (vill_count/own_deck.num_cards)
     """
     If it's from deck, the card draw is treated as +2, if not then it's calculated as
     an average of cards in deck, and the max of that and 1.99 is taken, as per the alg
@@ -222,8 +222,8 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
         power_in_deck = 0 #going to look at the total power in the deck to calculate average
         for tempcard in own_deck.contents:
             power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size, True)
-        average_power = power_in_deck/(own_deck.size)
-        power += card.draw*max(1.99, average_power)
+        average_power = power_in_deck/(own_deck.num_cards)
+        power += card.draw[0]*max(1.99, average_power)
         
     """
     Two-face draws half a card on average, which is not quite true but a good heuristic
@@ -296,12 +296,13 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
     Weaknesses value calculated as per alg and probability of giving them a weakness
     """
     if (card.weakness[0]):
+        mult = 0
         if (card.weakness[1] == 1):
             num_odds = 0
             for tempcard in opponent_deck.contents:
                 if(tempcard.cost%2 == 1):
                     num_odds += 1
-            mult = (num_odds/opponent_deck.size)
+            mult = (num_odds/opponent_deck.num_cards)
         elif (card.weakness[1] == 2):
             mult =1
         if (super_deck_size > 8 and main_deck_size > 51):
@@ -408,24 +409,24 @@ def max_power_lineup(power, lineup, lineup1):
     #Buy in order as we can the highest values
     while len(lineup) > 0:
         if power > lineup[0].get_cost(): #if we can buy the most power
-            card = lineup.remove[0] #most power left on lineup
+            card = lineup.pop(0) #most power left on lineup
             power -= card.get_cost()
             val_buy_total += card.indeck_power
             cards_to_buy_val.append(card) #add most power to cards to buy
         else: #if we can't buy it, add it to leftovers
-            leftovers.append(lineup.remove[0])
+            leftovers.append(lineup.pop(0))
     #bought the entire lineup so can just return
     if len(leftovers) < 1:
         return cards_to_buy_val
 
     while len(lineup1) > 0:
         if power > lineup1[0].get_cost(): #if we can buy the best
-            card = lineup1.remove[0] #best ratio left on lineup
+            card = lineup1.pop(0) #best ratio left on lineup
             power -= card.get_cost()
             ratio_buy_total += card.indeck_power
             cards_to_buy_ratio.append(card) #add best ratio to cards to buy
         else: #if we can't buy it, add it to leftovers
-            leftovers.append(lineup1.remove[0])
+            leftovers.append(lineup1.pop(0))
     if val_buy_total >= ratio_buy_total: #if we improve the deck average more sorting by val, return that
         return cards_to_buy_val
     else:
@@ -448,7 +449,7 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
     #first, we'll play to try to end the game when possible
     cards_to_buy = []
     #(bool can_end_game, cards_to_buy, remaining_power)
-    end_game = check_end_game(power, super_villain_deck, main_deck.size, lineup, kick_deck)
+    end_game = check_end_game(power, super_villain_deck, main_deck.num_cards, lineup, kick_deck)
     if end_game[0]:
         cards_to_buy.append(end_game[1]) #end_game[1] should be a list
         return cards_to_buy
@@ -459,7 +460,7 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
         cards_to_buy.append(super_villain_deck.peek()) #add the super villain to the cards to buy
         if power <= 1: #buying super spent all power so no need to check other stuff
             return cards_to_buy
-    lineup.extend(kick_deck) #from here on in, we need to add kicks to the lineup to consider optimal buy
+    lineup.extend(kick_deck.contents) #from here on in, we need to add kicks to the lineup to consider optimal buy
     #end game coming soon, but cannot end it on our turn
     if super_villain_deck.num_cards <= 3 or main_deck.num_cards <= 15:
         vp_sorted = lineup.copy()
@@ -472,10 +473,10 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
 
     power_in_deck = 0 #next few lines calculate average power in deck
     for tempcard in own_deck.contents:
-        power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck.size, opponent_deck, player_power, super_villain_deck.size, True)
-    average_power = power_in_deck/(own_deck.size)
+        power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, True)
+    average_power = power_in_deck/(own_deck.num_cards)
     for lineup_card in lineup: #assigns indeck_power for sorting
-        lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.size, opponent_deck, player_power, super_villain_deck.size, False) - average_power
+        lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, False) - average_power
     power_sorted = lineup.copy()
     power_sorted = sort_by_deck_power(power_sorted)
     dp_ratio_sorted = lineup.copy()
