@@ -361,21 +361,21 @@ def computer_turn(player, opponent):
 
         #coded in game.py
         if card.custom == 1:
-            jonn_jonzz(human_player)
+            jonn_jonzz(player)
         elif card.custom == 2:
-            shazam(human_player)
+            shazam(player)
         elif card.custom == 3:
-            white_lantern_power_battery(human_player)
+            white_lantern_power_battery(player)
         elif card.custom == 4:
-            xray_vision(human_player, computer_player)
+            xray_vision(player, opponent)
         elif card.custom == 5:
-            super_girl(human_player)
+            super_girl(player)
         elif card.custom == 7:
-            trigon(human_player)
+            trigon(player)
         elif card.custom == 10:
-            bart_allen(human_player)
+            bart_allen(player)
         else:  # if not here, then handled by card_effect
-            card_effect.card_effect(human_player, card)
+            card_effect.card_effect(player, card)
 
     #get which cards the computer wants to buy
     cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
