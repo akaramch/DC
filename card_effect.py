@@ -1,6 +1,8 @@
 #various individual functions for card effects
 import pygame
 import dc_player
+import play_card
+import buy_cards
 pygame.init()
 """
 
@@ -46,18 +48,50 @@ def prompt_player(type, message, choices, none_choice_possible, none_button="Non
     #we don't want to prompt the player for the computer's
     if is_computer:
         if type == 1:
-            pass
+            if none_choice_possible:
+                choice = play_card.can_hand_destroy(choices)
+            else:
+                choice = play_card.must_hand_destroy(choices)
+            return choice
         elif type == 2:
-            pass
+            destroy = play_card.top_destroy(choices[0])
+            if destroy:
+                return choices[0]
+            else:
+                return None
         elif type == 3:
+            choice = play_card.discard_destroy(choices)
+            return choice
             pass
         elif type == 4:
             pass
         elif type == 5:
-            pass
+            #grab the card with highest cost
+            best_card = None
+            highest_cost = -1
+            for card in choices:
+                if card.get_cost() > highest_cost:
+                    best_card = card
+                    highest_cost = card.get_cost()
+            return best_card
         elif type == 6:
-            pass
+            # grab the card with highest cost
+            best_card = None
+            highest_cost = -1
+            for card in choices:
+                if card.get_cost() > highest_cost:
+                    best_card = card
+                    highest_cost = card.get_cost()
+            return best_card
         elif type == 7:
+            # grab the card with highest cost
+            best_card = None
+            highest_cost = -1
+            for card in choices:
+                if card.get_cost() > highest_cost:
+                    best_card = card
+                    highest_cost = card.get_cost()
+            return best_card
             pass
     # draw background for showing the player prompts
     prompt_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
