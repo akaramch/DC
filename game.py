@@ -396,9 +396,19 @@ def computer_turn(player, opponent):
 def end_turn(player):
     # move cards to discard
     player.end_turn()
+
+    global done
+    #check if the game is over because super deck is empty
+    if super_villain_deck.isEmpty():
+        done = True
+        return
     # refill lineup
     for i in range(0,5):
         if not lineup[i]:
+            #check if we can draw, if not, game is over
+            if main_deck.isEmpty():
+                done = True #game is done
+                return
             lineup[i] = main_deck.draw()
     global hand_scroll
     hand_scroll= 0
@@ -612,6 +622,10 @@ computer_player.own_deck.shuffle()
 # fill the lineup
 for i in range(5):
     lineup[i] = main_deck.draw()
+
+for i in range(55):
+    main_deck.draw()
+
 # fill the player's hand
 for i in range(5):
     human_player.own_deck.draw()
@@ -789,12 +803,11 @@ while not done:
                     hand_scroll -= 1
                 handlen = len(human_player.own_deck.hand)
                 #all of the cards that needed to be implemented in game.py
-                #asdf
                 if card.custom == 1:
                     jonn_jonzz(human_player)
                 elif card.custom == 2:
                     shazam(human_player)
-                elif card.custom == 3: #asdf
+                elif card.custom == 3:
                     white_lantern_power_battery(human_player)
                 elif card.custom == 4:
                     xray_vision(human_player, computer_player)
