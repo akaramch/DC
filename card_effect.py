@@ -269,10 +269,13 @@ def card_effect(player, card):
     if draw_bonus_type != 0:
         if draw_bonus_type == 1: #two face
             evenodd = prompt_player_even_odd("Choose even or odd")
-            if player.own_deck.peek().cost % 2 == evenodd:
-                player.own_deck.draw()
-            else:
-                player.own_deck.undrawn_top_to_discard()
+            if player.own_deck.isEmpty():
+                player.own_deck.shuffle()
+                if not player.own_deck.isEmpty() or player.own_deck.discard.isEmpty():
+                    if player.own_deck.peek().cost % 2 == evenodd:
+                        player.own_deck.draw()
+                    else:
+                        player.own_deck.undrawn_top_to_discard()
 
     #add draw bonus
     draw += draw_bonus
@@ -288,17 +291,20 @@ def card_effect(player, card):
         if top_destroy_option == 1: #nth metal
             if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
                 player.own_deck.refill_deck()
-            selection = prompt_player("This is the top card of your deck. If you wish to destroy it, click the card. Otherwise, click \"No.\"", [player.own_deck.peek()], True, "No") #player.own_deck.peek is the top card of their deck
-            if selection: #if they decided to destroy
-                player.own_deck.destroy_from_deck(selection) #remove the card from the deck
-        if top_destroy_option == 2: #jervis tetch
-            if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
-                player.own_deck.refill_deck()
-            selection = prompt_player("This is the top card of your deck. If you wish to destroy it, click the card. Otherwise, click \"No\" and it will be discarded.", [player.own_deck.peek()], True, "No")  # player.own_deck.peek is the top card of their deck
-            if selection:  # if they decided to destroy
-                player.own_deck.destroy_from_deck(selection)  # remove the card from the deck
-            else: #if they didn't destroy
-                player.own_deck.undrawn_top_to_discard() #put the card in discard
+                if player.own_deck.isEmpty():
+                    player.own_deck.shuffle()
+                    if not player.own_deck.isEmpty() or player.own_deck.discard.isEmpty():
+                        selection = prompt_player("This is the top card of your deck. If you wish to destroy it, click the card. Otherwise, click \"No.\"", [player.own_deck.peek()], True, "No") #player.own_deck.peek is the top card of their deck
+                    if selection: #if they decided to destroy
+                        player.own_deck.destroy_from_deck(selection) #remove the card from the deck
+                if top_destroy_option == 2: #jervis tetch
+                    if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
+                        player.own_deck.refill_deck()
+                    selection = prompt_player("This is the top card of your deck. If you wish to destroy it, click the card. Otherwise, click \"No\" and it will be discarded.", [player.own_deck.peek()], True, "No")  # player.own_deck.peek is the top card of their deck
+                    if selection:  # if they decided to destroy
+                        player.own_deck.destroy_from_deck(selection)  # remove the card from the deck
+                    else: #if they didn't destroy
+                        player.own_deck.undrawn_top_to_discard() #put the card in discard
 
     if card.name == "Soultaker Sword":
         if not (len(player.own_deck.hand) == 0): #make sure there is a card in the hand
