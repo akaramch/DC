@@ -386,9 +386,9 @@ def computer_turn(player, opponent):
         buy(player, card, index)
 
     #tell the player what cards the computer played
-    card_effect.prompt_player("Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click \"OK\"", player.own_deck.played, True, "OK")
+    card_effect.prompt_player(0, "Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click \"OK\"", player.own_deck.played, True, "OK", is_computer=player.isComputer)
     #prompt the player what cards the computer bought
-    card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click \"OK\"", cards_to_buy, True, "OK")
+    card_effect.prompt_player(0, "Cards bought during computer's turn. To continue, click one of the cards, or click \"OK\"", cards_to_buy, True, "OK", is_computer=player.isComputer)
 
     end_turn(player)
 
@@ -467,7 +467,7 @@ def white_lantern_power_battery(player): #3
     #TODO make this not print the entire kick deck when the computer plays it
     #ask which to take
     print("activate battery")
-    gained = card_effect.prompt_player("Select a card from the lineup to gain to the top of your deck.", lineup, False)
+    gained = card_effect.prompt_player(6, "Select a card from the lineup to gain to the top of your deck.", lineup, False, is_computer=player.isComputer)
     index = lineup.index(gained) #get the card index in lineup
     lineup[index] = None #remove the card from lineup
     player.gain_card_top(gained) #add card to top of undrawn
@@ -500,14 +500,14 @@ def super_girl(player): #5
 
 def trigon(player): #7
     top_two = [main_deck.draw(), main_deck.draw()] #get top two cards
-    selection = card_effect.prompt_player("Select a card to add to your hand. The other will go to the bottom of the main deck.", top_two, False)
+    selection = card_effect.prompt_player(7, "Select a card to add to your hand. The other will go to the bottom of the main deck.", top_two, False, is_computer=player.isComputer)
     player.gain_card_hand(selection) #add selected card to hand
     top_two.remove(selection) #only card left here is the not selected one
     main_deck.add_to_bottom(top_two[0])
 
 def bart_allen(player):
     #get first choice
-    selection1 = card_effect.prompt_player("Select a card to gain from the lineup.", lineup, False)
+    selection1 = card_effect.prompt_player(6, "Select a card to gain from the lineup.", lineup, False, is_computer=player.isComputer)
     index1 = lineup.index(selection1) #find an index of the first card
     lineup[index1] = None #remove from lineup
     player.gain_card_hand(selection1) #player gets the card to hand
@@ -517,7 +517,7 @@ def bart_allen(player):
     for card in lineup:
         if card is not None:
             options.append(card)
-    selection2 = card_effect.prompt_player("Select a second card to gain from the lineup.", options, False)
+    selection2 = card_effect.prompt_player(6, "Select a second card to gain from the lineup.", options, False, is_computer=player.isComputer)
     index2 = lineup.index(selection2) #find index of the second card
     lineup[index2] = None
     player.gain_card_hand(selection2) #gain other card
