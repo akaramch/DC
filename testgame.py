@@ -153,7 +153,7 @@ StartingMainDeck += [Legion_Flight_Ring] * 2
 StartingMainDeck += [Nth_Metal] * 3
 StartingMainDeck += [Power_Ring] * 3
 StartingMainDeck += [Soultaker_Sword] * 3
-StartingMainDeck += [White_Lantern_Power_Battery] * 1
+#StartingMainDeck += [White_Lantern_Power_Battery] * 1
 
 # SUPER POWERS
 PowerList = []
@@ -299,7 +299,7 @@ SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
 #StartingMainDeck = []
-StartingPlayerDeck = [White_Lantern_Power_Battery] + [Punch] * 4
+StartingPlayerDeck = [Mongul] + [Punch] * 6
 
 # player buys card
 # if the card is in the lineup, need an index in case there's more than one of the same card in the lineup

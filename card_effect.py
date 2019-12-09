@@ -369,6 +369,11 @@ def card_effect(player, card):
             selection = prompt_player(1, "You may pick a card in your hand to destroy. Click \"None\" to destroy nothing.", player.own_deck.hand, True, is_computer=player.isComputer)
             if selection: #if the player chose one
                 player.own_deck.destroy_from_hand(selection) #destroy it
+                
+    if card.name == "Mongul":
+        if not (len(player.own_deck.hand)) == 0:
+            selection = prompt_player(1, "Pick a card from your hand to destroy.", player.own_deck.hand, False, is_computer=player.isComputer)
+            player.own_deck.destroy_from_hand(selection)
 
     if card.destroy_hand_or_discard == 1: #heat vision
         if len(player.own_deck.discard) != 0:
