@@ -354,6 +354,10 @@ def buy(player, card, i=0):
 
 #executes a computer turn based on our algorithms
 def computer_turn(player, opponent):
+    global lineup
+    save_lineup = []
+    for card in lineup:
+        save_lineup.append(card)
     while len(player.own_deck.hand) != 0: #while there are cards to play, play them
         card = play_card.to_play(player.own_deck.hand, player.own_deck) #figure out the card to play
         index = player.own_deck.hand.index(card) #get the index
@@ -379,10 +383,17 @@ def computer_turn(player, opponent):
     power_generated = player.power #used for the report on computer's turn
     #get which cards the computer wants to buy
     cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
+    lineup = save_lineup
     for card in cards_to_buy: #buy cards in card to buy
         index = 0
         if card.name != "Kick" and not (card in SuperVillainDeckList or card == The_Flash): #if card is in lineup
-            index = lineup.index(card)
+            try:
+                index = lineup.index(card)
+            except ValueError:
+                for thing in lineup:
+                    print("  ", thing)
+                print(card)
+                raise ValueError
         buy(player, card, index)
 
     #tell the player what cards the computer played
