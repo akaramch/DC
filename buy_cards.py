@@ -480,13 +480,20 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
     for tempcard in own_deck.contents:
         power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, True)
     average_power = power_in_deck/(own_deck.num_cards)
-    for lineup_card in lineup: #assigns indeck_power for sorting
-        lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, False) - average_power
     power_sorted = lineup.copy()
-    power_sorted = sort_by_deck_power(power_sorted)
+    power_sorted.extend(kick_deck.contents)
+    for lineup_card in power_sorted: #assigns indeck_power for sorting
+        lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, False) - average_power
+    power_sorted = sort_by_deck_power(power_sorted) 
     dp_ratio_sorted = lineup.copy()
+    dp_ratio_sorted.extend(kick_deck.contents)
+    for lineup_card in dp_ratio_sorted: #assigns indeck_power for sorting
+        lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, False) - average_power
     dp_ratio_sorted = sort_by_dp_ratio(dp_ratio_sorted)
     max_pow = max_power_lineup(power, power_sorted, dp_ratio_sorted)
     cards_to_buy.extend(max_pow)
     return cards_to_buy
 
+def best_cards(super_villain_deck, main_deck, kick_deck, own_deck, lineup, opponent_deck, player_power, num):
+    average_power = power_in_deck/(own_deck.num_cards)
+    
