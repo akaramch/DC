@@ -153,7 +153,7 @@ StartingMainDeck += [Legion_Flight_Ring] * 2
 StartingMainDeck += [Nth_Metal] * 3
 StartingMainDeck += [Power_Ring] * 3
 StartingMainDeck += [Soultaker_Sword] * 3
-StartingMainDeck += [White_Lantern_Power_Battery] * 1
+#StartingMainDeck += [White_Lantern_Power_Battery] * 1
 
 # SUPER POWERS
 PowerList = []
@@ -364,8 +364,8 @@ def computer_turn(player, opponent):
             jonn_jonzz(player)
         elif card.custom == 2:
             shazam(player, opponent)
-        elif card.custom == 3:
-            white_lantern_power_battery(player)
+        #elif card.custom == 3:
+        #    white_lantern_power_battery(player)
         elif card.custom == 4:
             xray_vision(player, opponent)
         elif card.custom == 5:
@@ -430,8 +430,8 @@ def jonn_jonzz(player): #1
         jonn_jonzz(player)
     elif villain.custom == 2:
         shazam(player)
-    elif villain.custom == 3:
-        white_lantern_power_battery(player)
+    #elif villain.custom == 3:
+    #    white_lantern_power_battery(player)
     elif villain.custom == 4:
         xray_vision(player, opponent)
     elif villain.custom == 5:
@@ -452,8 +452,8 @@ def shazam(player,opponent): #2
         jonn_jonzz(player)
     elif top.custom == 2:
         shazam(player)
-    elif top.custom == 3:
-        white_lantern_power_battery(player)
+    #elif top.custom == 3:
+    #    white_lantern_power_battery(player)
     elif top.custom == 4:
         xray_vision(player, opponent)
     elif top.custom == 5:
@@ -647,6 +647,7 @@ for i in range(5):
 # fill the computer's hand
 for i in range(5):
     computer_player.own_deck.draw()
+    
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
