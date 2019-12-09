@@ -352,22 +352,6 @@ def card_effect(player, card):
         if top_destroy_option == 1: #nth metal
             if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
                 player.own_deck.refill_deck()
-<<<<<<< HEAD
-                if player.own_deck.isEmpty():
-                    player.own_deck.shuffle()
-                    if not player.own_deck.isEmpty() or player.own_deck.discard.isEmpty():
-                        selection = prompt_player("This is the top card of your deck. If you wish to destroy it, click the card. Otherwise, click \"No.\"", [player.own_deck.peek()], True, "No") #player.own_deck.peek is the top card of their deck
-                    if selection: #if they decided to destroy
-                        player.own_deck.destroy_from_deck(selection) #remove the card from the deck
-                if top_destroy_option == 2: #jervis tetch
-                    if len(player.own_deck.undrawn) == 0: #if undrawn is empty, we need to reshuffle
-                        player.own_deck.refill_deck()
-                    selection = prompt_player("This is the top card of your deck. If you wish to destroy it, click the card. Otherwise, click \"No\" and it will be discarded.", [player.own_deck.peek()], True, "No")  # player.own_deck.peek is the top card of their deck
-                    if selection:  # if they decided to destroy
-                        player.own_deck.destroy_from_deck(selection)  # remove the card from the deck
-                    else: #if they didn't destroy
-                        player.own_deck.undrawn_top_to_discard() #put the card in discard
-=======
             selection = prompt_player(2, "This is the top card of your deck. If you wish to destroy it, click the card. Otherwise, click \"No.\"", [player.own_deck.peek()], True, "No", is_computer=player.isComputer) #player.own_deck.peek is the top card of their deck
             if selection: #if they decided to destroy
                 player.own_deck.destroy_from_deck(selection) #remove the card from the deck
@@ -379,7 +363,6 @@ def card_effect(player, card):
                 player.own_deck.destroy_from_deck(selection)  # remove the card from the deck
             else: #if they didn't destroy
                 player.own_deck.undrawn_top_to_discard() #put the card in discard
->>>>>>> 50eff9096abf0cf02ac91982ce0b73eed385d65a
 
     if card.name == "Soultaker Sword":
         if not (len(player.own_deck.hand) == 0): #make sure there is a card in the hand
