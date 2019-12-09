@@ -159,3 +159,19 @@ def hand_or_discard_destroy(hand, discard, num_to_destroy):
                 return (to_destroy_discard, to_destroy_hand)
     return (to_destroy_discard, to_destroy_hand)
 
+"""
+Chooses odd or even for twoface. Takes in your undrawn cards as a parameter.
+Returns either the string odd or the string even
+"""
+def odd_or_even(undrawn_deck):
+    odd_count = 0
+    even_count = 0
+    for card in undrawn_deck:
+        if card.cost % 2 == 0:
+            even_count += 1
+        else:
+            odd_count += 1
+    if even_count > odd_count: #breaks towards odd in a tie because all 0 costs are even
+        return "even"
+    else:
+        return "odd"
