@@ -64,7 +64,8 @@ def prompt_player(type, message, choices, none_choice_possible, none_button="Non
             return choice
             pass
         elif type == 4:
-            pass
+            choice = play_card.hand_discard(choices)
+            return choice
         elif type == 5:
             #grab the card with highest cost
             best_card = None

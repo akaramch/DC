@@ -135,7 +135,7 @@ Power_Ring = Card("cardimgs/powerring.jpg", cost=3, power=(2,1), name="Power Rin
 Nth_Metal = Card("cardimgs/nthmetal.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="+1 Power. Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) # 3
 White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, custom= 3, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") # 1
 
-EquipmentList.append(Aquamans_Trident)
+#EquipmentList.append(Aquamans_Trident)
 EquipmentList.append(Batarang)
 EquipmentList.append(Lasso_of_Truth)
 EquipmentList.append(Legion_Flight_Ring)
@@ -145,7 +145,7 @@ EquipmentList.append(Soultaker_Sword)
 EquipmentList.append(White_Lantern_Power_Battery)
 
 # add equipment to main deck
-StartingMainDeck += [Aquamans_Trident] * 3
+#StartingMainDeck += [Aquamans_Trident] * 3
 StartingMainDeck += [Batarang] * 2
 StartingMainDeck += [Lasso_of_Truth] * 2
 StartingMainDeck += [Legion_Flight_Ring] * 2
