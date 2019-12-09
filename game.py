@@ -511,7 +511,13 @@ def bart_allen(player):
     index1 = lineup.index(selection1) #find an index of the first card
     lineup[index1] = None #remove from lineup
     player.gain_card_hand(selection1) #player gets the card to hand
-    selection2 = card_effect.prompt_player("Select a second card to gain from the lineup.", lineup, False)
+    # get second choice
+    # one element of the lineup is None so skip that one
+    options = []
+    for card in lineup:
+        if card is not None:
+            options.append(card)
+    selection2 = card_effect.prompt_player("Select a second card to gain from the lineup.", options, False)
     index2 = lineup.index(selection2) #find index of the second card
     lineup[index2] = None
     player.gain_card_hand(selection2) #gain other card
@@ -632,6 +638,8 @@ for i in range(5):
 # fill the computer's hand
 for i in range(5):
     computer_player.own_deck.draw()
+
+human_player.own_deck.hand.append(Bart_Allen)
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
