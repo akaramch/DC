@@ -629,17 +629,12 @@ computer_player.own_deck.shuffle()
 for i in range(5):
     lineup[i] = main_deck.draw()
 
-for i in range(55):
-    main_deck.draw()
-
 # fill the player's hand
 for i in range(5):
     human_player.own_deck.draw()
 # fill the computer's hand
 for i in range(5):
     computer_player.own_deck.draw()
-
-human_player.own_deck.hand.append(Bart_Allen)
 
 while not done:
     mouse_pos = pygame.mouse.get_pos() # assume we will always need to know the position of the mouse
