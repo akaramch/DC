@@ -400,8 +400,10 @@ def end_turn(player):
     for i in range(0,5):
         if not lineup[i]:
             lineup[i] = main_deck.draw()
-    hand_scroll = 0
-    super_villain_bought = False #flip the next villain
+    global hand_scroll
+    hand_scroll= 0
+    global super_villain_bought
+    super_villain_bought= False #flip the next villain
 
 def jonn_jonzz(player): #1
     villain = super_villain_deck.peek() #get the top super villain
