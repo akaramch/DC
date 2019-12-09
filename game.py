@@ -133,7 +133,7 @@ Legion_Flight_Ring = Card("cardimgs/legionflightring.jpg", cost=2, name="Legion 
 Lasso_of_Truth = Card("cardimgs/lassooftruth.jpg", cost=2, power=(1,0), name="Lasso of Truth", vp=1, type="Equipment", defense=(True,1), text="+1 Power. Defense: You may discard this card to avoid an Attack. If you do, draw a card.") # 2
 Power_Ring = Card("cardimgs/powerring.jpg", cost=3, power=(2,1), name="Power Ring", vp=1, type="Equipment", text="+2 Power. Reveal the top card of your deck. If its cost is 1 or greater, additional +1 Power.") # 3
 Nth_Metal = Card("cardimgs/nthmetal.jpg", cost=3, power=(1,0), name="Nth Metal", vp=1, type="Equipment", text="+1 Power. Look at the top card of your deck. You may destroy it.", destroy_top=(True,1)) # 3
-White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, custom= 3, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") # 1
+#White_Lantern_Power_Battery = Card("cardimgs/whitelanternpowerbattery.jpg", cost=7, name="White Lantern Power Battery", vp=2, custom= 3, type="Equipment", text="Gain any card from the Line-Up and put it on top of your deck.") # 1
 
 #EquipmentList.append(Aquamans_Trident)
 EquipmentList.append(Batarang)
@@ -142,7 +142,7 @@ EquipmentList.append(Legion_Flight_Ring)
 EquipmentList.append(Nth_Metal)
 EquipmentList.append(Power_Ring)
 EquipmentList.append(Soultaker_Sword)
-EquipmentList.append(White_Lantern_Power_Battery)
+#EquipmentList.append(White_Lantern_Power_Battery)
 
 # add equipment to main deck
 #StartingMainDeck += [Aquamans_Trident] * 3
@@ -377,7 +377,14 @@ def computer_turn(player, opponent):
             card_effect.card_effect(player, card)
     power_generated = player.power #used for the report on computer's turn
     #get which cards the computer wants to buy
-    cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
+    current_lineup = []
+    global lineup
+    for card in lineup: #make sure None isn't a part of the lineup we pass into buy_cards
+        if card is not None:
+            current_lineup.append(card)
+    pre_lineup = lineup
+    cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, current_lineup, opponent.own_deck, None)
+    lineup = pre_lineup
     for card in cards_to_buy: #buy cards in card to buy
         index = 0
         if card.name != "Kick" and not (card in SuperVillainDeckList or card == The_Flash): #if card is in lineup

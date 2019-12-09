@@ -179,6 +179,8 @@ def prompt_player(type, message, choices, none_choice_possible, none_button="Non
 
 # the prompt for Two-Face
 def prompt_player_even_odd(message, isComputer=False):
+    if isComputer:
+        return 0
     prompt_bkg = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     prompt_bkg.fill(GAME_BKG_COLOR)
     pygame.draw.circle(prompt_bkg, (127, 127, 127), (CARD_WIDTH * 3, CARD_HEIGHT + CARD_SPACE * 2), CARD_WIDTH // 2, 5)
@@ -291,7 +293,7 @@ def card_effect(player, card):
         elif power_bonus_type == 5: #king of atlantis
             #+2 Power if you destroy a card in discard pile
             if len(player.own_deck.discard) != 0: #if we have discard cards
-                selection = prompt_player("You may select a card in your discard to destroy for +2 power. Click \"None\" to destroy nothing.", player.own_deck.discard, True, is_computer=player.isComputer)
+                selection = prompt_player(3, "You may select a card in your discard to destroy for +2 power. Click \"None\" to destroy nothing.", player.own_deck.discard, True, is_computer=player.isComputer)
                 if selection: #did the player select something?
                     power_bonus += 2 #give bonus
                     player.own_deck.destroy_from_discard(selection) #destroy the card
@@ -329,7 +331,7 @@ def card_effect(player, card):
     draw_bonus_type = card.draw[1]
     if draw_bonus_type != 0:
         if draw_bonus_type == 1: #two face
-            evenodd = prompt_player_even_odd("Choose even or odd", is_computer=player.isComputer)
+            evenodd = prompt_player_even_odd("Choose even or odd", isComputer=player.isComputer)
             if player.own_deck.peek().cost % 2 == evenodd:
                 player.own_deck.draw()
             else:
@@ -377,7 +379,11 @@ def card_effect(player, card):
                         player.own_deck.destroy_from_hand(selection_hand)
             else: #select destroy from discard
                 player.own_deck.destroy_from_discard(selection_discard)
-
+        else:
+            if len(player.own_deck.hand) != 0:
+                selection_hand = prompt_player(1, "You may pick a card in your hand to destroy. Click \"None\" to destroy nothing.", player.own_deck.hand, True, is_computer=player.isComputer)
+                if selection_hand:  # if destroy from hand
+                    player.own_deck.destroy_from_hand(selection_hand)
     if card.destroy_hand_or_discard == 2: #lobo
         selection1_discard = None
         selection1_hand = None
