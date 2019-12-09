@@ -360,7 +360,7 @@ def computer_turn(player, opponent):
         #play the card effect
         #coded in game.py
         if card.custom == 1:
-            jonn_jonzz(player, opponent)
+            jonn_jonzz(player)
         elif card.custom == 2:
             shazam(player, opponent)
         elif card.custom == 3:
@@ -477,7 +477,7 @@ def xray_vision(player, opponent): #4
     print("X-Ray Vision played:",top,"from the top of your opponent's deck.")
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
-        jonn_jonzz(player, opponent)
+        jonn_jonzz(player)
     elif top.custom == 2:
         shazam(player, opponent)
     elif top.custom == 3:
