@@ -825,7 +825,7 @@ while not done:
                 if card.custom == 1:
                     jonn_jonzz(human_player)
                 elif card.custom == 2:
-                    shazam(human_player)
+                    shazam(human_player,computer_player)
                 elif card.custom == 3:
                     white_lantern_power_battery(human_player)
                 elif card.custom == 4:
