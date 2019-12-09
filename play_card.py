@@ -37,6 +37,8 @@ def assign_priority(card, own_deck):
         return 5
     if card.custom == 4:
         return 7
+    if card.custom == 6:
+        return 150
     if card.power[1] == 2 or card.power[1] == 4 or card.power[1] == 5:
         if len(own_deck.undrawn) <= 1:
             return 1
@@ -103,7 +105,7 @@ def can_hand_destroy(hand):
         return None
 """
 Given your discard pile, will return which card you should destroy
-Returns none if you shouldn's
+Returns none if you shouldn't
 """
 def discard_destroy(discard):
     for card in discard:
@@ -116,3 +118,44 @@ def discard_destroy(discard):
         if card.name == "Punch":
             return card
     return None
+
+"""
+Given your discard pile and hand, will return which card(s) you should destroy (in the form of a list)
+Returns a tuple, first is a list of cards to destroy from discard, the second a list to destroy from hand
+Returns an empty list if you shouldn't destroy any cards
+"""
+def hand_or_discard_destroy(hand, discard, num_to_destroy):
+    to_destroy_discard = []
+    to_destroy_hand = []
+    for card in discard:
+        if card.name == "Weakness":
+            to_destroy_discard.append(card)
+            if (len(to_destroy_discard) + len(to_destroy_hand)) == num_to_destroy:
+                return (to_destroy_discard, to_destroy_hand)
+    for card in hand:
+        if card.name == "Weakness":
+            to_destroy_discard.append(card)
+            if (len(to_destroy_discard) + len(to_destroy_hand)) == num_to_destroy:
+                return (to_destroy_discard, to_destroy_hand)
+    for card in discard:
+        if card.name == "Vulnerability":
+            to_destroy_discard.append(card)
+            if (len(to_destroy_discard) + len(to_destroy_hand)) == num_to_destroy:
+                return (to_destroy_discard, to_destroy_hand)
+    for card in hand:
+        if card.name == "Vulnerability":
+            to_destroy_discard.append(card)
+            if (len(to_destroy_discard) + len(to_destroy_hand)) == num_to_destroy:
+                return (to_destroy_discard, to_destroy_hand)
+    for card in discard:
+        if card.name == "Punch":
+            to_destroy_discard.append(card)
+            if (len(to_destroy_discard) + len(to_destroy_hand)) == num_to_destroy:
+                return (to_destroy_discard, to_destroy_hand)
+    for card in hand:
+        if card.name == "Punch":
+            to_destroy_discard.append(card)
+            if (len(to_destroy_discard) + len(to_destroy_hand)) == num_to_destroy:
+                return (to_destroy_discard, to_destroy_hand)
+    return (to_destroy_discard, to_destroy_hand)
+
