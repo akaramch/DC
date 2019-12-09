@@ -386,9 +386,9 @@ def computer_turn(player, opponent):
         buy(player, card, index)
 
     #tell the player what cards the computer played
-    card_effect.prompt_player("Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click None", player.own_deck.played, True)
+    card_effect.prompt_player("Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click \"OK\"", player.own_deck.played, True, "OK")
     #prompt the player what cards the computer bought
-    card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
+    card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click \"OK\"", cards_to_buy, True, "OK")
 
     end_turn(player)
 
