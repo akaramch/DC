@@ -454,7 +454,7 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
     #(bool can_end_game, cards_to_buy, remaining_power)
     end_game = check_end_game(power, super_villain_deck, main_deck.num_cards, lineup, kick_deck)
     if end_game[0]:
-        cards_to_buy.append(end_game[1]) #end_game[1] should be a list
+        cards_to_buy.extend(end_game[1]) #end_game[1] should be a list
         return cards_to_buy
 
     #can buy super_villain
@@ -466,10 +466,14 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
     #from here on in, we need to add kicks to the lineup to consider optimal buy
     #end game coming soon, but cannot end it on our turn
     if super_villain_deck.num_cards <= 3 or main_deck.num_cards <= 15:
-        vp_sorted = lineup.copy()
+        vp_sorted = []
+        for card in lineup:
+            vp_sorted.append(card)
         vp_sorted.extend(kick_deck.contents)
         vp_sorted = sort_by_vp(vp_sorted)
-        ratio_sorted = lineup.copy()
+        ratio_sorted = []
+        for card in lineup:
+            ratio_sorted.append(card)
         ratio_sorted.extend(kick_deck.contents)
         ratio_sorted = sort_by_ratio(ratio_sorted)
         max_vp = max_vp_lineup(power, vp_sorted, ratio_sorted) #set of cards that can be bought that maximize vp
@@ -480,12 +484,16 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
     for tempcard in own_deck.contents:
         power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, True)
     average_power = power_in_deck/(own_deck.num_cards)
-    power_sorted = lineup.copy()
+    power_sorted = []
+    for card in lineup:
+        power_sorted.append(card)
     power_sorted.extend(kick_deck.contents)
     for lineup_card in power_sorted: #assigns indeck_power for sorting
         lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, False) - average_power
     power_sorted = sort_by_deck_power(power_sorted) 
-    dp_ratio_sorted = lineup.copy()
+    dp_ratio_sorted = []
+    for card in lineup:
+        dp_ratio_sorted.append(card)
     dp_ratio_sorted.extend(kick_deck.contents)
     for lineup_card in dp_ratio_sorted: #assigns indeck_power for sorting
         lineup_card.indeck_power = get_power(lineup_card, own_deck, kick_deck, main_deck.num_cards, opponent_deck, player_power, super_villain_deck.num_cards, False) - average_power
