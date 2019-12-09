@@ -44,7 +44,7 @@ def max_vp_lineup(power, lineup, lineup1):
         return cards_to_buy_val
 
     while len(lineup1) > 0:
-        if power > lineup1[0].get_cost(): #if we can buy the most vp
+        if power >= lineup1[0].get_cost(): #if we can buy the most vp
             card = lineup1.pop(0) #most vp left on lineup
             power -= card.get_cost()
             ratio_buy_total += card.get_vp()
@@ -411,7 +411,7 @@ def max_power_lineup(power, lineup, lineup1):
     leftovers = []
     #Buy in order as we can the highest values
     while len(lineup) > 0:
-        if power > lineup[0].get_cost(): #if we can buy the most power
+        if power >= lineup[0].get_cost(): #if we can buy the most power
             card = lineup.pop(0) #most power left on lineup
             power -= card.get_cost()
             val_buy_total += card.indeck_power
