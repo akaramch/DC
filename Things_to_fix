@@ -1,10 +1,6 @@
-Supervillain needs to flip, eventually attack 
+WLPB, Bart Allen prompt player even when computer plays.
 
-Drawing when there are no cards to be drawn - everything in play or in hand - crashes the program. I've handled this with the SVs that draw multiple cards, not sure how to handle with just regular LFRs, JQs, KFs, TFMA, etc. Should print an error message.
-
-WLPB does nothing
-
-Bart Allen shows many Kicks, crashes when you click on anything
+Jonzz 'takes 1 positional argument but 2 were given' TypeError
 
 Nekron crashes when you destroy and then there are no more possible destroy targets - hand and discard empty. Could probably fix but I'm tired and need to check the rest of these. Fine as far as I can tell otherwise, though.
 
@@ -12,7 +8,6 @@ Nekron, Lobo, other destroy cards sometimes crash when they destroy a card from 
 
 Shazam is fairly susceptible to crashes
 
-X-Ray Vision always plays the first card it found.
 
 
 
