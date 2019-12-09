@@ -47,7 +47,7 @@ def max_vp_lineup(power, lineup, lineup1):
         if power > lineup1[0].get_cost(): #if we can buy the most vp
             card = lineup1.pop(0) #most vp left on lineup
             power -= card.get_cost()
-            ratio_buy_total += card.get_vp
+            ratio_buy_total += card.get_vp()
             cards_to_buy_ratio.append(card) #add most vp to cards to buy
         else: #if we can't buy it, add it to leftovers
             leftovers.append(lineup1.pop(0))
