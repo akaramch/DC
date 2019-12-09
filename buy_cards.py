@@ -460,12 +460,14 @@ def buy_cards(power, super_villain_deck, main_deck, kick_deck, own_deck, lineup,
         cards_to_buy.append(super_villain_deck.peek()) #add the super villain to the cards to buy
         if power <= 1: #buying super spent all power so no need to check other stuff
             return cards_to_buy
-    lineup.extend(kick_deck.contents) #from here on in, we need to add kicks to the lineup to consider optimal buy
+    #from here on in, we need to add kicks to the lineup to consider optimal buy
     #end game coming soon, but cannot end it on our turn
     if super_villain_deck.num_cards <= 3 or main_deck.num_cards <= 15:
         vp_sorted = lineup.copy()
+        vp_sorted.extend(kick_deck.contents)
         vp_sorted = sort_by_vp(vp_sorted)
         ratio_sorted = lineup.copy()
+        ratio_sorted.extend(kick_deck.contents)
         ratio_sorted = sort_by_ratio(ratio_sorted)
         max_vp = max_vp_lineup(power, vp_sorted, ratio_sorted) #set of cards that can be bought that maximize vp
         cards_to_buy.extend(max_vp) #adds the cards found above to the cards to buy
