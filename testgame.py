@@ -298,7 +298,7 @@ SuperVillainDeckList.append(Black_Adam)
 SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
-StartingMainDeck = [Batarang] * 5
+StartingMainDeck = [Batarang] * 6
 StartingPlayerDeck = [Ultra_Strength] * 10
 
 # player buys card
@@ -795,7 +795,8 @@ while not done:
         elif mouse_pos[0] > END_TURN_BUTTON_LEFT and mouse_pos[0] < (END_TURN_BUTTON_LEFT + END_TURN_BUTTON_WIDTH) and mouse_pos[1] > END_TURN_BUTTON_TOP and mouse_pos[1] < END_TURN_BUTTON_TOP + END_TURN_BUTTON_HEIGHT:
             if click:
                 end_turn(human_player)
-                computer_turn(computer_player, human_player)
+                if not done:
+                    computer_turn(computer_player, human_player)
                 
         # is the mouse on a card in the hand
         elif CARD_SPACE < mouse_pos[0] < CARD_SPACE + min(hand_outline.get_width() - 10, CARD_WIDTH * (len(human_player.own_deck.hand) - hand_scroll)) and SCREEN_HEIGHT - CARD_HEIGHT - 5 < mouse_pos[1] < SCREEN_HEIGHT - 5:
