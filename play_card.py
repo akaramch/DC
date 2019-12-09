@@ -92,6 +92,29 @@ def must_hand_destroy(hand):
         i += 1
     return hand[index]
 """
+If you have to discard from hand, returns card to discard
+"""
+def hand_discard(hand):
+    for card in hand:
+        if card.name == "Weakness":
+            return card
+    for card in hand:
+        if card.name == "Vulnerability":
+            return card
+    for card in hand:
+        if card.name == "Punch":
+            return card
+    min = 0
+    index = 11
+    i = 0 #iterator
+    for card in hand:
+        if card.cost > min:
+            min = card.cost
+            index = i
+        i += 1
+    return hand[index]
+
+"""
 Given your hand, will return the card you should destroy if it's optional 
 returns none if you shouldn't destroy any cards
 Currently doesn't have code to destroy punches only if it prevents you from buying super
