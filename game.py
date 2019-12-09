@@ -354,10 +354,7 @@ def buy(player, card, i=0):
 
 #executes a computer turn based on our algorithms
 def computer_turn(player, opponent):
-<<<<<<< HEAD
-    #asdf
     while len(player.own_deck.hand) != 0: #while there are cards to play, play them
-        #TODO integrate the algorithm for playing cards
         card = play_card.to_play(player.own_deck.hand, player.own_deck) #figure out the card to play
         index = player.own_deck.hand.index(card) #get the index
         player.own_deck.hand_to_played(index) #move to played
@@ -394,47 +391,6 @@ def computer_turn(player, opponent):
     card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
 
     end_turn(player)
-=======
-    pass
-    ##asdf
-    #while len(player.own_deck.hand) != 0: #while there are cards to play, play them
-    #    #TODO integrate the algorithm for playing cards
-    #    card = player.own_deck.hand[0]
-    #    player.own_deck.hand_to_played(0)
-    #
-    #    #coded in game.py
-    #    if card.custom == 1:
-    #        jonn_jonzz(player, opponent)
-    #    elif card.custom == 2:
-    #        shazam(player, opponent)
-    #    elif card.custom == 3:
-    #        white_lantern_power_battery(player)
-    #    elif card.custom == 4:
-    #        xray_vision(player, opponent)
-    #    elif card.custom == 5:
-    #        super_girl(player)
-    #    elif card.custom == 7:
-    #        trigon(player)
-    #    elif card.custom == 10:
-    #        bart_allen(player)
-    #    else:  # if not here, then handled by card_effect
-    #        card_effect.card_effect(player, card)
-    #power_generated = player.power
-    ##get which cards the computer wants to buy
-    #cards_to_buy = buy_cards.buy_cards(player.power, super_villain_deck, main_deck, kick_deck, player.own_deck, lineup, opponent.own_deck, None)
-    #for card in cards_to_buy: #buy cards in card to buy
-    #    index = 0
-    #    if card.name != "Kick" and not (card in SuperVillainDeckList or card == The_Flash): #if card is in lineup
-    #        index = lineup.index(card)
-    #    buy(player, card, index)
-    #
-    ##tell the player what cards the computer played
-    #card_effect.prompt_player("Cards played during computer's turn. This generated " + str(power_generated) + " power. To continue, click one of the cards, or click None", player.own_deck.played, True)
-    ##prompt the player what cards the computer bought
-    #card_effect.prompt_player("Cards bought during computer's turn. To continue, click one of the cards, or click None", cards_to_buy, True)
-    #
-    #end_turn(player)
->>>>>>> ae4afd33b2ba775d13682e38befe8ddf4224c415
 
 #ends the turn for the player whose turn it was
 def end_turn(player):
