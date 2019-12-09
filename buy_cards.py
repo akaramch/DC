@@ -91,11 +91,14 @@ def get_power(card, own_deck, kick_deck, main_deck_size, opponent_deck, player_p
         X-ray vision
         """
         if (card.custom == 4):
-
+            x_copy = 0 #number of x-ray visions in their deck ignored
             power_in_deck = 0 #going to look at the total power in the opponent's deck to calculate average
             for tempcard in opponent_deck.contents:
-                power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size, False)
-            average_power = power_in_deck/(opponent_deck.num_cards)
+                if tempcard.custom == 4:
+                    x_copy += 1
+                else:
+                    power_in_deck += get_power(tempcard, own_deck, kick_deck, main_deck_size, opponent_deck, player_power, super_deck_size, False)
+            average_power = power_in_deck/(opponent_deck.num_cards - x_copy)
             return average_power
         if (card.custom == 5): #Supergirl is worth different things depending on how many kicks are left
 
