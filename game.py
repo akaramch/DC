@@ -117,6 +117,7 @@ Vulnerability = Card("cardimgs/vulnerability.jpg", type="Starter", cost=0, name=
 Weakness = Card("cardimgs/weakness.jpg", cost=0, vp=-1, name="Weakness", type="Weakness", text="Weakness cards reduce your score at the end of the game.") # HOWEVER MANY
 
 StartingPlayerDeck = [Vulnerability] * 3 + [Punch] * 7
+
 StartingMainDeck = [] # will be used to build the card list for the main deck
 
 """  DEFAULT CARD
@@ -360,7 +361,7 @@ def computer_turn(player, opponent):
         #play the card effect
         #coded in game.py
         if card.custom == 1:
-            jonn_jonzz(player, opponent)
+            jonn_jonzz(player)
         elif card.custom == 2:
             shazam(player, opponent)
         elif card.custom == 3:
@@ -467,9 +468,10 @@ def shazam(player,opponent): #2
 
 def white_lantern_power_battery(player): #3
     for card in lineup:
-        if card.name == "Power Ring":
-            player.gain_card_hand(card)
-            lineup.remove(card)
+        if card != None:
+            if card.name == "Power Ring":
+                player.gain_card_hand(card)
+                lineup.remove(card)
     #TODO make this not print the entire kick deck when the computer plays it
     #ask which to take
     print("activate battery")
@@ -484,7 +486,7 @@ def xray_vision(player, opponent): #4
     print("X-Ray Vision played:",top,"from the top of your opponent's deck.")
     # all of the cards that needed to be implemented in game.py
     if top.custom == 1:
-        jonn_jonzz(player, opponent)
+        jonn_jonzz(player)
     elif top.custom == 2:
         shazam(player, opponent)
     elif top.custom == 3:
@@ -634,6 +636,10 @@ computer_player.own_deck.shuffle()
 # fill the lineup
 for i in range(5):
     lineup[i] = main_deck.draw()
+
+for i in range(57):
+    main_deck.draw()
+
 
 # fill the player's hand
 for i in range(5):

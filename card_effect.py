@@ -331,11 +331,14 @@ def card_effect(player, card):
     draw_bonus_type = card.draw[1]
     if draw_bonus_type != 0:
         if draw_bonus_type == 1: #two face
-            evenodd = prompt_player_even_odd("Choose even or odd", isComputer=player.isComputer)
-            if player.own_deck.peek().cost % 2 == evenodd:
-                player.own_deck.draw()
-            else:
-                player.own_deck.undrawn_top_to_discard()
+            evenodd = prompt_player_even_odd("Choose even or odd")
+            if player.own_deck.isEmpty():
+                player.own_deck.shuffle()
+                if not player.own_deck.isEmpty() or player.own_deck.discard.isEmpty():
+                    if player.own_deck.peek().cost % 2 == evenodd:
+                        player.own_deck.draw()
+                    else:
+                        player.own_deck.undrawn_top_to_discard()
 
     #add draw bonus
     draw += draw_bonus

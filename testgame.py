@@ -298,8 +298,8 @@ SuperVillainDeckList.append(Black_Adam)
 SuperVillainDeckList.append(Hel)
 SuperVillainDeckList.append(Arkillo)
 
-StartingMainDeck = [Batarang] * 6
-StartingPlayerDeck = [Ultra_Strength] * 10
+#StartingMainDeck = []
+StartingPlayerDeck = [White_Lantern_Power_Battery] + [Punch] * 4
 
 # player buys card
 # if the card is in the lineup, need an index in case there's more than one of the same card in the lineup
@@ -464,9 +464,10 @@ def shazam(player,opponent): #2
 
 def white_lantern_power_battery(player): #3
     for card in lineup:
-        if card.name == "Power Ring":
-            player.gain_card_hand(card)
-            lineup.remove(card)
+        if card != None:
+            if card.name == "Power Ring":
+                player.gain_card_hand(card)
+                lineup.remove(card)
     #TODO make this not print the entire kick deck when the computer plays it
     #ask which to take
     print("activate battery")
