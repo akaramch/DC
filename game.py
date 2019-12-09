@@ -643,10 +643,6 @@ computer_player.own_deck.shuffle()
 for i in range(5):
     lineup[i] = main_deck.draw()
 
-for i in range(57):
-    main_deck.draw()
-
-
 # fill the player's hand
 for i in range(5):
     human_player.own_deck.draw()
