@@ -175,6 +175,7 @@ def prompt_player(type, message, choices, none_choice_possible, none_button="Non
             if i >= 0:
                 screen.blit(choices[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE * 2))
             screen.blit(choices[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE * 2))
+            screen.blit(choices[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE * 2))
             if click:
                 return choices[i]
         pygame.display.flip()
