@@ -171,10 +171,9 @@ def prompt_player(type, message, choices, none_choice_possible, none_button="Non
         # is the mouse on a card in the list of choices
         if SCREEN_WIDTH - CARD_WIDTH - CARD_SPACE < mouse_pos[0] < SCREEN_WIDTH - CARD_SPACE and CARD_SPACE < mouse_pos[1] < CARD_SPACE + max(min((len(choices) - 1) * (CARD_HEIGHT // 6) + CARD_HEIGHT, pile_outline.get_height() - 10), 0):
             i = max(0, min(scroll + (mouse_pos[1] - CARD_SPACE) // (CARD_HEIGHT // 6), len(choices) - 1))
-            try:
+            # if i == -1 then choices is empty and this would give an index error
+            if i >= 0:
                 screen.blit(choices[i].zoom(), (SCREEN_WIDTH - CARD_WIDTH - CARD_ZOOM_WIDTH - CARD_SPACE * 2, CARD_SPACE * 2))
-            except IndexError:
-                print(i)
             if click:
                 return choices[i]
         pygame.display.flip()
