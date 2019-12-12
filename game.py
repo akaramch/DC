@@ -447,7 +447,7 @@ def jonn_jonzz(player): #1
     elif villain.custom == 10:
         bart_allen(player)
     else:  # if not here, then handled by card_effect
-        card_effect.card_effect(human_player, villain)
+        card_effect.card_effect(player, villain)
 
 def shazam(player,opponent): #2
     player.power += 2
@@ -469,7 +469,7 @@ def shazam(player,opponent): #2
     elif top.custom == 10:
         bart_allen(player)
     else:  # if not here, then handled by card_effect
-        card_effect.card_effect(human_player, top)
+        card_effect.card_effect(player, top)
 
 
 def white_lantern_power_battery(player): #3
