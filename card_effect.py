@@ -537,7 +537,6 @@ def card_effect(player, card):
         player.black_adam_effect = (found_hero, found_villain, found_equipment, found_starter, found_power) #set the effect if we didn't find everything
         
     if card.custom == 12: #H'el
-        player.power += 2
         value_drawn = 0
         while value_drawn < 7:
             
@@ -551,6 +550,7 @@ def card_effect(player, card):
             value_drawn += next_card_cost
             
     if card.custom == 13: #Arkillo
+        player.power += 2
         arraySize = len(player.own_deck.discard)
         i = 0
         while i < arraySize:
