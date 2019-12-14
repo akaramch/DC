@@ -334,15 +334,17 @@ def card_effect(player, card):
     draw_bonus = 0
     draw_bonus_type = card.draw[1]
     if draw_bonus_type != 0:
-        if draw_bonus_type == 1: #two face
+        if draw_bonus_type == 1: #two-face
             evenodd = prompt_player_even_odd("Choose even or odd")
+            # shuffle the deck if it needs shuffled
             if player.own_deck.isEmpty():
                 player.own_deck.shuffle()
-                if not player.own_deck.isEmpty() or player.own_deck.discard.isEmpty():
-                    if player.own_deck.peek().cost % 2 == evenodd:
-                        player.own_deck.draw()
-                    else:
-                        player.own_deck.undrawn_top_to_discard()
+            # if the player's entire deck is in their hand they're out of luck
+            if not (player.own_deck.isEmpty() and player.own_deck.discard.isEmpty()):
+                if player.own_deck.peek().cost % 2 == evenodd:
+                    player.own_deck.draw()
+                else:
+                    player.own_deck.undrawn_top_to_discard()
 
     #add draw bonus
     draw += draw_bonus
@@ -535,6 +537,7 @@ def card_effect(player, card):
         player.black_adam_effect = (found_hero, found_villain, found_equipment, found_starter, found_power) #set the effect if we didn't find everything
         
     if card.custom == 12: #H'el
+        player.power += 2
         value_drawn = 0
         while value_drawn < 7:
             
