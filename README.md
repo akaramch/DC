@@ -1,6 +1,8 @@
 # DC
 Authors: Dan Felley, Blake Mader, Kabir Karamchandani, Parker Swanson
 
+Disclaimer: This is a project we created for personal use, and was not made for public or commercial distribution. All cards and images are the property of DC. If there are any issues with the content of our game, please let us know and we will change them immediately.
+
 Before playing the game, make sure you have pygame installed for your python:
     https://www.pygame.org/wiki/GettingStarted
     
